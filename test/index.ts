@@ -38,9 +38,17 @@ test('hash stress', async t => {
 test('hash  hashObjectIgnoreKeyOrder', async t => {
   const a = {
     a: true,
-    b: true
+    b: true,
+    c: {
+      d: true,
+      e: true
+    }
   }
   const b = {
+    c: {
+      e: true,
+      d: true
+    },
     b: true,
     a: true
   }
