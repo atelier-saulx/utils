@@ -1,19 +1,31 @@
 {
-  "name": "@saulx/selva-server",
-  "version": "1.12.1",
-  "main": "./dist/index.js",
+  "name": "selva",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "api",
+    "tools",
+    "diff"
+  ],
+  "main": "./index.js",
+  "gypfile": true,
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "killall": "pkill -9 node && pkill -9 redis",
+    "publish-major": "yarn build && node ./bin/publish.js major && npm login && cd client && npm publish && cd ../server && npm publish && cd ../api && npm publish",
+    "publish-minor": "yarn build && node ./bin/publish.js minor && npm login && cd client && npm publish && cd ../server && npm publish && cd ../api && npm publish",
+    "publish-patch": "yarn build && node ./bin/publish.js && npm login && cd client && npm publish && cd ../server && npm publish && cd ../api && npm publish",
+    "clean": "rm -rf node_modules && rm -rf client/node_modules client/dist && rm -rf server/node_modules server/dist",
+    "test": "cd client && yarn test",
+    "build": "yarn buildClient && yarn buildServer",
+    "buildClient": "cd client && yarn buildLua && yarn build",
+    "buildLua": "cd client && yarn buildLua",
+    "buildServer": "cd server && yarn build",
+    "buildApi": "cd api && yarn build",
+    "watchServer": "cd server && yarn watch",
+    "watchClientTests": "cd client && yarn watch",
+    "watch": "watch"
   },
-  "husky": {
-    "hooks": {
-      "/pre-commit": "lint-staged",
-      "/pre-push": "node services/db/lib/start & lerna run test --parallel --since origin -- -- --fail-fast; kill $!",
-      "/post-merge": "lerna bootstrap --since $(git rev-parse HEAD) --include-filtered-dependencies"
-    }
-  },
-  "repository": "https://github.com/atelier-saulx/selva",
   "lint-staged": {
     "{js,json}": [
       "prettier --write",
@@ -22,52 +34,16 @@
     "*.js": [
       "eslint --fix",
       "git add"
-    ],
-    "*.ts": [
-      "eslint --fix",
-      "git add"
     ]
   },
-  "ava": {
-    "files": [
-      "test/**/*.ts",
-      "!test/assertions"
-    ],
-    "compileEnhancements": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
-  },
-  "bin": {
-    "selva-server": "/bin/index.js"
+  "prettier": "@saulx/prettier-config",
+  "eslintConfig": {
+    "extends": "@saulx/eslint-config"
   },
   "devDependencies": {
-    "@types/pidusage": "^2.0.1",
-    "@types/redis": "^2.8.14",
-    "ava": "2.4.0",
-    "husky": "^3.0.8",
-    "lint-staged": "^9.4.2",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.3",
-    "typescript-to-lua": "^0.30.1"
-  },
-  "dependencies": {
-    "@saulx/selva": "1.12.1",
-    "@saulx/selva-diff": "^1.0.1",
-    "aws-sdk": "^2.616.0",
-    "before-exit": "^1.0.0",
-    "chalk": "^4.0.0",
-    "data-record": "^0.1.3",
-    "rimraf": "^3.0.2",
-    "dropbox": "^4.0.30",
-    "get-port": "^5.1.1",
-    "node-fetch": "^2.6.0",
-    "os-utils": "^0.0.14",
-    "mkdirp": "1.0.4",
-    "pidusage": "^2.0.18",
-    "redis": "^2.8.0"
+    "eslint": "^6.5.1",
+    "prettier": "^1.18.2",
+    "@saulx/eslint-config": "https://github.com/atelier-saulx/eslint-config",
+    "@saulx/prettier-config": "https://github.com/atelier-saulx/prettier-config"
   }
 }
