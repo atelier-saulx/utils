@@ -120,13 +120,13 @@ export const hash = (val: any): number => {
     if (val === null) {
       return 0
     } else {
-      return hashObject(val)
+      return hashObject(val) >>> 0
     }
   } else {
     if (typeof val === 'number') {
-      return (5381 * 33) ^ val
+      return ((5381 * 33) ^ val) >>> 0
     } else {
-      return stringHash(val)
+      return stringHash(val) >>> 0
     }
   }
 }
