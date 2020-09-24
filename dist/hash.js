@@ -130,15 +130,15 @@ exports.hash = (val) => {
             return 0;
         }
         else {
-            return exports.hashObject(val);
+            return exports.hashObject(val) >>> 0;
         }
     }
     else {
         if (typeof val === 'number') {
-            return (5381 * 33) ^ val;
+            return ((5381 * 33) ^ val) >>> 0;
         }
         else {
-            return exports.stringHash(val);
+            return exports.stringHash(val) >>> 0;
         }
     }
 };
