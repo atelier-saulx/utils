@@ -119,3 +119,53 @@ test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })
+
+test('hash weird equality hashObjectIgnoreKeyOrder 2', async t => {
+  const a = {
+    type: 'folder',
+    title: '',
+    id: 'fo1',
+    name: '',
+    children: [
+      {
+        buttonText: 'my b',
+        type: 'match',
+        name: '',
+        id: 'ma1',
+        aliases: [],
+        published: false
+      }
+    ],
+    aliases: []
+  }
+  const b = {
+    type: 'folder',
+    title: '',
+    id: 'fo1',
+    name: '',
+    children: [
+      {
+        buttonText: 'my ba',
+        type: 'match',
+        name: '',
+        id: 'ma1',
+        aliases: [],
+        published: false
+      }
+    ],
+    aliases: []
+  }
+
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
+  const hashStrA = hash('my b')
+  const hashStrB = hash('my ba')
+
+  t.true(hashStrA !== hashStrB)
+  t.true(hashA1 !== hashB1)
+  t.true(hashA !== hashB)
+})
