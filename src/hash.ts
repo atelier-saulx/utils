@@ -38,9 +38,7 @@ export const hashObjectIgnoreKeyOrderNest = (
         if (field === null) {
           hash = nullHash ^ hashNumber(i, hash)
         } else {
-          hash =
-            (hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-            hashNumber(i, hash)
+          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashNumber(i, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashNumber(i, hash)
@@ -63,16 +61,14 @@ export const hashObjectIgnoreKeyOrderNest = (
         if (field === null) {
           hash = nullHash ^ hashKey(key, hash)
         } else {
-          hash =
-            (hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-            hashKey(key, hash)
+          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashKey(key, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashKey(key, hash)
       }
     }
   }
-  return hash
+  return hash * 33
 }
 
 export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
@@ -88,9 +84,7 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
         if (field === null) {
           hash = nullHash ^ hashNumber(i, hash)
         } else {
-          hash =
-            (hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-            hashNumber(i, hash)
+          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashNumber(i, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashNumber(i, hash)
@@ -108,16 +102,14 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
         if (field === null) {
           hash = nullHash ^ hashKey(key, hash)
         } else {
-          hash =
-            (hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-            hashKey(key, hash)
+          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashKey(key, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashKey(key, hash)
       }
     }
   }
-  return hash
+  return hash * 33
 }
 
 export const hashObject = (props: object): number => {

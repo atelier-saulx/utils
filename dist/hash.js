@@ -36,9 +36,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
                     hash = nullHash ^ hashNumber(i, hash);
                 }
                 else {
-                    hash =
-                        (exports.hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-                            hashNumber(i, hash);
+                    hash = exports.hashObjectIgnoreKeyOrderNest(field, hash) ^ hashNumber(i, hash);
                 }
             }
             else if (type === 'boolean') {
@@ -65,9 +63,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
                     hash = nullHash ^ hashKey(key, hash);
                 }
                 else {
-                    hash =
-                        (exports.hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-                            hashKey(key, hash);
+                    hash = exports.hashObjectIgnoreKeyOrderNest(field, hash) ^ hashKey(key, hash);
                 }
             }
             else if (type === 'boolean') {
@@ -75,7 +71,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
             }
         }
     }
-    return hash;
+    return hash * 33;
 };
 exports.hashObjectNest = (obj, hash = 5381) => {
     if (obj.constructor === Array) {
@@ -93,9 +89,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
                     hash = nullHash ^ hashNumber(i, hash);
                 }
                 else {
-                    hash =
-                        (exports.hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-                            hashNumber(i, hash);
+                    hash = exports.hashObjectIgnoreKeyOrderNest(field, hash) ^ hashNumber(i, hash);
                 }
             }
             else if (type === 'boolean') {
@@ -118,9 +112,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
                     hash = nullHash ^ hashKey(key, hash);
                 }
                 else {
-                    hash =
-                        (exports.hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-                            hashKey(key, hash);
+                    hash = exports.hashObjectIgnoreKeyOrderNest(field, hash) ^ hashKey(key, hash);
                 }
             }
             else if (type === 'boolean') {
@@ -128,7 +120,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
             }
         }
     }
-    return hash;
+    return hash * 33;
 };
 exports.hashObject = (props) => {
     return exports.hashObjectNest(props) >>> 0;
