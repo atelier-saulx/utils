@@ -9,10 +9,13 @@ exports.stringHash = (str, hash = 5381) => {
     return hash;
 };
 const hashKey = (key, hash = 5381) => {
-    return exports.stringHash(key, hash) * 33;
+    return exports.stringHash(key, hash) * 5381;
 };
 const hashNumber = (nr, hash = 5381) => {
-    return ((hash * 33) ^ nr) * 33;
+    return ((hash * 33) ^ nr) * 5381;
+};
+const hashBool = (val, hash = 5381) => {
+    return ((hash * 33) ^ (val === true ? 1 : 0)) * 5381 * 33;
 };
 const nullHash = 5381 * 33;
 // ignore key order
@@ -23,7 +26,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
             const field = obj[i];
             const type = typeof field;
             if (type === 'string') {
-                hash = (exports.stringHash(field, hash) * 33) ^ hashNumber(i, hash);
+                hash = exports.stringHash(field, hash) ^ hashNumber(i, hash);
             }
             else if (type === 'number') {
                 hash = hashNumber(field, hash) ^ hashNumber(i, hash);
@@ -39,8 +42,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
                 }
             }
             else if (type === 'boolean') {
-                hash =
-                    (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^ hashNumber(i, hash);
+                hash = hashBool(field, hash) ^ hashNumber(i, hash);
             }
         }
     }
@@ -53,7 +55,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
             const field = obj[key];
             const type = typeof field;
             if (type === 'string') {
-                hash = (exports.stringHash(field, hash) * 33) ^ hashKey(key, hash);
+                hash = exports.stringHash(field, hash) ^ hashKey(key, hash);
             }
             else if (type === 'number') {
                 hash = hashNumber(field, hash) ^ hashKey(key, hash);
@@ -69,8 +71,7 @@ exports.hashObjectIgnoreKeyOrderNest = (obj, hash = 5381) => {
                 }
             }
             else if (type === 'boolean') {
-                hash =
-                    (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^ hashKey(key, hash);
+                hash = hashBool(field, hash) ^ hashKey(key, hash);
             }
         }
     }
@@ -82,7 +83,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
             const field = obj[i];
             const type = typeof field;
             if (type === 'string') {
-                hash = (exports.stringHash(field, hash) * 33) ^ hashNumber(i, hash);
+                hash = exports.stringHash(field, hash) ^ hashNumber(i, hash);
             }
             else if (type === 'number') {
                 hash = hashNumber(field, hash) ^ hashNumber(i, hash);
@@ -98,8 +99,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
                 }
             }
             else if (type === 'boolean') {
-                hash =
-                    (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^ hashNumber(i, hash);
+                hash = hashBool(field, hash) ^ hashNumber(i, hash);
             }
         }
     }
@@ -108,7 +108,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
             const field = obj[key];
             const type = typeof field;
             if (type === 'string') {
-                hash = (exports.stringHash(field, hash) * 33) ^ hashKey(key, hash);
+                hash = exports.stringHash(field, hash) ^ hashKey(key, hash);
             }
             else if (type === 'number') {
                 hash = hashNumber(field, hash) ^ hashKey(key, hash);
@@ -124,8 +124,7 @@ exports.hashObjectNest = (obj, hash = 5381) => {
                 }
             }
             else if (type === 'boolean') {
-                hash =
-                    (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^ hashKey(key, hash);
+                hash = hashBool(field, hash) ^ hashKey(key, hash);
             }
         }
     }

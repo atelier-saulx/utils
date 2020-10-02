@@ -112,10 +112,6 @@ test('hash test equality 1', async t => {
   const hashA = hashObjectIgnoreKeyOrder(a)
   const hashB = hashObjectIgnoreKeyOrder(b)
 
-  const hashStrA = hash('my ballz')
-  const hashStrB = hash('my ballzzzz')
-
-  t.true(hashStrA !== hashStrB)
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })
@@ -162,15 +158,11 @@ test('hash test equality 2', async t => {
   const hashA = hashObjectIgnoreKeyOrder(a)
   const hashB = hashObjectIgnoreKeyOrder(b)
 
-  const hashStrA = hash('my b')
-  const hashStrB = hash('my ba')
-
-  t.true(hashStrA !== hashStrB)
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })
 
-test.only('hash test equality 3', async t => {
+test('hash test equality 3', async t => {
   const a = {
     type: 'videoScreen',
     index: 0,
@@ -206,10 +198,86 @@ test.only('hash test equality 3', async t => {
   const hashA = hashObjectIgnoreKeyOrder(a)
   const hashB = hashObjectIgnoreKeyOrder(b)
 
-  const hashStrA = hash('my b')
-  const hashStrB = hash('my ba')
+  t.true(hashA1 !== hashB1)
+  t.true(hashA !== hashB)
+})
 
-  t.true(hashStrA !== hashStrB)
+test('hash test equality 4', async t => {
+  const a = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'a',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+  const b = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'aa',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
+  t.true(hashA1 !== hashB1)
+  t.true(hashA !== hashB)
+})
+
+test('hash test equality 5', async t => {
+  const a = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'aa',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+  const b = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'aax',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })
