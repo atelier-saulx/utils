@@ -70,7 +70,7 @@ test('hash stress hashObjectIgnoreKeyOrder', async t => {
   t.true(typeof x === 'number')
 })
 
-test.only('hash weird equality hashObjectIgnoreKeyOrder', async t => {
+test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
   const a = {
     type: 'folder',
     title: '',
