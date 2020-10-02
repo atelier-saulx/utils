@@ -281,3 +281,21 @@ test('hash test equality 5', async t => {
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })
+
+test('hash test equality 6', async t => {
+  const a = {
+    buttonText: 'aax'
+  }
+  const b = {
+    buttonText: 'b'
+  }
+
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
+  t.true(hashA1 !== hashB1)
+  t.true(hashA !== hashB)
+})
