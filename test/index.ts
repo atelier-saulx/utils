@@ -70,7 +70,7 @@ test('hash stress hashObjectIgnoreKeyOrder', async t => {
   t.true(typeof x === 'number')
 })
 
-test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
+test('hash test equality 1', async t => {
   const a = {
     type: 'folder',
     title: '',
@@ -120,7 +120,7 @@ test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
   t.true(hashA !== hashB)
 })
 
-test('hash weird equality hashObjectIgnoreKeyOrder 2', async t => {
+test('hash test equality 2', async t => {
   const a = {
     type: 'folder',
     title: '',
@@ -154,6 +154,50 @@ test('hash weird equality hashObjectIgnoreKeyOrder 2', async t => {
       }
     ],
     aliases: []
+  }
+
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
+  const hashStrA = hash('my b')
+  const hashStrB = hash('my ba')
+
+  t.true(hashStrA !== hashStrB)
+  t.true(hashA1 !== hashB1)
+  t.true(hashA !== hashB)
+})
+
+test.only('hash test equality 3', async t => {
+  const a = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'my b',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+  const b = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'my ba',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
   }
 
   const hashA1 = hashObject(a)
