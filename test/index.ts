@@ -299,3 +299,43 @@ test('hash test equality 6', async t => {
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })
+
+test('hash test equality 7', async t => {
+  const a = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: 'a',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+  const b = {
+    type: 'videoScreen',
+    index: 0,
+    id: '309aa290aa',
+    video: '',
+    buttonText: '',
+    image: '',
+    title: 'my',
+    description: '',
+    name: 'Video Screen',
+    aliases: [],
+    children: [],
+    videoMandatory: false
+  }
+
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
+  t.true(hashA1 !== hashB1)
+  t.true(hashA !== hashB)
+})

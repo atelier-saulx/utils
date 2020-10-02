@@ -38,7 +38,9 @@ export const hashObjectIgnoreKeyOrderNest = (
         if (field === null) {
           hash = nullHash ^ hashNumber(i, hash)
         } else {
-          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashNumber(i, hash)
+          hash =
+            (33 * hashObjectIgnoreKeyOrderNest(field, hash)) ^
+            hashNumber(i, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashNumber(i, hash)
@@ -61,14 +63,16 @@ export const hashObjectIgnoreKeyOrderNest = (
         if (field === null) {
           hash = nullHash ^ hashKey(key, hash)
         } else {
-          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashKey(key, hash)
+          hash =
+            (33 * hashObjectIgnoreKeyOrderNest(field, hash)) ^
+            hashKey(key, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashKey(key, hash)
       }
     }
   }
-  return hash * 33
+  return hash
 }
 
 export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
@@ -84,7 +88,7 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
         if (field === null) {
           hash = nullHash ^ hashNumber(i, hash)
         } else {
-          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashNumber(i, hash)
+          hash = (33 * hashObjectNest(field, hash)) ^ hashNumber(i, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashNumber(i, hash)
@@ -102,14 +106,14 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
         if (field === null) {
           hash = nullHash ^ hashKey(key, hash)
         } else {
-          hash = hashObjectIgnoreKeyOrderNest(field, hash) ^ hashKey(key, hash)
+          hash = (33 * hashObjectNest(field, hash)) ^ hashKey(key, hash)
         }
       } else if (type === 'boolean') {
         hash = hashBool(field, hash) ^ hashKey(key, hash)
       }
     }
   }
-  return hash * 33
+  return hash
 }
 
 export const hashObject = (props: object): number => {
