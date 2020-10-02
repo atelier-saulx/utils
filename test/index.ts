@@ -69,3 +69,47 @@ test('hash stress hashObjectIgnoreKeyOrder', async t => {
 
   t.true(typeof x === 'number')
 })
+
+test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
+  const a = {
+    type: 'folder',
+    title: '',
+    id: 'fo1',
+    name: '',
+    children: [
+      {
+        buttonText: 'my ballz',
+        type: 'match',
+        name: '',
+        id: 'ma1',
+        aliases: [],
+        published: false
+      }
+    ],
+    aliases: []
+  }
+  const b = {
+    type: 'folder',
+    title: '',
+    id: 'fo1',
+    name: '',
+    children: [
+      {
+        buttonText: 'my ballzzzz',
+        type: 'match',
+        name: '',
+        id: 'ma1',
+        aliases: [],
+        published: false
+      }
+    ],
+    aliases: []
+  }
+
+  const hashA = hashObjectIgnoreKeyOrder(a)
+  const hashB = hashObjectIgnoreKeyOrder(b)
+
+  console.log(hashA, hashB)
+
+  t.true(hashA !== hashB)
+})
