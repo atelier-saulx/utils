@@ -70,7 +70,7 @@ test('hash stress hashObjectIgnoreKeyOrder', async t => {
   t.true(typeof x === 'number')
 })
 
-test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
+test.only('hash weird equality hashObjectIgnoreKeyOrder', async t => {
   const a = {
     type: 'folder',
     title: '',
@@ -106,10 +106,16 @@ test('hash weird equality hashObjectIgnoreKeyOrder', async t => {
     aliases: []
   }
 
+  const hashA1 = hashObject(a)
+  const hashB1 = hashObject(b)
+
   const hashA = hashObjectIgnoreKeyOrder(a)
   const hashB = hashObjectIgnoreKeyOrder(b)
 
-  console.log(hashA, hashB)
+  const hashStrA = hash('my ballz')
+  const hashStrB = hash('my ballzzzz')
 
+  t.true(hashStrA !== hashStrB)
+  t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
 })

@@ -14,21 +14,21 @@ export const hashObjectIgnoreKeyOrderNest = (obj, hash = 5381): number => {
       const field = obj[key]
       const type = typeof field
       if (type === 'string') {
-        hash = (stringHash(field, hash) * 33) ^ stringHash(key, hash)
+        hash = (stringHash(field, hash) * 33) ^ (stringHash(key, hash) * 33)
       } else if (type === 'number') {
-        hash = (((hash * 33) ^ field) * 33) ^ stringHash(key, hash)
+        hash = (((hash * 33) ^ field) * 33) ^ (stringHash(key, hash) * 33)
       } else if (type === 'object') {
         if (field === null) {
-          hash = 5381 ^ stringHash(key, hash)
+          hash = 5381 ^ (stringHash(key, hash) * 33)
         } else {
           hash =
             (hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-            stringHash(key, hash)
+            (stringHash(key, hash) * 33)
         }
       } else if (type === 'boolean') {
         hash =
           (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^
-          stringHash(key, hash)
+          (stringHash(key, hash) * 33)
       }
     }
   } else {
@@ -39,21 +39,21 @@ export const hashObjectIgnoreKeyOrderNest = (obj, hash = 5381): number => {
       const field = obj[key]
       const type = typeof field
       if (type === 'string') {
-        hash = (stringHash(field, hash) * 33) ^ stringHash(key, hash)
+        hash = (stringHash(field, hash) * 33) ^ (stringHash(key, hash) * 33)
       } else if (type === 'number') {
-        hash = (((hash * 33) ^ field) * 33) ^ stringHash(key, hash)
+        hash = (((hash * 33) ^ field) * 33) ^ (stringHash(key, hash) * 33)
       } else if (type === 'object') {
         if (field === null) {
-          hash = 5381 ^ stringHash(key, hash)
+          hash = 5381 ^ (stringHash(key, hash) * 33)
         } else {
           hash =
             (hashObjectIgnoreKeyOrderNest(field, hash) * 33) ^
-            stringHash(key, hash)
+            (stringHash(key, hash) * 33)
         }
       } else if (type === 'boolean') {
         hash =
           (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^
-          stringHash(key, hash)
+          (stringHash(key, hash) * 33)
       }
     }
   }
@@ -61,49 +61,25 @@ export const hashObjectIgnoreKeyOrderNest = (obj, hash = 5381): number => {
 }
 
 export const hashObjectNest = (obj, hash = 5381): number => {
-  //   if (obj.constructor === Array) {
   for (let key in obj) {
     const field = obj[key]
     const type = typeof field
     if (type === 'string') {
-      hash = (stringHash(field, hash) * 33) ^ stringHash(key, hash)
+      hash = (stringHash(field, hash) * 33) ^ (stringHash(key, hash) * 33)
     } else if (type === 'number') {
-      hash = (((hash * 33) ^ field) * 33) ^ stringHash(key, hash)
+      hash = (((hash * 33) ^ field) * 33) ^ (stringHash(key, hash) * 33)
     } else if (type === 'object') {
       if (field === null) {
-        hash = 5381 ^ stringHash(key, hash)
+        hash = 5381 ^ (stringHash(key, hash) * 33)
       } else {
-        hash = (hashObjectNest(field, hash) * 33) ^ stringHash(key, hash)
+        hash = (hashObjectNest(field, hash) * 33) ^ (stringHash(key, hash) * 33)
       }
     } else if (type === 'boolean') {
       hash =
-        (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^ stringHash(key, hash)
+        (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^
+        (stringHash(key, hash) * 33)
     }
   }
-  //   } else {
-  //     const keys = Object.keys(obj).sort()
-
-  //     for (let i = 0; i < keys.length; i++) {
-  //       const key = keys[i]
-  //       const field = obj[key]
-  //       const type = typeof field
-  //       if (type === 'string') {
-  //         hash = (stringHash(field, hash) * 33) ^ stringHash(key, hash)
-  //       } else if (type === 'number') {
-  //         hash = (((hash * 33) ^ field) * 33) ^ stringHash(key, hash)
-  //       } else if (type === 'object') {
-  //         if (field === null) {
-  //           hash = 5381 ^ stringHash(key, hash)
-  //         } else {
-  //           hash = (hashObjectNest(field, hash) * 33) ^ stringHash(key, hash)
-  //         }
-  //       } else if (type === 'boolean') {
-  //         hash =
-  //           (((hash * 33) ^ (field === true ? 1 : 0)) * 33) ^
-  //           stringHash(key, hash)
-  //       }
-  //     }
-  //   }
   return hash
 }
 
