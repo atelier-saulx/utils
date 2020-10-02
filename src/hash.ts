@@ -7,7 +7,6 @@ export const stringHash = (str, hash = 5381): number => {
 }
 
 // ignore key order
-
 export const hashObjectIgnoreKeyOrderNest = (obj, hash = 5381): number => {
   if (obj.constructor === Array) {
     for (let key in obj) {
