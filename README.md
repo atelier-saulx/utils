@@ -64,6 +64,15 @@ import { stringHash } from '@saulx/utils'
 console.log(stringHash('bla bla bla'))
 ```
 
+## deepEqual
+
+Compare objects
+
+```javascript
+import { stringHash } from '@saulx/utils'
+console.log(deepEqual({ a: { b: true } }, { a: { b: true } })) // true
+```
+
 ## deepCopy
 
 Create a deepcopy of objects
