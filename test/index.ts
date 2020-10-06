@@ -5,7 +5,8 @@ import {
   hashObject,
   hashObjectIgnoreKeyOrder,
   deepMerge,
-  deepMergeArrays
+  deepMergeArrays,
+  wait
 } from '../src'
 
 test('hash', async t => {
@@ -435,4 +436,10 @@ test('deepMerge', async t => {
     },
     'multiple arguments'
   )
+})
+
+test('wait ', async t => {
+  var d = Date.now()
+  await wait(1e3)
+  t.true(Date.now() - d > 999)
 })
