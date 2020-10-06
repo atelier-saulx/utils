@@ -1,5 +1,12 @@
 import test from 'ava'
-import { hash, deepCopy, hashObject, hashObjectIgnoreKeyOrder } from '../src'
+import {
+  hash,
+  deepCopy,
+  hashObject,
+  hashObjectIgnoreKeyOrder,
+  deepMerge,
+  deepMergeArrays
+} from '../src'
 
 test('hash', async t => {
   const a = { x: true }
@@ -338,4 +345,62 @@ test('hash test equality 7', async t => {
 
   t.true(hashA1 !== hashB1)
   t.true(hashA !== hashB)
+})
+
+test('deepMerge', async t => {
+  const a = {
+    b: {
+      a: 'a!',
+      c: [
+        { x: true, y: false },
+        { x: false, y: true }
+      ],
+      d: { x: {} }
+    }
+  }
+
+  const b = {
+    b: {
+      b: 'its b!',
+      c: [{ x: true, y: true }],
+      d: { x: { flap: true } }
+    }
+  }
+
+  const r = deepCopy(a)
+
+  deepMergeArrays(r, deepCopy(b))
+
+  t.deepEqual(
+    r,
+    {
+      b: {
+        a: 'a!',
+        c: [
+          { x: true, y: true },
+          { x: false, y: true }
+        ],
+        d: { x: { flap: true } },
+        b: 'its b!'
+      }
+    },
+    'deep merge include arrays'
+  )
+
+  const r2 = deepCopy(a)
+
+  deepMerge(r2, deepCopy(b))
+
+  t.deepEqual(
+    r2,
+    {
+      b: {
+        a: 'a!',
+        c: [{ x: true, y: true }],
+        d: { x: { flap: true } },
+        b: 'its b!'
+      }
+    },
+    'deep merge exclude arrays'
+  )
 })

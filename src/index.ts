@@ -2,4 +2,8 @@ import deepCopy from './deepCopy'
 
 export * from './hash'
 
-export { deepCopy }
+export * from './deepMerge'
+
+import isObject from './isObject'
+
+export { deepCopy, isObject }
