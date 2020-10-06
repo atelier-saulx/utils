@@ -7,7 +7,8 @@ import {
   hashObjectIgnoreKeyOrder,
   deepMerge,
   deepMergeArrays,
-  wait
+  wait,
+  deepEqual
 } from '../src'
 
 test('hash', async t => {
@@ -487,4 +488,11 @@ test('hash fixed length', async t => {
     t.is(blap.length, 20)
     t.is(blurp.length, 10)
   }
+})
+
+test('deepEqual ', async t => {
+  const bla = { x: true, y: true, z: [1, 2, 3, 4, { x: true }] }
+  const blarf = { x: true, y: true, z: [1, 2, 3, 4, { x: true }] }
+
+  t.true(deepEqual(bla, blarf))
 })

@@ -8,4 +8,6 @@ import isObject from './isObject'
 
 import wait from './wait'
 
-export { deepCopy, isObject, wait }
+import deepEqual from './deepEqual'
+
+export { deepCopy, isObject, wait, deepEqual }
