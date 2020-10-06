@@ -1,6 +1,7 @@
 import test from 'ava'
 import {
   hash,
+  hashCompact,
   deepCopy,
   hashObject,
   hashObjectIgnoreKeyOrder,
@@ -449,7 +450,7 @@ test('wait ', async t => {
   t.true(Date.now() - d > 999)
 })
 
-test.only('hash fixed length', async t => {
+test('hash fixed length', async t => {
   const texts = []
   for (let i = 0; i < 10000; i++) {
     const nr = Math.random() * 100
@@ -467,16 +468,23 @@ test.only('hash fixed length', async t => {
   for (let i = 0; i < 10; i++) {
     const bla = texts[i]
     const x = hash(bla, 15)
-    const y = hash(bla, 9)
-    const t = hash(bla, 10)
-    const z = hash(bla, 6)
-    const blap = hash(
+    const y = hashCompact(bla, 9)
+    const a = hashCompact(
+      ['x', 'bla bla', 'snurkypatbs do it', { lifestyle: true }],
+      10
+    )
+    const z = hashCompact(bla, 6)
+    const blap = hashCompact(
       ['x', 'bla bla', 'snurkypatbs do it', { lifestyle: true }],
       20
     )
-    const blurp = hash(['x', 'bla bla', 'snurkypatbs do it'], 10)
-    console.log(bla, '--------->', x, y, z, t, blap, blurp)
-  }
+    const blurp = hashCompact(['x', 'bla bla', 'snurkypatbs do it'], 10)
 
-  t.pass()
+    t.is(x.toString().length, 15)
+    t.is(y.length, 9)
+    t.is(a.length, 10)
+    t.is(z.length, 6)
+    t.is(blap.length, 20)
+    t.is(blurp.length, 10)
+  }
 })

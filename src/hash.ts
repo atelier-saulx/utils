@@ -138,7 +138,38 @@ const toString = (hash: number): string => {
 }
 
 // want bits probably
-export const hash = (val: any, size?: number): string | number => {
+export const hash = (val: any, size?: number): number => {
+  let result: number
+  if (typeof val === 'object') {
+    if (val === null) {
+      result = 0
+    } else {
+      result = hashObject(val) >>> 0
+    }
+  } else {
+    if (typeof val === 'boolean') {
+      result = hashBool(val) >>> 0
+    } else if (typeof val === 'number') {
+      result = ((nullHash ^ val) * size) >>> 0
+    } else {
+      result = stringHash(val) >>> 0
+    }
+  }
+
+  if (size) {
+    if (size < 10) {
+      throw new Error('Minimum size for 32 bits is 10 numbers')
+    }
+    const len = Math.ceil(Math.log10(result + 1))
+    if (len < size) {
+      return result * Math.pow(10, size - len)
+    }
+  }
+
+  return result
+}
+
+export const hashCompact = (val: any, size?: number): string => {
   let result: number
   if (typeof val === 'object') {
     if (val === null) {
@@ -147,12 +178,8 @@ export const hash = (val: any, size?: number): string | number => {
       if (size && size > 9 && val.constructor === Array) {
         let str = ''
         const arraySize = val.length
-        const space = ~~(size / arraySize)
-        const first = toString(<number>hash(val))
         for (let i = 0; i < arraySize; i++) {
-          val.forEach(v => {
-            str += toString(<number>hash(v))
-          })
+          str += toString(hash(val[i]))
         }
         const len = str.length
         if (len < size) {
@@ -177,29 +204,16 @@ export const hash = (val: any, size?: number): string | number => {
       result = stringHash(val) >>> 0
     }
   }
-
-  if (size) {
-    if (size < 6) {
-      throw new Error('Minimum size for 32 bits is 6 characters')
-    }
-
-    const len = Math.ceil(Math.log10(result + 1))
-
-    if (len < size) {
-      return result * Math.pow(10, size - len)
-    } else if (len > size) {
-      let x = toString(result)
-      const len = x.length
-      if (len < size) {
-        x += 'x'
-        if (len + 1 < size) {
-          x += new Array(size - len).join('0')
-        }
-      }
-
-      console.log('need less space make small small', x.length, x, size)
+  if (size < 6) {
+    throw new Error('Minimum size for 32 bits is 6 characters')
+  }
+  let x = toString(result)
+  const len = x.length
+  if (len < size) {
+    x += 'x'
+    if (len + 1 < size) {
+      x += new Array(size - len).join('0')
     }
   }
-
-  return result
+  return x
 }
