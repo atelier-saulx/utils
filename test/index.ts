@@ -403,4 +403,36 @@ test('deepMerge', async t => {
     },
     'deep merge exclude arrays'
   )
+
+  const r3 = deepCopy(a)
+
+  deepMerge(
+    r3,
+    {
+      b: { a: 'ja' }
+    },
+    {
+      b: { x: 'snurf' }
+    },
+    {
+      blarf: true
+    }
+  )
+
+  t.deepEqual(
+    r3,
+    {
+      b: {
+        a: 'ja',
+        c: [
+          { x: true, y: false },
+          { x: false, y: true }
+        ],
+        d: { x: {} },
+        x: 'snurf'
+      },
+      blarf: true
+    },
+    'multiple arguments'
+  )
 })
