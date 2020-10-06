@@ -6,4 +6,6 @@ export * from './deepMerge'
 
 import isObject from './isObject'
 
-export { deepCopy, isObject }
+import wait from './wait'
+
+export { deepCopy, isObject, wait }

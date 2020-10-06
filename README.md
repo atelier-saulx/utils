@@ -106,3 +106,20 @@ import { isObject } from '@saulx/utils'
 console.log(isObject({ x: true })) // true
 console.log(isObject([1, 2, 3])) // false
 ```
+
+## wait
+
+Timeout in a promise, default is 100ms
+
+```javascript
+import { wait } from '@saulx/utils'
+
+const somethingAsync = async () => {
+  await wait() // 100ms
+  console.log('after 100ms')
+  await wait(1000)
+  console.log('after 1100ms')
+}
+
+somethingAsync()
+```
