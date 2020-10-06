@@ -38,7 +38,7 @@ test('hash stress', async t => {
 
   var d = Date.now()
   const x = hashObject(a)
-  console.log(Date.now() - d, 'ms')
+  console.log('    1mil keys object takes', Date.now() - d, 'ms to hash')
 
   t.true(typeof x === 'number')
 })
@@ -73,7 +73,12 @@ test('hash stress hashObjectIgnoreKeyOrder', async t => {
 
   var d = Date.now()
   const x = hashObjectIgnoreKeyOrder(a)
-  console.log(Date.now() - d, 'ms')
+
+  console.log(
+    '    1mil keys object takes',
+    Date.now() - d,
+    'ms to hash ignore key order'
+  )
 
   t.true(typeof x === 'number')
 })
@@ -442,4 +447,36 @@ test('wait ', async t => {
   var d = Date.now()
   await wait(1e3)
   t.true(Date.now() - d > 999)
+})
+
+test.only('hash fixed length', async t => {
+  const texts = []
+  for (let i = 0; i < 10000; i++) {
+    const nr = Math.random() * 100
+    texts[i] =
+      nr < 33
+        ? {
+            blxxxa: ~~(Math.random() * 100 * 10000).toString(16),
+            bla: ~~(Math.random() * 100 * 10000).toString(16)
+          }
+        : nr < 66
+        ? (Math.random() * 100 * 10000).toString(16)
+        : (Math.random() * 100000 * 10000).toString(16)
+  }
+
+  for (let i = 0; i < 10; i++) {
+    const bla = texts[i]
+    const x = hash(bla, 15)
+    const y = hash(bla, 9)
+    const t = hash(bla, 10)
+    const z = hash(bla, 6)
+    const blap = hash(
+      ['x', 'bla bla', 'snurkypatbs do it', { lifestyle: true }],
+      20
+    )
+    const blurp = hash(['x', 'bla bla', 'snurkypatbs do it'], 10)
+    console.log(bla, '--------->', x, y, z, t, blap, blurp)
+  }
+
+  t.pass()
 })

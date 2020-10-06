@@ -124,18 +124,82 @@ export const hashObjectIgnoreKeyOrder = (props: object): number => {
   return hashObjectIgnoreKeyOrderNest(props) >>> 0
 }
 
-export const hash = (val: any): number => {
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+const toString = (hash: number): string => {
+  let result: string = ''
+  let mod: number
+  do {
+    mod = hash % 62
+    result = chars.charAt(mod) + result
+    hash = Math.floor(hash / 62)
+  } while (hash > 0)
+  return result
+}
+
+// want bits probably
+export const hash = (val: any, size?: number): string | number => {
+  let result: number
   if (typeof val === 'object') {
     if (val === null) {
-      return 0
+      result = 0
     } else {
-      return hashObject(val) >>> 0
+      if (size && size > 9 && val.constructor === Array) {
+        let str = ''
+        const arraySize = val.length
+        const space = ~~(size / arraySize)
+        const first = toString(<number>hash(val))
+        for (let i = 0; i < arraySize; i++) {
+          val.forEach(v => {
+            str += toString(<number>hash(v))
+          })
+        }
+        const len = str.length
+        if (len < size) {
+          str += 'x'
+          if (len + 1 < size) {
+            str += new Array(size - len).join('0')
+          }
+        } else if (len > size) {
+          return str.slice(0, size)
+        }
+        return str
+      } else {
+        result = hashObject(val) >>> 0
+      }
     }
   } else {
-    if (typeof val === 'number') {
-      return (nullHash ^ val) >>> 0
+    if (typeof val === 'boolean') {
+      result = hashBool(val) >>> 0
+    } else if (typeof val === 'number') {
+      result = ((nullHash ^ val) * size) >>> 0
     } else {
-      return stringHash(val) >>> 0
+      result = stringHash(val) >>> 0
     }
   }
+
+  if (size) {
+    if (size < 6) {
+      throw new Error('Minimum size for 32 bits is 6 characters')
+    }
+
+    const len = Math.ceil(Math.log10(result + 1))
+
+    if (len < size) {
+      return result * Math.pow(10, size - len)
+    } else if (len > size) {
+      let x = toString(result)
+      const len = x.length
+      if (len < size) {
+        x += 'x'
+        if (len + 1 < size) {
+          x += new Array(size - len).join('0')
+        }
+      }
+
+      console.log('need less space make small small', x.length, x, size)
+    }
+  }
+
+  return result
 }
