@@ -8,8 +8,14 @@ import {
   deepMerge,
   deepMergeArrays,
   wait,
-  deepEqual
+  deepEqual,
+  toEnvVar
 } from '../src'
+
+test('env var', async t => {
+  const x = toEnvVar('@based/bla-bla-bla$_!')
+  t.is(x, 'BASED_BLA_BLA_BLA')
+})
 
 test('hash', async t => {
   const a = { x: true }
