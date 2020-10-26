@@ -502,3 +502,52 @@ test('deepEqual ', async t => {
 
   t.true(deepEqual(bla, blarf))
 })
+
+test.only('deepEqual 2', async t => {
+  const bla = {
+    id: 213891765,
+    privateIp: '10.114.0.21',
+    publicIp: '159.89.17.141',
+    name: 'my-special-app-for-testing-super-secret-0-fra1',
+    tags: {
+      app: 'my_special_app_for_testing_super_secret',
+      env: 'production',
+      net: 'private',
+      project: 'supersecretspecialtestproject',
+      org: 'saulx'
+    },
+    specs: {
+      memory: '1gb',
+      cpus: 1,
+      image: 'ubuntu-nodejs',
+      region: 'fra1',
+      cloudProvider: 'do',
+      sizeName: 's-1vcpu-1gb'
+    },
+    price: 5
+  }
+  const blarf = {
+    id: 213891765,
+    privateIp: '10.114.0.21',
+    publicIp: '159.89.17.141',
+    name: 'my-special-app-for-testing-super-secret-0-fra1',
+    tags: {
+      app: 'my_special_app_for_testing_super_secret',
+      env: 'production',
+      net: 'private',
+      project: 'supersecretspecialtestproject',
+      org: 'saulx'
+    },
+    specs: {
+      memory: '1gb',
+      cpus: 1,
+      image: 'ubuntu-nodejs',
+      region: 'fra1',
+      cloudProvider: 'do',
+      sizeName: 's-1vcpu-1gb'
+    },
+    price: 5
+  }
+
+  t.true(deepEqual(bla, blarf))
+})
