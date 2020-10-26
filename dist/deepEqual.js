@@ -33,8 +33,8 @@ const deepEqual = (a, b) => {
                         return false;
                     }
                     else if (t === 'object') {
-                        if (deepEqual(a[i], b[i])) {
-                            return true;
+                        if (!deepEqual(a[i], b[i])) {
+                            return false;
                         }
                     }
                 }
@@ -70,8 +70,8 @@ const deepEqual = (a, b) => {
                 return false;
             }
             else if (k && t === 'object') {
-                if (deepEqual(k1, k)) {
-                    return true;
+                if (!deepEqual(k1, k)) {
+                    return false;
                 }
             }
             else if (k !== k1) {
