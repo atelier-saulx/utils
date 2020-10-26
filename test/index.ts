@@ -503,7 +503,7 @@ test('deepEqual ', async t => {
   t.true(deepEqual(bla, blarf))
 })
 
-test.only('deepEqual 2', async t => {
+test('deepEqual 2', async t => {
   const bla = {
     id: 213891765,
     privateIp: '10.114.0.21',
