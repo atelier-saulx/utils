@@ -603,18 +603,11 @@ test('deepEqual 3', async t => {
 })
 
 test.cb('readStream', t => {
-  const { PassThrough, Writable } = require('stream')
+  const { PassThrough } = require('stream')
   const pass = new PassThrough()
-  const writable = new Writable()
+  pass.write('ok') // Will not emit 'data'.
   readStream(pass).then(v => {
-    console.log('done!', v.toString())
     t.end()
   })
-  pass.pipe(writable)
-  pass.unpipe(writable)
-  // readableFlowing is now false.
-  pass.resume()
-  setTimeout(() => {
-    pass.end('x')
-  }, 100)
+  pass.end(Buffer.from('flap'))
 })
