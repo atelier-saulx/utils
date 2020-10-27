@@ -602,6 +602,55 @@ test('deepEqual 3', async t => {
   t.false(deepEqual(bla, blarf))
 })
 
+test('deepEqual 4', async t => {
+  const bla = {
+    id: 213913182,
+    privateIp: '10.110.0.2',
+    publicIp: '128.199.41.139',
+    name: 'ams3-my-special-app-for-testing-super-secret-persist-33057c3-0',
+    tags: {
+      app: 'my_special_app_for_testing_super_secret_persist',
+      env: 'production',
+      net: 'private',
+      project: 'supersecretspecialtestproject',
+      org: 'saulx'
+    },
+    specs: {
+      memory: '1gb',
+      cpus: 1,
+      image: 'ubuntu-nodejs',
+      region: 'ams3',
+      cloudProvider: 'do',
+      sizeName: 's-1vcpu-1gb'
+    },
+    price: 5,
+    domain: 'my-special-app-for-testing-super-secret-persist.based.io'
+  }
+  const blarf = {
+    id: 213913182,
+    privateIp: '10.110.0.2',
+    publicIp: '128.199.41.139',
+    name: 'ams3-my-special-app-for-testing-super-secret-persist-33057c3-0',
+    tags: {
+      app: 'my_special_app_for_testing_super_secret_persist',
+      env: 'production',
+      net: 'private',
+      project: 'supersecretspecialtestproject',
+      org: 'saulx'
+    },
+    specs: {
+      memory: '1gb',
+      cpus: 1,
+      image: 'ubuntu-nodejs',
+      region: 'ams3',
+      cloudProvider: 'do',
+      sizeName: 's-1vcpu-1gb'
+    },
+    price: 5
+  }
+  t.false(deepEqual(bla, blarf))
+})
+
 test.cb('readStream', t => {
   const { PassThrough } = require('stream')
   const { createReadStream } = require('fs')
