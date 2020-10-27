@@ -8,8 +8,10 @@ import deepEqual from './deepEqual'
 
 import toEnvVar from './envVar'
 
+import readStream from './readStream'
+
 export * from './hash'
 
 export * from './deepMerge'
 
-export { deepCopy, isObject, wait, deepEqual, toEnvVar }
+export { deepCopy, readStream, isObject, wait, deepEqual, toEnvVar }

@@ -9,7 +9,8 @@ import {
   deepMergeArrays,
   wait,
   deepEqual,
-  toEnvVar
+  toEnvVar,
+  readStream
 } from '../src'
 
 test('env var', async t => {
@@ -599,4 +600,21 @@ test('deepEqual 3', async t => {
   }
 
   t.false(deepEqual(bla, blarf))
+})
+
+test.cb('readStream', t => {
+  const { PassThrough, Writable } = require('stream')
+  const pass = new PassThrough()
+  const writable = new Writable()
+  readStream(pass).then(v => {
+    console.log('done!', v.toString())
+    t.end()
+  })
+  pass.pipe(writable)
+  pass.unpipe(writable)
+  // readableFlowing is now false.
+  pass.resume()
+  setTimeout(() => {
+    pass.end('x')
+  }, 100)
 })
