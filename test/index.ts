@@ -604,10 +604,12 @@ test('deepEqual 3', async t => {
 
 test.cb('readStream', t => {
   const { PassThrough } = require('stream')
-  const pass = new PassThrough()
-  pass.write('ok') // Will not emit 'data'.
-  readStream(pass).then(v => {
+  const { createReadStream } = require('fs')
+  const { join } = require('path')
+
+  readStream(createReadStream(join(__dirname, '../package.json'))).then(v => {
+    const pkg = JSON.parse(v.toString())
+    t.is(pkg.name, '@saulx/utils')
     t.end()
   })
-  pass.end(Buffer.from('flap'))
 })
