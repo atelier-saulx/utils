@@ -10,7 +10,8 @@ import {
   wait,
   deepEqual,
   toEnvVar,
-  readStream
+  readStream,
+  queued
 } from '../src'
 
 test('env var', async t => {
@@ -661,4 +662,42 @@ test.cb('readStream', t => {
     t.is(pkg.name, '@saulx/utils')
     t.end()
   })
+})
+
+test.only('queued', async t => {
+  const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
+    await wait(100)
+    return x + 'blarp'
+  }
+  const myFnQueud = queued(myFn)
+  const args = []
+  for (let i = 0; i < 10; i++) {
+    args.push([i, { x: true }])
+  }
+  for (let i = 0; i < 10; i++) {
+    args.push([i, { x: true }])
+  }
+  let d = Date.now()
+  await Promise.all(args.map(v => myFnQueud(...v)))
+  const ellapsed = Date.now() - d
+  t.true(ellapsed > 500 && ellapsed < 1500)
+})
+
+test.only('queued concurrency 2', async t => {
+  const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
+    await wait(100)
+    return x + 'blarp'
+  }
+  const myFnQueud = queued(myFn, { concurrency: 2 })
+  const args = []
+  for (let i = 0; i < 10; i++) {
+    args.push([i, { x: true }])
+  }
+  for (let i = 0; i < 10; i++) {
+    args.push([i, { x: true }])
+  }
+  let d = Date.now()
+  await Promise.all(args.map(v => myFnQueud(...v)))
+  const ellapsed = Date.now() - d
+  t.true(ellapsed > 250 && ellapsed < 750)
 })

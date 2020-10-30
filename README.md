@@ -155,3 +155,67 @@ const somethingAsync = async () => {
 
 somethingAsync()
 ```
+
+## readStream
+
+Sink a read stream into a promise
+
+```javascript
+import { readStream } from '@saulx/utils'
+import fs from 'fs
+
+const aReadStream = fs.createReadStream('somefile')
+const myResult = await readStream(aReadStream)
+```
+
+## toEnvVar
+
+Convert a string to a env variable safe name
+
+```javascript
+import { toEnvVar } from '@saulx/utils'
+const x = toEnvVar('@based/bla-bla-bla$_!')
+console.log(x) // prints BASED_BLA_BLA_BLA
+```
+
+## queued
+
+Pass any async function and queue it based on the arguments, also shares the function execution for the same args
+
+```javascript
+import { queued, wait } from '@saulx/utils'
+
+const myFn = queued(async (a: string) => {
+  await wait(1000)
+  return a + '!'
+})
+
+// will execute bla first then x
+await Promise.all([
+  myFn('bla'),
+  myFn('x')
+  myFn('bla') // bla will be shared
+])
+```
+
+```javascript
+import { queued, wait } from '@saulx/utils'
+
+const myFn = queued(async (a: string) => {
+  await wait(1000)
+  return a + '!'
+}, {
+  memoize: (a) => {
+    // choose the value to use for memoization (to share results)
+    return a
+  },
+  concurrency: 10 // max concurrency of 10
+})
+
+// will execute bla first then x
+await Promise.all([
+  myFn('bla'),
+  myFn('x')
+  myFn('bla') // bla will be shared
+])
+```

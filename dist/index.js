@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toEnvVar = exports.deepEqual = exports.wait = exports.isObject = exports.readStream = exports.deepCopy = void 0;
+exports.toEnvVar = exports.deepEqual = exports.wait = exports.isObject = exports.readStream = exports.queued = exports.deepCopy = void 0;
 const deepCopy_1 = __importDefault(require("./deepCopy"));
 exports.deepCopy = deepCopy_1.default;
 const isObject_1 = __importDefault(require("./isObject"));
@@ -26,6 +26,8 @@ const envVar_1 = __importDefault(require("./envVar"));
 exports.toEnvVar = envVar_1.default;
 const readStream_1 = __importDefault(require("./readStream"));
 exports.readStream = readStream_1.default;
+const queued_1 = __importDefault(require("./queued"));
+exports.queued = queued_1.default;
 __exportStar(require("./hash"), exports);
 __exportStar(require("./deepMerge"), exports);
 //# sourceMappingURL=index.js.map
