@@ -150,7 +150,7 @@ export const hash = (val: any, size?: number): number => {
     if (typeof val === 'boolean') {
       result = hashBool(val) >>> 0
     } else if (typeof val === 'number') {
-      result = ((nullHash ^ val) * size) >>> 0
+      result = ((nullHash ^ val) * 33) >>> 0
     } else {
       result = stringHash(val) >>> 0
     }
@@ -199,7 +199,7 @@ export const hashCompact = (val: any, size?: number): string => {
     if (typeof val === 'boolean') {
       result = hashBool(val) >>> 0
     } else if (typeof val === 'number') {
-      result = ((nullHash ^ val) * size) >>> 0
+      result = ((nullHash ^ val) * 33) >>> 0
     } else {
       result = stringHash(val) >>> 0
     }

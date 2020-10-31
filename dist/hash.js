@@ -159,7 +159,7 @@ exports.hash = (val, size) => {
             result = hashBool(val) >>> 0;
         }
         else if (typeof val === 'number') {
-            result = ((nullHash ^ val) * size) >>> 0;
+            result = ((nullHash ^ val) * 33) >>> 0;
         }
         else {
             result = exports.stringHash(val) >>> 0;
@@ -211,7 +211,7 @@ exports.hashCompact = (val, size) => {
             result = hashBool(val) >>> 0;
         }
         else if (typeof val === 'number') {
-            result = ((nullHash ^ val) * size) >>> 0;
+            result = ((nullHash ^ val) * 33) >>> 0;
         }
         else {
             result = exports.stringHash(val) >>> 0;
