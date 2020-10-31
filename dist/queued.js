@@ -10,7 +10,10 @@ const defaultDedup = (...args) => {
     for (let arg of args) {
         if (arg !== undefined) {
             if (typeof arg === 'object') {
-                if (is_plain_object_1.default(arg)) {
+                if (Array.isArray(arg)) {
+                    x += hash_1.hashObjectIgnoreKeyOrder(arg);
+                }
+                else if (is_plain_object_1.default(arg)) {
                     x += hash_1.hashObjectIgnoreKeyOrder(arg);
                 }
             }

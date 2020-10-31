@@ -8,7 +8,9 @@ const defaultDedup = (...args: any[]): string | number => {
   for (let arg of args) {
     if (arg !== undefined) {
       if (typeof arg === 'object') {
-        if (isPlainObject(arg)) {
+        if (Array.isArray(arg)) {
+          x += hashObjectIgnoreKeyOrder(arg)
+        } else if (isPlainObject(arg)) {
           x += hashObjectIgnoreKeyOrder(arg)
         }
       } else {
