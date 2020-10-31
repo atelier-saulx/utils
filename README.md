@@ -182,6 +182,8 @@ console.log(x) // prints BASED_BLA_BLA_BLA
 
 Pass any async function and queue it based on the arguments, also shares the function execution for the same args
 
+Accepts 5 arguments maximum!
+
 ```javascript
 import { queued, wait } from '@saulx/utils'
 
