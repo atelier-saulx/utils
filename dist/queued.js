@@ -70,38 +70,8 @@ function queued(promiseFn, opts = {}) {
             }
         }
     };
-    return (a, b, c, d, e, f, g, h) => {
+    return (...args) => {
         return new Promise((resolve, reject) => {
-            let args;
-            // this beauty is there for type script so args.length will still be correct
-            // (typescript does not support inheriting types from args directly...)
-            if (h !== undefined) {
-                args = [a, b, c, d, e, f, g, h];
-            }
-            else if (g !== undefined) {
-                args = [a, b, c, d, e, f, g];
-            }
-            else if (f !== undefined) {
-                args = [a, b, c, d, e, f];
-            }
-            else if (e !== undefined) {
-                args = [a, b, c, d, e];
-            }
-            else if (d !== undefined) {
-                args = [a, b, c, d];
-            }
-            else if (c !== undefined) {
-                args = [a, b, c];
-            }
-            else if (b !== undefined) {
-                args = [a, b];
-            }
-            else if (a !== undefined) {
-                args = [a];
-            }
-            else {
-                args = [];
-            }
             const id = opts.dedup(...args);
             if (!listeners[id]) {
                 listeners[id] = { args, listeners: [[resolve, reject]] };

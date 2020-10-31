@@ -25,7 +25,70 @@ const defaultDedup = (...args: any[]): string | number => {
   return x
 }
 
-export default function queued<A, B, C, D, E, F, G, H>(
+function queued<K>(
+  promiseFn: () => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): () => Promise<K>
+function queued<A, K>(
+  promiseFn: (a?: A) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A) => Promise<K>
+function queued<A, B, K>(
+  promiseFn: (a?: A, b?: B) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B) => Promise<K>
+function queued<A, B, C, K>(
+  promiseFn: (a?: A, b?: B, c?: C) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C) => Promise<K>
+function queued<A, B, C, D, K>(
+  promiseFn: (a?: A, b?: B, c?: C, d?: D) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D) => Promise<K>
+function queued<A, B, C, D, E, K>(
+  promiseFn: (a?: A, b?: B, c?: C, d?: D, e?: E) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D, e?: E) => Promise<K>
+function queued<A, B, C, D, E, F, G, K>(
+  promiseFn: (a?: A, b?: B, c?: C, d?: D, e?: E) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G) => Promise<K>
+function queued<A, B, C, D, E, F, K>(
+  promiseFn: (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F) => Promise<K>
+function queued<A, B, C, D, E, F, G, K>(
+  promiseFn: (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G) => Promise<K>
+function queued<A, B, C, D, E, F, G, H, K>(
   promiseFn: (
     a?: A,
     b?: B,
@@ -35,12 +98,65 @@ export default function queued<A, B, C, D, E, F, G, H>(
     f?: F,
     g?: G,
     h?: H
-  ) => Promise<H>,
+  ) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H) => Promise<K>
+function queued<A, B, C, D, E, F, G, H, I, K>(
+  promiseFn: (
+    a?: A,
+    b?: B,
+    c?: C,
+    d?: D,
+    e?: E,
+    f?: F,
+    g?: G,
+    h?: H,
+    i?: I
+  ) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H, i?: I) => Promise<K>
+function queued<A, B, C, D, E, F, G, H, I, J, K>(
+  promiseFn: (
+    a?: A,
+    b?: B,
+    c?: C,
+    d?: D,
+    e?: E,
+    f?: F,
+    g?: G,
+    h?: H,
+    i?: I,
+    j?: J
+  ) => Promise<K>,
+  opts?: {
+    concurrency?: number
+    dedup?: (...args: any[]) => number | string
+  }
+): (
+  a?: A,
+  b?: B,
+  c?: C,
+  d?: D,
+  e?: E,
+  f?: F,
+  g?: G,
+  h?: H,
+  i?: I,
+  j?: J
+) => Promise<K>
+function queued(
+  promiseFn,
   opts: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
   } = {}
-): (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H) => Promise<H> {
+) {
   // default options
   if (!opts.dedup) {
     opts.dedup = defaultDedup
@@ -88,30 +204,8 @@ export default function queued<A, B, C, D, E, F, G, H>(
     }
   }
 
-  return (a, b, c, d, e, f, g, h): Promise<any> => {
+  return (...args) => {
     return new Promise((resolve, reject) => {
-      let args: any[]
-      // this beauty is there for type script so args.length will still be correct
-      // (typescript does not support inheriting types from args directly...)
-      if (h !== undefined) {
-        args = [a, b, c, d, e, f, g, h]
-      } else if (g !== undefined) {
-        args = [a, b, c, d, e, f, g]
-      } else if (f !== undefined) {
-        args = [a, b, c, d, e, f]
-      } else if (e !== undefined) {
-        args = [a, b, c, d, e]
-      } else if (d !== undefined) {
-        args = [a, b, c, d]
-      } else if (c !== undefined) {
-        args = [a, b, c]
-      } else if (b !== undefined) {
-        args = [a, b]
-      } else if (a !== undefined) {
-        args = [a]
-      } else {
-        args = []
-      }
       const id = opts.dedup(...args)
       if (!listeners[id]) {
         listeners[id] = { args, listeners: [[resolve, reject]] }
@@ -124,3 +218,5 @@ export default function queued<A, B, C, D, E, F, G, H>(
     })
   }
 }
+
+export default queued

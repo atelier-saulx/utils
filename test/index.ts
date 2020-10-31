@@ -689,7 +689,7 @@ test('queued', async t => {
   t.is(cnt, 10)
 })
 
-test.only('queued concurrency 2', async t => {
+test('queued concurrency 2', async t => {
   const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
     await wait(1000)
     return x + 'blarp'
