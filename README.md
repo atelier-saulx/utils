@@ -162,7 +162,7 @@ Sink a read stream into a promise
 
 ```javascript
 import { readStream } from '@saulx/utils'
-import fs from 'fs
+import fs from 'fs'
 
 const aReadStream = fs.createReadStream('somefile')
 const myResult = await readStream(aReadStream)
