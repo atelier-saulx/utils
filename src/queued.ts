@@ -1,5 +1,5 @@
 import { hash, hashObjectIgnoreKeyOrder } from './hash'
-import isPlainObject from 'is-plain-object'
+import isPlainObject from 'is-plain-obj'
 
 type Listener = (r: any) => any
 

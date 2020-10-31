@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const hash_1 = require("./hash");
-const is_plain_object_1 = __importDefault(require("is-plain-object"));
+const is_plain_obj_1 = __importDefault(require("is-plain-obj"));
 const defaultDedup = (...args) => {
     let x = '';
     for (let arg of args) {
@@ -13,7 +13,7 @@ const defaultDedup = (...args) => {
                 if (Array.isArray(arg)) {
                     x += hash_1.hashObjectIgnoreKeyOrder(arg);
                 }
-                else if (is_plain_object_1.default(arg)) {
+                else if (is_plain_obj_1.default(arg)) {
                     x += hash_1.hashObjectIgnoreKeyOrder(arg);
                 }
             }
