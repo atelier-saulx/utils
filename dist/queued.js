@@ -1,17 +1,31 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const hash_1 = require("./hash");
-const defaultMemoize = (...args) => {
-    // go trough all args
-    const x = hash_1.hashObjectIgnoreKeyOrder(args);
-    console.log(x);
+const is_plain_object_1 = __importDefault(require("is-plain-object"));
+const defaultDedup = (...args) => {
+    let x = '';
+    for (let arg of args) {
+        if (typeof arg === 'object') {
+            if (is_plain_object_1.default(arg)) {
+                x += hash_1.hashObjectIgnoreKeyOrder(arg);
+            }
+            else {
+                console.log('ignore!');
+            }
+        }
+        else {
+            x += hash_1.hash(arg);
+        }
+    }
     return x;
 };
-// function map<T, K>(list: T[], fn(x: T => K): K[]
 function queued(promiseFn, opts = {}) {
     // default options
-    if (!opts.memoize) {
-        opts.memoize = defaultMemoize;
+    if (!opts.dedup) {
+        opts.dedup = defaultDedup;
     }
     if (!opts.concurrency) {
         opts.concurrency = 1;
@@ -19,11 +33,12 @@ function queued(promiseFn, opts = {}) {
     const listeners = {};
     let inProgress = false;
     const drain = () => { };
-    return (...args) => {
+    return (a, b, c, d, e, f, g, h, i, j) => {
         return new Promise((resolve, reject) => {
             // here we make the function
-            console.log('yesh');
-            promiseFn(...args)
+            const id = opts.dedup(a, b, c, d, e, f, g, h, i, j);
+            console.log('yesh', id);
+            promiseFn(a, b, c, d, e, f, g, h, i, j)
                 .then(resolve)
                 .catch(reject);
         });

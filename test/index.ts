@@ -665,6 +665,12 @@ test.cb('readStream', t => {
 })
 
 test.only('queued', async t => {
+  class Val {}
+
+  const val = new Val()
+
+  // does not include val in dedup
+
   const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
     await wait(100)
     return x + 'blarp'
@@ -683,21 +689,22 @@ test.only('queued', async t => {
   t.true(ellapsed > 500 && ellapsed < 1500)
 })
 
-test.only('queued concurrency 2', async t => {
-  const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
-    await wait(100)
-    return x + 'blarp'
-  }
-  const myFnQueud = queued(myFn, { concurrency: 2 })
-  const args = []
-  for (let i = 0; i < 10; i++) {
-    args.push([i, { x: true }])
-  }
-  for (let i = 0; i < 10; i++) {
-    args.push([i, { x: true }])
-  }
-  let d = Date.now()
-  await Promise.all(args.map(v => myFnQueud(...v)))
-  const ellapsed = Date.now() - d
-  t.true(ellapsed > 250 && ellapsed < 750)
-})
+// test.only('queued concurrency 2', async t => {
+//   const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
+//     await wait(100)
+//     return x + 'blarp'
+//   }
+
+//   const myFnQueud = queued(myFn, { concurrency: 2 })
+//   const args = []
+//   for (let i = 0; i < 10; i++) {
+//     args.push([i, { x: true }])
+//   }
+//   for (let i = 0; i < 10; i++) {
+//     args.push([i, { x: true }])
+//   }
+//   let d = Date.now()
+//   await Promise.all(args.map(v => myFnQueud(...v)))
+//   const ellapsed = Date.now() - d
+//   t.true(ellapsed > 250 && ellapsed < 750)
+// })

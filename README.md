@@ -205,14 +205,15 @@ const myFn = queued(async (a: string) => {
   await wait(1000)
   return a + '!'
 }, {
-  memoize: (a) => {
-    // choose the value to use for memoization (to share results)
+  dedup: (a) => {
+    // choose the value to use for dedup (to share results)
     return a
   },
   concurrency: 10 // max concurrency of 10
 })
 
-// will execute bla first then x
+// will execute all at the same time (scince concurrency is 10)
+// will only execute 'bla' once since it has the same arguments used in id
 await Promise.all([
   myFn('bla'),
   myFn('x')

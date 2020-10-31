@@ -35,6 +35,9 @@
   "eslintConfig": {
     "extends": "@saulx/eslint-config"
   },
+  "dependencies": {
+    "is-plain-object": "^5.0.0"
+  },
   "devDependencies": {
     "ava": "2.4.0",
     "husky": "^3.0.8",

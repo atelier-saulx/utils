@@ -1,27 +1,58 @@
-import { hashObjectIgnoreKeyOrder } from './hash'
+import { hash, hashObjectIgnoreKeyOrder } from './hash'
+import isPlainObject from 'is-plain-object'
 
 type Listener = (result: { returnValue?: any; err?: Error }) => {}
 
-const defaultMemoize = (...args: any[]) => {
-  // go trough all args
-
-  const x = hashObjectIgnoreKeyOrder(args)
-  console.log(x)
+const defaultDedup = (...args: any[]): string | number => {
+  let x = ''
+  for (let arg of args) {
+    if (typeof arg === 'object') {
+      if (isPlainObject(arg)) {
+        x += hashObjectIgnoreKeyOrder(arg)
+      } else {
+        console.log('ignore!')
+      }
+    } else {
+      x += hash(arg)
+    }
+  }
   return x
 }
 
-// function map<T, K>(list: T[], fn(x: T => K): K[]
-
-export default function queued<T, R>(
-  promiseFn: (...args: any[]) => Promise<any>,
+export default function queued<A, B, C, D, E, F, G, H, I, J, K>(
+  promiseFn: (
+    a?: A,
+    b?: B,
+    c?: C,
+    d?: D,
+    e?: E,
+    f?: F,
+    g?: G,
+    h?: H,
+    i?: I,
+    j?: J,
+    k?: K
+  ) => Promise<K>,
   opts: {
     concurrency?: number
-    memoize?: (...args: any[]) => any
+    dedup?: (...args: any[]) => number | string
   } = {}
-): <T>(...args: any[]) => Promise<any> {
+): (
+  a?: A,
+  b?: B,
+  c?: C,
+  d?: D,
+  e?: E,
+  f?: F,
+  g?: G,
+  h?: H,
+  i?: I,
+  j?: J,
+  k?: K
+) => Promise<K> {
   // default options
-  if (!opts.memoize) {
-    opts.memoize = defaultMemoize
+  if (!opts.dedup) {
+    opts.dedup = defaultDedup
   }
 
   if (!opts.concurrency) {
@@ -36,11 +67,13 @@ export default function queued<T, R>(
 
   const drain = () => {}
 
-  return <T>(...args: any[]): Promise<any> => {
+  return (a, b, c, d, e, f, g, h, i, j): Promise<any> => {
     return new Promise((resolve, reject) => {
       // here we make the function
-      console.log('yesh')
-      promiseFn(...args)
+      const id = opts.dedup(a, b, c, d, e, f, g, h, i, j)
+      console.log('yesh', id)
+
+      promiseFn(a, b, c, d, e, f, g, h, i, j)
         .then(resolve)
         .catch(reject)
     })
