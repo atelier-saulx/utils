@@ -12,10 +12,10 @@ const hashKey = (key, hash = 5381) => {
     return exports.stringHash(key, hash) * 5381;
 };
 const hashNumber = (nr, hash = 5381) => {
-    return ((hash * 33) ^ nr) * 5381;
+    return ((hash * 33) ^ nr) * 6521;
 };
 const hashBool = (val, hash = 5381) => {
-    return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 5381 * 33;
+    return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621 * 33;
 };
 const nullHash = 5381 * 33;
 // ignore key order

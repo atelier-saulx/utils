@@ -11,11 +11,11 @@ const hashKey = (key: string, hash: number = 5381): number => {
 }
 
 const hashNumber = (nr: number, hash: number = 5381): number => {
-  return ((hash * 33) ^ nr) * 5381
+  return ((hash * 33) ^ nr) * 6521
 }
 
 const hashBool = (val: boolean, hash: number = 5381): number => {
-  return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 5381 * 33
+  return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621 * 33
 }
 
 const nullHash = 5381 * 33
