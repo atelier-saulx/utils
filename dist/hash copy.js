@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hashCompact = exports.hash = exports.hashObjectIgnoreKeyOrder = exports.hashObject = exports.hashObjectNest = exports.hashObjectIgnoreKeyOrderNest = exports.stringHash = void 0;
 exports.stringHash = (str, hash = 5381) => {
-    var i = str.length;
+    var j = str.length;
+    var i = j;
     while (i) {
         const char = str.charCodeAt(--i);
         hash = (hash * 33) ^ char;
@@ -231,4 +232,4 @@ exports.hashCompact = (val, size) => {
     }
     return x;
 };
-//# sourceMappingURL=hash.js.map
+//# sourceMappingURL=hash copy.js.map

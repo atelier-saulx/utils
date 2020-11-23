@@ -11,7 +11,8 @@ import {
   deepEqual,
   toEnvVar,
   readStream,
-  queued
+  queued,
+  obscurify
 } from '../src'
 
 test('env var', async t => {
@@ -51,6 +52,66 @@ test('hash stress', async t => {
   console.log('    1mil keys object takes', Date.now() - d, 'ms to hash')
 
   t.true(typeof x === 'number')
+})
+
+test('hash colish', async t => {
+  const hash2 = str => {
+    var i = str.length
+    var hash1 = 6143
+    var hash2 = 7879
+
+    while (i--) {
+      const char = str.charCodeAt(i)
+      hash1 = (hash1 * 33) ^ char
+      hash2 = (hash2 * 33) ^ char
+    }
+
+    return (hash1 >>> 0) * 4096 + (hash2 >>> 0)
+  }
+  var d = Date.now()
+
+  const prevs = []
+
+  for (let i = 0; i < 10; i++) {
+    const set = {}
+
+    prevs.push(set)
+
+    let cnt = 0
+    while (cnt < 1e6) {
+      const ip =
+        Math.floor(Math.random() * 255) +
+        1 +
+        '.' +
+        Math.floor(Math.random() * 255) +
+        '.' +
+        Math.floor(Math.random() * 255) +
+        '.' +
+        Math.floor(Math.random() * 255)
+
+      const x = obscurify(ip)
+
+      let prev
+
+      for (let j = 0; j < i + 1; j++) {
+        prev = prevs[j][x]
+        if (prev) {
+          break
+        }
+      }
+
+      if (prev) {
+        if (prev !== ip) {
+          t.fail('Colish ' + ip + ' ' + prev + ' hash ' + x)
+        }
+      }
+      cnt++
+
+      set[x] = ip
+    }
+  }
+
+  t.pass()
 })
 
 test('hash  hashObjectIgnoreKeyOrder', async t => {
@@ -215,7 +276,6 @@ test('hash  hashObjectIgnoreKeyOrder large', async t => {
     companyName: ''
   }
 
-  var d = Date.now()
   const x = hashObjectIgnoreKeyOrder(a)
   const y = hashObjectIgnoreKeyOrder(b)
 

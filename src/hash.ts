@@ -1,7 +1,8 @@
 export const stringHash = (str: string, hash: number = 5381): number => {
   var i = str.length
   while (i) {
-    hash = (hash * 33) ^ str.charCodeAt(--i)
+    const char = str.charCodeAt(--i)
+    hash = (hash * 33) ^ char
   }
   return hash
 }
@@ -18,7 +19,7 @@ const hashBool = (val: boolean, hash: number = 5381): number => {
   return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621 * 33
 }
 
-const nullHash = 5381 * 33
+const nullHash = 6857 * 33
 
 // ignore key order
 export const hashObjectIgnoreKeyOrderNest = (
@@ -47,10 +48,8 @@ export const hashObjectIgnoreKeyOrderNest = (
       }
     }
   } else {
-    // super slow
     const keys = Object.keys(obj).sort()
     hash = hashNumber(keys.length + 1, hash)
-
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       const field = obj[key]
@@ -117,11 +116,14 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
 }
 
 export const hashObject = (props: object): number => {
-  return hashObjectNest(props) >>> 0
+  return (hashObjectNest(props) >>> 0) * 4096 + hashObjectNest(props, 52711)
 }
 
 export const hashObjectIgnoreKeyOrder = (props: object): number => {
-  return hashObjectIgnoreKeyOrderNest(props) >>> 0
+  return (
+    (hashObjectIgnoreKeyOrderNest(props) >>> 0) * 4096 +
+    (hashObjectIgnoreKeyOrderNest(props, 52711) >>> 0)
+  )
 }
 
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -144,15 +146,15 @@ export const hash = (val: any, size?: number): number => {
     if (val === null) {
       result = 0
     } else {
-      result = hashObject(val) >>> 0
+      result = hashObject(val)
     }
   } else {
     if (typeof val === 'boolean') {
-      result = hashBool(val) >>> 0
+      result = (hashBool(val) >>> 0) * 4096
     } else if (typeof val === 'number') {
-      result = ((nullHash ^ val) * 33) >>> 0
+      result = (hashNumber(val) >>> 0) * 4096 + (hashNumber(val, 52711) >>> 0)
     } else {
-      result = stringHash(val) >>> 0
+      result = (stringHash(val) >>> 0) * 4096 + (stringHash(val, 52711) >>> 0)
     }
   }
 

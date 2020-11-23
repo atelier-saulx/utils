@@ -12,8 +12,19 @@ import readStream from './readStream'
 
 import queued from './queued'
 
+import obscurify from './obscurify'
+
 export * from './hash'
 
 export * from './deepMerge'
 
-export { deepCopy, queued, readStream, isObject, wait, deepEqual, toEnvVar }
+export {
+  deepCopy,
+  queued,
+  obscurify,
+  readStream,
+  isObject,
+  wait,
+  deepEqual,
+  toEnvVar
+}
