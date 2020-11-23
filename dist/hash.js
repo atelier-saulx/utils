@@ -16,7 +16,7 @@ const hashNumber = (nr, hash = 5381) => {
     return ((hash * 33) ^ nr) * 6521;
 };
 const hashBool = (val, hash = 5381) => {
-    return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621 * 33;
+    return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621;
 };
 const nullHash = 6857 * 33;
 // ignore key order

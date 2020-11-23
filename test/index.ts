@@ -414,6 +414,158 @@ test('hash  hashObjectIgnoreKeyOrder large 2', async t => {
   t.true(x !== y)
 })
 
+test('hash  hashObjectIgnoreKeyOrder large 3', async t => {
+  const a = {
+    children: [
+      {
+        type: 'waitingScreen',
+        index: 0,
+        id: 'wa4ab7e44c',
+        disabled: true,
+        title: 'Wait # 1'
+      },
+      {
+        type: 'welcomeScreen',
+        index: 1,
+        id: 'we7e8b4bfc',
+        disabled: false,
+        title: 'The voting will start soon!'
+      },
+      {
+        type: 'videoScreen',
+        index: 2,
+        id: 'vi6d2e21ca',
+        title: 'Watch the recap first!',
+        disabled: false,
+        video:
+          'https://cdn.based.io/ef728d8a807067f2e73591d4850c5f8a/ef728d8a807067f2e73591d4850c5f8a.m3u8'
+      },
+      {
+        type: 'multipleChoice',
+        index: 3,
+        id: 'mu241ab268',
+        disabled: false,
+        title: 'Pick 3 of your favorite songs and submit your vote.'
+      },
+      {
+        type: 'thankYouScreen',
+        index: 4,
+        id: 'thba70c809',
+        disabled: false,
+        title: 'Thank you for voting!'
+      }
+    ],
+    companyName: '',
+    ogTitle: '',
+    type: 'edition',
+    id: 'ed936c4793',
+    name: '',
+    ogDescription: '',
+    aliases: ['jesc'],
+    title: 'JESC 2020',
+    config: {
+      borderRadius: 0,
+      logoLink: 'https://hotmail.com',
+      logo:
+        'https://static.junioreurovision.tv/dist/assets/images/jesc_slogan.c6c10aa7dcf40254bf08d7f7f3d65b90.png',
+      borderWidth: 0,
+      roundId: 0
+    },
+    logo: '',
+    ogImage: '',
+    startTime: 1606086000000,
+    theme: {
+      buttonText: 'rgb(245,245,245)',
+      highlight: 'rgb(49,130,206)',
+      background: 'rgb(17,11,87)',
+      itemBackground: 'rgb(252,252,252)',
+      text: 'rgb(254,255,254)',
+      backgroundImage:
+        'https://based-images.imgix.net/c37e075134b55505f28fc28c7c21536c.png',
+      itemText: 'rgb(0,0,0)'
+    },
+    updatedAt: 1606159265527
+  }
+
+  const b = {
+    children: [
+      {
+        type: 'waitingScreen',
+        index: 0,
+        id: 'wa4ab7e44c',
+        disabled: true,
+        title: 'Wait # 1'
+      },
+      {
+        type: 'welcomeScreen',
+        index: 1,
+        id: 'we7e8b4bfc',
+        disabled: true,
+        title: 'The voting will start soon!'
+      },
+      {
+        type: 'videoScreen',
+        index: 2,
+        id: 'vi6d2e21ca',
+        title: 'Watch the recap first!',
+        disabled: false,
+        video:
+          'https://cdn.based.io/ef728d8a807067f2e73591d4850c5f8a/ef728d8a807067f2e73591d4850c5f8a.m3u8'
+      },
+      {
+        type: 'multipleChoice',
+        index: 3,
+        id: 'mu241ab268',
+        disabled: false,
+        title: 'Pick 3 of your favorite songs and submit your vote.'
+      },
+      {
+        type: 'thankYouScreen',
+        index: 4,
+        id: 'thba70c809',
+        disabled: false,
+        title: 'Thank you for voting!'
+      }
+    ],
+    companyName: '',
+    ogTitle: '',
+    type: 'edition',
+    id: 'ed936c4793',
+    name: '',
+    ogDescription: '',
+    aliases: ['jesc'],
+    title: 'JESC 2020',
+    config: {
+      borderRadius: 0,
+      logoLink: 'https://hotmail.com',
+      logo:
+        'https://static.junioreurovision.tv/dist/assets/images/jesc_slogan.c6c10aa7dcf40254bf08d7f7f3d65b90.png',
+      borderWidth: 0,
+      roundId: 0
+    },
+    logo: '',
+    ogImage: '',
+    startTime: 1606086000000,
+    theme: {
+      buttonText: 'rgb(245,245,245)',
+      highlight: 'rgb(49,130,206)',
+      background: 'rgb(17,11,87)',
+      itemBackground: 'rgb(252,252,252)',
+      text: 'rgb(254,255,254)',
+      backgroundImage:
+        'https://based-images.imgix.net/c37e075134b55505f28fc28c7c21536c.png',
+      itemText: 'rgb(0,0,0)'
+    },
+    updatedAt: 1606159265527
+  }
+
+  var d = Date.now()
+  const x = hashObjectIgnoreKeyOrder(a)
+  const y = hashObjectIgnoreKeyOrder(b)
+
+  t.true(x !== y)
+})
+
 test('hash stress hashObjectIgnoreKeyOrder', async t => {
   const a = {}
 

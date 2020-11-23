@@ -16,7 +16,7 @@ const hashNumber = (nr: number, hash: number = 5381): number => {
 }
 
 const hashBool = (val: boolean, hash: number = 5381): number => {
-  return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621 * 33
+  return ((hash * 33) ^ (val === true ? 9907 : 4729)) * 7621
 }
 
 const nullHash = 6857 * 33
