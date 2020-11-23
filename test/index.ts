@@ -58,7 +58,7 @@ test('hash colish', async t => {
   var d = Date.now()
   const prevs = []
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1; i++) {
     const set = {}
     prevs.push(set)
     let cnt = 0
@@ -73,7 +73,7 @@ test('hash colish', async t => {
         '.' +
         Math.floor(Math.random() * 255)
 
-      const x = obscurify(ip)
+      const x = hash(ip)
 
       let prev
 
