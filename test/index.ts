@@ -55,22 +55,21 @@ test('hash stress', async t => {
 })
 
 test('hash colish', async t => {
-  const hash2 = str => {
-    var i = str.length
-    var hash1 = 6143
-    var hash2 = 7879
-
-    while (i--) {
-      const char = str.charCodeAt(i)
-      hash1 = (hash1 * 33) ^ char
-      hash2 = (hash2 * 33) ^ char
-    }
-
-    return (hash1 >>> 0) * 4096 + (hash2 >>> 0)
-  }
   var d = Date.now()
 
   const prevs = []
+
+  const ip =
+    Math.floor(Math.random() * 255) +
+    1 +
+    '.' +
+    Math.floor(Math.random() * 255) +
+    '.' +
+    Math.floor(Math.random() * 255) +
+    '.' +
+    Math.floor(Math.random() * 255)
+
+  console.log(obscurify(ip))
 
   for (let i = 0; i < 10; i++) {
     const set = {}
