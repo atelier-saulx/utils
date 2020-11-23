@@ -69,13 +69,9 @@ test('hash colish', async t => {
     '.' +
     Math.floor(Math.random() * 255)
 
-  console.log(obscurify(ip))
-
   for (let i = 0; i < 10; i++) {
     const set = {}
-
     prevs.push(set)
-
     let cnt = 0
     while (cnt < 1e6) {
       const ip =
