@@ -56,18 +56,7 @@ test('hash stress', async t => {
 
 test('hash colish', async t => {
   var d = Date.now()
-
   const prevs = []
-
-  const ip =
-    Math.floor(Math.random() * 255) +
-    1 +
-    '.' +
-    Math.floor(Math.random() * 255) +
-    '.' +
-    Math.floor(Math.random() * 255) +
-    '.' +
-    Math.floor(Math.random() * 255)
 
   for (let i = 0; i < 10; i++) {
     const set = {}
