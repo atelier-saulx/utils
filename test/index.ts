@@ -650,6 +650,7 @@ test('hash  hashObjectIgnoreKeyOrder large 3', async t => {
       {
         name: '',
         subtitle: 'Best Friends',
+        // description is totally different
         description: 'nothing',
         title: 'Unity',
         id: 'ope8f83cd6',
@@ -682,6 +683,7 @@ test('hash  hashObjectIgnoreKeyOrder large 3', async t => {
       {
         name: '',
         subtitle: 'Best Friends',
+        // description is totally different
         description:
           "Unity is a girl-group made up of members Naomi (13), Maud (14), Jayda (13) and Demi (14).\n\nUnity were selected in AVROTROS’ Junior Songfestival 2020 and will perform the song Best Friends in JESC 2020. All four members have a rich musical history for their ages.\n\nJayda has been part of Kinderen voor Kinderen, a Dutch children's choir, and has been dancing and singing since she was very young.\n\nDemi, who couldn't participate in the national final live show, won a platinum record when she was part of Kinderen voor Kinderen, went to theatre school when she was six and played Pippi Longstocking in a local musical.\n\nMaud started guitar lessons when she was eight and has since attended a music academy. She also took part in The Voice Kids in the Netherlands.\n\nNaomi started performing in musicals when she was seven and has been singing in church for many years now.",
         title: 'Unity',
