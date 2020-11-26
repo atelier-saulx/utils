@@ -20,15 +20,15 @@ export const hashObjectIgnoreKeyOrderNest = (
       if (type === 'string') {
         hash = stringHash(i + ':' + field, hash)
       } else if (type === 'number') {
-        hash = stringHash(i + ':' + field, hash)
+        hash = stringHash(i + 'n:' + field, hash)
       } else if (type === 'object') {
         if (field === null) {
-          hash = stringHash(i + ':' + 'null', hash)
+          hash = stringHash(i + 'v:' + 'null', hash)
         } else {
-          hash = (33 * hashObjectIgnoreKeyOrderNest(field, hash)) ^ i
+          hash = stringHash(i + 'o:', hashObjectIgnoreKeyOrderNest(field, hash))
         }
       } else if (type === 'boolean') {
-        hash = stringHash(':' + (field ? 'true' : 'false'), hash) ^ i
+        hash = stringHash('b:' + (field ? 'true' : 'false'), hash) ^ i
       }
     }
   } else {
@@ -41,18 +41,18 @@ export const hashObjectIgnoreKeyOrderNest = (
       if (type === 'string') {
         hash = stringHash(key + ':' + field, hash)
       } else if (type === 'number') {
-        hash = stringHash(key + ':' + field, hash)
+        hash = stringHash(key + 'n:' + field, hash)
       } else if (type === 'object') {
         if (field === null) {
-          hash = stringHash(key + ':' + 'null', hash)
+          hash = stringHash(key + 'v:' + 'null', hash)
         } else {
           hash = stringHash(
-            key + ':',
+            key + 'o:',
             hashObjectIgnoreKeyOrderNest(field, hash)
           )
         }
       } else if (type === 'boolean') {
-        hash = stringHash(key + ':' + (field ? 'true' : 'false'), hash)
+        hash = stringHash(key + 'b:' + (field ? 'true' : 'false'), hash)
       }
     }
   }
@@ -67,15 +67,15 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
       if (type === 'string') {
         hash = stringHash(i + ':' + field, hash)
       } else if (type === 'number') {
-        hash = stringHash(i + ':' + field, hash)
+        hash = stringHash(i + 'n:' + field, hash)
       } else if (type === 'object') {
         if (field === null) {
-          hash = stringHash(i + ':' + 'null', hash)
+          hash = stringHash(i + 'v:' + 'null', hash)
         } else {
-          hash = stringHash(i + ':', hashObjectNest(field, hash))
+          hash = stringHash(i + 'o:', hashObjectNest(field, hash))
         }
       } else if (type === 'boolean') {
-        hash = stringHash(i + ':' + (field ? 'true' : 'false'), hash)
+        hash = stringHash(i + 'b:' + (field ? 'true' : 'false'), hash)
       }
     }
   } else {
@@ -85,15 +85,15 @@ export const hashObjectNest = (obj: object | any[], hash = 5381): number => {
       if (type === 'string') {
         hash = stringHash(key + ':' + field, hash)
       } else if (type === 'number') {
-        hash = stringHash(key + ':' + field, hash)
+        hash = stringHash(key + 'n:' + field, hash)
       } else if (type === 'object') {
         if (field === null) {
-          hash = stringHash(key + ':' + 'null', hash)
+          hash = stringHash(key + 'v:' + 'null', hash)
         } else {
-          hash = stringHash(key + ':', hashObjectNest(field, hash))
+          hash = stringHash(key + 'o:', hashObjectNest(field, hash))
         }
       } else if (type === 'boolean') {
-        hash = stringHash(key + ':' + (field ? 'true' : 'false'), hash)
+        hash = stringHash(key + 'b:' + (field ? 'true' : 'false'), hash)
       }
     }
   }
@@ -146,9 +146,6 @@ export const hash = (val: any, size?: number): number => {
   }
 
   if (size) {
-    if (size < 10) {
-      throw new Error('Minimum size for 32 bits is 10 numbers')
-    }
     const len = Math.ceil(Math.log10(result + 1))
     if (len < size) {
       return result * Math.pow(10, size - len)
@@ -192,9 +189,6 @@ export const hashCompact = (val: any, size?: number): string => {
     } else {
       result = stringHash(val) >>> 0
     }
-  }
-  if (size < 6) {
-    throw new Error('Minimum size for 32 bits is 6 characters')
   }
   let x = toString(result)
   const len = x.length
