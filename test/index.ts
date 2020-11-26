@@ -679,12 +679,14 @@ const large = {
 }
 
 test('hash  hashObjectIgnoreKeyOrder large 3.1', async t => {
-  const a = { ...large }
-  const b = large
-  a.description = 'bla'
-  const x = hashObjectIgnoreKeyOrder(a)
-  const y = hashObjectIgnoreKeyOrder(b)
-  t.true(x !== y)
+  for (let i = 0; i < 10000; i++) {
+    const a = { ...large }
+    const b = large
+    a.description = (~~(Math.random() * 999999999999)).toString(16)
+    const x = hashObjectIgnoreKeyOrder(a)
+    const y = hashObjectIgnoreKeyOrder(b)
+    t.true(x !== y)
+  }
 })
 
 test('hash  hashObjectIgnoreKeyOrder large 3', async t => {
