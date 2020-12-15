@@ -31,6 +31,9 @@
       "ts-node/register"
     ]
   },
+  "browser": {
+    "./dist/readStream.js": false
+  },
   "prettier": "@saulx/prettier-config",
   "eslintConfig": {
     "extends": "@saulx/eslint-config"
