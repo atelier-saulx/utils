@@ -1,7 +1,7 @@
 {
   "name": "@saulx/utils",
   "main": "./dist/index.js",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -32,7 +32,7 @@
     ]
   },
   "browser": {
-    "./dist/readStream.js": false
+    "stream": false
   },
   "prettier": "@saulx/prettier-config",
   "eslintConfig": {
