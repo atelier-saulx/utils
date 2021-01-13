@@ -1,3 +1,5 @@
+import { murmurHash } from 'saulx-murmur'
+
 export const stringHash = (str: string, hash: number = 5381): number => {
   var i = str.length
   while (i) {
@@ -126,6 +128,9 @@ const toString = (hash: number): string => {
 
 // want bits probably
 export const hash = (val: any, size?: number): number => {
+  if (val instanceof Buffer) {
+    return murmurHash(val)
+  }
   let result: number
   if (typeof val === 'object') {
     if (val === null) {

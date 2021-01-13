@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hashCompact = exports.hash = exports.hashObjectIgnoreKeyOrder = exports.hashObject = exports.hashObjectNest = exports.hashObjectIgnoreKeyOrderNest = exports.stringHash = void 0;
+const saulx_murmur_1 = require("saulx-murmur");
 exports.stringHash = (str, hash = 5381) => {
     var i = str.length;
     while (i) {
@@ -132,6 +133,9 @@ const toString = (hash) => {
 };
 // want bits probably
 exports.hash = (val, size) => {
+    if (val instanceof Buffer) {
+        return saulx_murmur_1.murmurHash(val);
+    }
     let result;
     if (typeof val === 'object') {
         if (val === null) {
