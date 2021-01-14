@@ -15,11 +15,6 @@ import {
   obscurify
 } from '../src'
 
-test.only('hash buffer', async t => {
-  const x = hash(Buffer.from('hash me!'))
-  t.is(x, 2061152078)
-})
-
 test('env var', async t => {
   const x = toEnvVar('@based/bla-bla-bla$_!')
   t.is(x, 'BASED_BLA_BLA_BLA')
