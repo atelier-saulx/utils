@@ -1,7 +1,7 @@
 {
   "name": "@saulx/utils",
   "main": "./dist/index.js",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -32,7 +32,8 @@
     ]
   },
   "browser": {
-    "stream": false
+    "stream": false,
+    "./dist/hash/hash.js": "./dist/hash/hashBrowser.js"
   },
   "prettier": "@saulx/prettier-config",
   "eslintConfig": {
