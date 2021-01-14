@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "is-plain-obj": "^3.0.0",
-    "saulx-murmur": "^0.2.2"
+    "saulx-murmur": "^0.1.0"
   },
   "devDependencies": {
     "@saulx/eslint-config": "https://github.com/atelier-saulx/eslint-config",
