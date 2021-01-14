@@ -1,11 +1,8 @@
-import { murmurHash } from 'saulx-murmur'
 import hashObject from './hashObject'
 import stringHash from './stringHash'
 
+// no murmur (and no buffers) for browser
 const hash = (val: any, size?: number): number => {
-  if (val instanceof Buffer) {
-    return murmurHash(val)
-  }
   let result: number
   if (typeof val === 'object') {
     if (val === null) {

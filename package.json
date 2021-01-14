@@ -1,7 +1,7 @@
 {
   "name": "@saulx/utils",
   "main": "./dist/index.js",
-  "version": "1.6.3",
+  "version": "1.6.5",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -32,16 +32,14 @@
     ]
   },
   "browser": {
-    "stream": false,
-    "./dist/hash/hash.js": "./dist/hash/hashBrowser.js"
+    "stream": false
   },
   "prettier": "@saulx/prettier-config",
   "eslintConfig": {
     "extends": "@saulx/eslint-config"
   },
   "dependencies": {
-    "is-plain-obj": "^3.0.0",
-    "saulx-murmur": "^0.1.0"
+    "is-plain-obj": "^3.0.0"
   },
   "devDependencies": {
     "@saulx/eslint-config": "https://github.com/atelier-saulx/eslint-config",
