@@ -1,7 +1,7 @@
 {
   "name": "@saulx/utils",
   "main": "./dist/index.js",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "is-plain-obj": "^3.0.0",
-    "saulx-murmur": "^0.2.1"
+    "saulx-murmur": "^0.2.2"
   },
   "devDependencies": {
     "@saulx/eslint-config": "https://github.com/atelier-saulx/eslint-config",
