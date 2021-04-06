@@ -1,68 +1,6 @@
 # utils
 
-Saulx utils package, hashes are non cryptographic 32 bit hashes
-
-## hash
-
-Create a hash for any data type
-
-```javascript
-import { hash } from '@saulx/utils'
-console.log(hash({ x: true }))
-```
-
-```javascript
-import { hash } from '@saulx/utils'
-
-// pads extra zeroes
-console.log(hash({ x: true }, 15))
-```
-
-## hashCompact
-
-Create a hash for any data type, returns a base 62 string
-
-```javascript
-import { hashCompact } from '@saulx/utils'
-console.log(hashCompact({ x: true })) // -> CCoj0h
-```
-
-Passing an array and specifying more chars makes a hash that uses all avaible space to make it more unique (becomes more then 32 bits)
-
-```javascript
-import { hashCompact } from '@saulx/utils'
-console.log(hashCompact([{ x: true }, 'bla', 'blurp', 'snurf'], 20)) // -> CCoj0hNFgt8MovDmLkmh
-```
-
-## hashObject
-
-Create a hash from objects or arrays
-
-```javascript
-import { hashObject } from '@saulx/utils'
-console.log(hashObject({ x: true }))
-```
-
-## hashObjectIgnoreKeyOrder
-
-Only works for objects, creates the same hash independent from object key order
-
-```javascript
-import { hashObject } from '@saulx/utils'
-console.log(
-  hashObjectIgnoreKeyOrder({ x: true, y: true }) ===
-    hashObjectIgnoreKeyOrder({ y: true, x: true })
-)
-```
-
-## stringHash
-
-Creates a hash for strings
-
-```javascript
-import { stringHash } from '@saulx/utils'
-console.log(stringHash('bla bla bla'))
-```
+Saulx utils package
 
 ## deepEqual
 

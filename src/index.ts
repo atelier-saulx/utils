@@ -14,8 +14,6 @@ import queued from './queued'
 
 import obscurify from './obscurify'
 
-export * from './hash'
-
 export * from './deepMerge'
 
 export {
