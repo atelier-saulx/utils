@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const hash_1 = require("./hash");
+const hash_1 = require("@saulx/hash");
 const is_plain_obj_1 = __importDefault(require("is-plain-obj"));
 const defaultDedup = (...args) => {
     let x = '';

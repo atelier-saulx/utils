@@ -30,6 +30,5 @@ const queued_1 = __importDefault(require("./queued"));
 exports.queued = queued_1.default;
 const obscurify_1 = __importDefault(require("./obscurify"));
 exports.obscurify = obscurify_1.default;
-__exportStar(require("./hash"), exports);
 __exportStar(require("./deepMerge"), exports);
 //# sourceMappingURL=index.js.map

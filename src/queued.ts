@@ -1,4 +1,4 @@
-import { hash, hashObjectIgnoreKeyOrder } from './hash'
+import { hash, hashObjectIgnoreKeyOrder } from '@saulx/hash'
 import isPlainObject from 'is-plain-obj'
 
 type Listener = (r: any) => any
