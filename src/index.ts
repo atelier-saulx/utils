@@ -14,6 +14,10 @@ import queued from './queued'
 
 import obscurify from './obscurify'
 
+import retry from './retry'
+
+import randomString from './randomString'
+
 export * from './deepMerge'
 
 export {
@@ -24,5 +28,7 @@ export {
   isObject,
   wait,
   deepEqual,
-  toEnvVar
+  toEnvVar,
+  retry,
+  randomString
 }
