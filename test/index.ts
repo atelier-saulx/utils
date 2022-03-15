@@ -7,7 +7,9 @@ import {
   deepEqual,
   toEnvVar,
   readStream,
-  queued
+  queued,
+  retry,
+  randomString
 } from '../src'
 
 test('env var', async t => {
@@ -302,7 +304,7 @@ test('queued', async t => {
   for (let i = 0; i < 10; i++) {
     args.push([i, { x: true }])
   }
-  let d = Date.now()
+  const d = Date.now()
   await Promise.all(args.map(v => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 500 && ellapsed < 1500)
@@ -326,4 +328,125 @@ test('queued concurrency 2', async t => {
   await Promise.all(args.map(v => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 1000 && ellapsed < 3000)
+})
+
+test('retry', async t => {
+  const fnFail = async () => {
+    throw new Error('failed')
+  }
+  let d = Date.now()
+  await t.throwsAsync(retry(fnFail, { timeout: 200, maxRetries: 3 }))
+  let elapsed = Date.now() - d
+  t.assert(elapsed >= 600)
+
+  const fnSuccess = async () => {
+    return 'flurp'
+  }
+  const res = await retry(fnSuccess, { timeout: 200, maxRetries: 3 })
+  t.assert(res === 'flurp')
+
+  let i = 0
+  const fnFailTwice = async () => {
+    if (i < 2) {
+      i++
+      throw new Error('no')
+    } else {
+      return 'yes'
+    }
+  }
+  d = Date.now()
+  const res2 = await retry(fnFailTwice, { timeout: 100, maxRetries: -1 })
+  elapsed = Date.now() - d
+  t.assert(res2 === 'yes')
+  t.assert(elapsed > 200 && elapsed < 250)
+
+  i = 0
+  async function failsTwiceWithArgs(v: string) {
+    if (i < 2) {
+      i++
+      throw new Error('no')
+    } else {
+      return v
+    }
+  }
+  await t.throwsAsync(
+    retry(failsTwiceWithArgs, { timeout: 100, maxRetries: 1 }, 'hello')
+  )
+
+  i = 0
+  const res3 = await retry(
+    failsTwiceWithArgs,
+    { timeout: 100, maxRetries: -1 },
+    'hello'
+  )
+  t.assert(res3 === 'hello')
+})
+
+test('randomString', t => {
+  const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz'
+  const numberChars = '0123456789'
+  const specialsChars = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+
+  const l = 2000
+
+  const one = randomString(l)
+  const two = randomString(l, { noSpecials: true })
+  const three = randomString(l, { noLowerCase: true })
+  const four = randomString(l, { noUpperCase: true })
+  const five = randomString(l, { noNumbers: true })
+
+  t.assert(one.length === l)
+  t.assert(two.length === l)
+  t.assert(three.length === l)
+  t.assert(four.length === l)
+  t.assert(five.length === l)
+
+  t.assert(
+    upperCaseChars.split('').some(v => {
+      return (
+        one.indexOf(v) >= 0 &&
+        two.indexOf(v) >= 0 &&
+        three.indexOf(v) >= 0 &&
+        four.indexOf(v) < 0 &&
+        five.indexOf(v) >= 0
+      )
+    })
+  )
+
+  t.assert(
+    lowerCaseChars.split('').some(v => {
+      return (
+        one.indexOf(v) >= 0 &&
+        two.indexOf(v) >= 0 &&
+        three.indexOf(v) < 0 &&
+        four.indexOf(v) >= 0 &&
+        five.indexOf(v) >= 0
+      )
+    })
+  )
+
+  t.assert(
+    numberChars.split('').some(v => {
+      return (
+        one.indexOf(v) >= 0 &&
+        two.indexOf(v) >= 0 &&
+        three.indexOf(v) >= 0 &&
+        four.indexOf(v) >= 0 &&
+        five.indexOf(v) < 0
+      )
+    })
+  )
+
+  t.assert(
+    specialsChars.split('').some(v => {
+      return (
+        one.indexOf(v) >= 0 &&
+        two.indexOf(v) < 0 &&
+        three.indexOf(v) >= 0 &&
+        four.indexOf(v) >= 0 &&
+        five.indexOf(v) >= 0
+      )
+    })
+  )
 })
