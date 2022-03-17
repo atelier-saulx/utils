@@ -6,6 +6,6 @@
  * @param `...args` variadic list of arguments for promiseFn
  */
 export default function retry<T>(promiseFn: (...args: any[]) => Promise<T>, opts: {
-    timeout: number;
-    maxRetries: number;
+    timeout?: number;
+    maxRetries?: number;
 }, ...args: any[]): Promise<T>;

@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param opts.maxRetries maximum number of retries. Default = -1 (infinite)
  * @param `...args` variadic list of arguments for promiseFn
  */
-async function retry(promiseFn, opts, ...args) {
+function retry(promiseFn, opts, ...args) {
     return new Promise((resolve, reject) => {
         const { timeout = 100, maxRetries = -1 } = opts;
         let i = 0;
