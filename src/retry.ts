@@ -5,9 +5,9 @@
  * @param opts.maxRetries maximum number of retries. Default = -1 (infinite)
  * @param `...args` variadic list of arguments for promiseFn
  */
-export default async function retry<T>(
+export default function retry<T>(
   promiseFn: (...args: any[]) => Promise<T>,
-  opts: { timeout: number; maxRetries: number },
+  opts: { timeout?: number; maxRetries?: number },
   ...args: any[]
 ): Promise<T> {
   return new Promise((resolve, reject) => {

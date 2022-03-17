@@ -380,6 +380,13 @@ test('retry', async t => {
     'hello'
   )
   t.assert(res3 === 'hello')
+
+  i = 0
+  d = Date.now()
+  const res4 = await retry(fnFailTwice, { maxRetries: -1 })
+  elapsed = Date.now() - d
+  t.assert(res4 === 'yes')
+  t.assert(elapsed > 200 && elapsed < 250)
 })
 
 test('randomString', t => {
