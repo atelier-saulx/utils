@@ -38,8 +38,8 @@ console.log(deepMerge(a, b, c))
 /*
  Logs
  {
-   x: { a: { b: true, c: true, x: ['bla']}},
-   y: true
+	 x: { a: { b: true, c: true, x: ['bla']}},
+	 y: true
  }
 */
 ```
@@ -61,8 +61,8 @@ console.log(deepMergeArrays(a, b, c))
 /*
  Logs
  {
-   x: { a: { b: true, c: true, x: ['bla', 2, 3]}},
-   y: true
+	 x: { a: { b: true, c: true, x: ['bla', 2, 3]}},
+	 y: true
  }
 */
 ```
@@ -85,10 +85,10 @@ Timeout in a promise, default is 100ms
 import { wait } from '@saulx/utils'
 
 const somethingAsync = async () => {
-  await wait() // 100ms
-  console.log('after 100ms')
-  await wait(1000)
-  console.log('after 1100ms')
+	await wait() // 100ms
+	console.log('after 100ms')
+	await wait(1000)
+	console.log('after 1100ms')
 }
 
 somethingAsync()
@@ -126,15 +126,15 @@ Accepts 5 arguments maximum!
 import { queued, wait } from '@saulx/utils'
 
 const myFn = queued(async (a: string) => {
-  await wait(1000)
-  return a + '!'
+	await wait(1000)
+	return a + '!'
 })
 
 // will execute bla first then x
 await Promise.all([
-  myFn('bla'),
-  myFn('x')
-  myFn('bla') // bla will be shared
+	myFn('bla'),
+	myFn('x')
+	myFn('bla') // bla will be shared
 ])
 ```
 
@@ -142,22 +142,22 @@ await Promise.all([
 import { queued, wait } from '@saulx/utils'
 
 const myFn = queued(async (a: string) => {
-  await wait(1000)
-  return a + '!'
+	await wait(1000)
+	return a + '!'
 }, {
-  dedup: (a) => {
-    // choose the value to use for dedup (to share results)
-    return a
-  },
-  concurrency: 10 // max concurrency of 10
+	dedup: (a) => {
+		// choose the value to use for dedup (to share results)
+		return a
+	},
+	concurrency: 10 // max concurrency of 10
 })
 
 // will execute all at the same time (scince concurrency is 10)
 // will only execute 'bla' once since it has the same arguments used in id
 await Promise.all([
-  myFn('bla'),
-  myFn('x')
-  myFn('bla') // bla will be shared
+	myFn('bla'),
+	myFn('x')
+	myFn('bla') // bla will be shared
 ])
 ```
 ## getType
@@ -165,22 +165,22 @@ await Promise.all([
 Returns a string with the operand/type of the javascrit primitive. Adds 'null' and 'array'. 
 
 ```javascript
-  getType('') 									// -> "string"
-  getType('this is a string')		// -> "string"
-  getType(123)									// -> "number"
-  getType(12.3)									// -> "number"
-  getType(-12.3)								// -> "number"
-  getType(-123)									// -> "number"
-  getType(BigInt('1'))					// -> "bigint"
-  getType(true)									// -> "boolean"
-  getType(false)								// -> "boolean"
-  getType(undefined)						// -> "undefined"
-  getType({})										// -> "object"
-  getType({ a: 'wawa' })				// -> "object"
-  getType(() => {})							// -> "function"
-  getType([])										// -> "array"
-  getType([1, 2, 3])						// -> "array"
-  getType(null)									// -> "null"
+	getType('')										// -> "string"
+	getType('this is a string')		// -> "string"
+	getType(123)									// -> "number"
+	getType(12.3)									// -> "number"
+	getType(-12.3)								// -> "number"
+	getType(-123)									// -> "number"
+	getType(BigInt('1'))					// -> "bigint"
+	getType(true)									// -> "boolean"
+	getType(false)								// -> "boolean"
+	getType(undefined)						// -> "undefined"
+	getType({})										// -> "object"
+	getType({ a: 'wawa' })				// -> "object"
+	getType(() => {})							// -> "function"
+	getType([])										// -> "array"
+	getType([1, 2, 3])						// -> "array"
+	getType(null)									// -> "null"
 ```
 
 ## walker
@@ -188,23 +188,23 @@ Returns a string with the operand/type of the javascrit primitive. Adds 'null' a
 Generic structure walker. By default walks objects.
 
 ```javascript
-  const result = []
-  await walk(objectToWalk, async (item, info) => {
-    result.push({
+	const result = []
+	await walk(objectToWalk, async (item, info) => {
+		result.push({
 			value: item,
 			name: info.name, // property name
 			path: info.path, // slash separated path in object
 			type: info.type  // operand type
 		})
-  }) // returns void
+	}) // returns void
 ```
 
 By configuring the options you can walk any kind of structure
 
 ```javascript
-  await walk(
+	await walk(
 		objectToWalk, // starting target
-    itemFn, // function to run for each matched item
+		itemFn, // function to run for each matched item
 		options: {
 			// check types for details
 			listFn, // function to list each path. Should return a list of items.
@@ -213,5 +213,5 @@ By configuring the options you can walk any kind of structure
 			targetValidationFn, // function to validate starting path
 			previousPath, // prefix to add to paths
 		}
-  })
+	})
 ```
