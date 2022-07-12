@@ -160,3 +160,25 @@ await Promise.all([
   myFn('bla') // bla will be shared
 ])
 ```
+## getType
+
+Returns a string with the operand/type of the javascrit primitive. Adds 'null' and 'array'. 
+
+```javascript
+  getType('') 									// -> "string"
+  getType('this is a string')		// -> "string"
+  getType(123)									// -> "number"
+  getType(12.3)									// -> "number"
+  getType(-12.3)								// -> "number"
+  getType(-123)									// -> "number"
+  getType(BigInt('1'))					// -> "bigint"
+  getType(true)									// -> "boolean"
+  getType(false)								// -> "boolean"
+  getType(undefined)						// -> "undefined"
+  getType({})										// -> "object"
+  getType({ a: 'wawa' })				// -> "object"
+  getType(() => {})							// -> "function"
+  getType([])										// -> "array"
+  getType([1, 2, 3])						// -> "array"
+  getType(null)									// -> "null"
+```

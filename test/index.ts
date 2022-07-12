@@ -9,41 +9,42 @@ import {
   readStream,
   queued,
   retry,
-  randomString
+  randomString,
+  getType,
 } from '../src'
 
-test('env var', async t => {
+test('env var', async (t) => {
   const x = toEnvVar('@based/bla-bla-bla$_!')
   t.is(x, 'BASED_BLA_BLA_BLA')
 })
 
-test('deepCopy', async t => {
+test('deepCopy', async (t) => {
   const bla = {
     x: {
-      bla: 'x'
-    }
+      bla: 'x',
+    },
   }
   t.deepEqual(deepCopy(bla), bla)
 })
 
-test('deepMerge', async t => {
+test('deepMerge', async (t) => {
   const a = {
     b: {
       a: 'a!',
       c: [
         { x: true, y: false },
-        { x: false, y: true }
+        { x: false, y: true },
       ],
-      d: { x: {} }
-    }
+      d: { x: {} },
+    },
   }
 
   const b = {
     b: {
       b: 'its b!',
       c: [{ x: true, y: true }],
-      d: { x: { flap: true } }
-    }
+      d: { x: { flap: true } },
+    },
   }
 
   const r = deepCopy(a)
@@ -57,11 +58,11 @@ test('deepMerge', async t => {
         a: 'a!',
         c: [
           { x: true, y: true },
-          { x: false, y: true }
+          { x: false, y: true },
         ],
         d: { x: { flap: true } },
-        b: 'its b!'
-      }
+        b: 'its b!',
+      },
     },
     'deep merge include arrays'
   )
@@ -77,8 +78,8 @@ test('deepMerge', async t => {
         a: 'a!',
         c: [{ x: true, y: true }],
         d: { x: { flap: true } },
-        b: 'its b!'
-      }
+        b: 'its b!',
+      },
     },
     'deep merge exclude arrays'
   )
@@ -88,13 +89,13 @@ test('deepMerge', async t => {
   deepMerge(
     r3,
     {
-      b: { a: 'ja' }
+      b: { a: 'ja' },
     },
     {
-      b: { x: 'snurf' }
+      b: { x: 'snurf' },
     },
     {
-      blarf: true
+      blarf: true,
     }
   )
 
@@ -105,31 +106,31 @@ test('deepMerge', async t => {
         a: 'ja',
         c: [
           { x: true, y: false },
-          { x: false, y: true }
+          { x: false, y: true },
         ],
         d: { x: {} },
-        x: 'snurf'
+        x: 'snurf',
       },
-      blarf: true
+      blarf: true,
     },
     'multiple arguments'
   )
 })
 
-test('wait ', async t => {
+test('wait ', async (t) => {
   var d = Date.now()
   await wait(1e3)
   t.true(Date.now() - d > 999)
 })
 
-test('deepEqual ', async t => {
+test('deepEqual ', async (t) => {
   const bla = { x: true, y: true, z: [1, 2, 3, 4, { x: true }] }
   const blarf = { x: true, y: true, z: [1, 2, 3, 4, { x: true }] }
 
   t.true(deepEqual(bla, blarf))
 })
 
-test('deepEqual 2', async t => {
+test('deepEqual 2', async (t) => {
   const bla = {
     id: 213891765,
     privateIp: '10.114.0.21',
@@ -140,7 +141,7 @@ test('deepEqual 2', async t => {
       env: 'production',
       net: 'private',
       project: 'supersecretspecialtestproject',
-      org: 'saulx'
+      org: 'saulx',
     },
     specs: {
       memory: '1gb',
@@ -148,9 +149,9 @@ test('deepEqual 2', async t => {
       image: 'ubuntu-nodejs',
       region: 'fra1',
       cloudProvider: 'do',
-      sizeName: 's-1vcpu-1gb'
+      sizeName: 's-1vcpu-1gb',
     },
-    price: 5
+    price: 5,
   }
   const blarf = {
     id: 213891765,
@@ -162,7 +163,7 @@ test('deepEqual 2', async t => {
       env: 'production',
       net: 'private',
       project: 'supersecretspecialtestproject',
-      org: 'saulx'
+      org: 'saulx',
     },
     specs: {
       memory: '1gb',
@@ -170,15 +171,15 @@ test('deepEqual 2', async t => {
       image: 'ubuntu-nodejs',
       region: 'fra1',
       cloudProvider: 'do',
-      sizeName: 's-1vcpu-1gb'
+      sizeName: 's-1vcpu-1gb',
     },
-    price: 5
+    price: 5,
   }
 
   t.true(deepEqual(bla, blarf))
 })
 
-test('deepEqual 3', async t => {
+test('deepEqual 3', async (t) => {
   const bla = {
     id: 213906207,
     privateIp: '10.114.0.20',
@@ -189,7 +190,7 @@ test('deepEqual 3', async t => {
       env: 'production',
       net: 'private',
       project: 'supersecretspecialtestproject',
-      org: 'saulx'
+      org: 'saulx',
     },
     specs: {
       memory: '1gb',
@@ -197,9 +198,9 @@ test('deepEqual 3', async t => {
       region: 'fra1',
       cpus: 4,
       cloudProvider: 'do',
-      sizeName: 's-4vcpu-8gb'
+      sizeName: 's-4vcpu-8gb',
     },
-    price: 5
+    price: 5,
   }
   const blarf = {
     id: 213906207,
@@ -211,7 +212,7 @@ test('deepEqual 3', async t => {
       env: 'production',
       net: 'private',
       project: 'supersecretspecialtestproject',
-      org: 'saulx'
+      org: 'saulx',
     },
     specs: {
       memory: '8gb',
@@ -219,15 +220,15 @@ test('deepEqual 3', async t => {
       image: 'ubuntu-nodejs',
       region: 'fra1',
       cloudProvider: 'do',
-      sizeName: 's-4vcpu-8gb'
+      sizeName: 's-4vcpu-8gb',
     },
-    price: 40
+    price: 40,
   }
 
   t.false(deepEqual(bla, blarf))
 })
 
-test('deepEqual 4', async t => {
+test('deepEqual 4', async (t) => {
   const bla = {
     id: 213913182,
     privateIp: '10.110.0.2',
@@ -238,7 +239,7 @@ test('deepEqual 4', async t => {
       env: 'production',
       net: 'private',
       project: 'supersecretspecialtestproject',
-      org: 'saulx'
+      org: 'saulx',
     },
     specs: {
       memory: '1gb',
@@ -246,10 +247,10 @@ test('deepEqual 4', async t => {
       image: 'ubuntu-nodejs',
       region: 'ams3',
       cloudProvider: 'do',
-      sizeName: 's-1vcpu-1gb'
+      sizeName: 's-1vcpu-1gb',
     },
     price: 5,
-    domain: 'my-special-app-for-testing-super-secret-persist.based.io'
+    domain: 'my-special-app-for-testing-super-secret-persist.based.io',
   }
   const blarf = {
     id: 213913182,
@@ -261,7 +262,7 @@ test('deepEqual 4', async t => {
       env: 'production',
       net: 'private',
       project: 'supersecretspecialtestproject',
-      org: 'saulx'
+      org: 'saulx',
     },
     specs: {
       memory: '1gb',
@@ -269,24 +270,24 @@ test('deepEqual 4', async t => {
       image: 'ubuntu-nodejs',
       region: 'ams3',
       cloudProvider: 'do',
-      sizeName: 's-1vcpu-1gb'
+      sizeName: 's-1vcpu-1gb',
     },
-    price: 5
+    price: 5,
   }
   t.false(deepEqual(bla, blarf))
 })
 
-test.cb('readStream', t => {
+test.cb('readStream', (t) => {
   const { createReadStream } = require('fs')
   const { join } = require('path')
-  readStream(createReadStream(join(__dirname, '../package.json'))).then(v => {
+  readStream(createReadStream(join(__dirname, '../package.json'))).then((v) => {
     const pkg = JSON.parse(v.toString())
     t.is(pkg.name, '@saulx/utils')
     t.end()
   })
 })
 
-test('queued', async t => {
+test('queued', async (t) => {
   let cnt = 0
   const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
     cnt++
@@ -305,13 +306,13 @@ test('queued', async t => {
     args.push([i, { x: true }])
   }
   const d = Date.now()
-  await Promise.all(args.map(v => myFnQueud(...v)))
+  await Promise.all(args.map((v) => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 500 && ellapsed < 1500)
   t.is(cnt, 10)
 })
 
-test('queued concurrency 2', async t => {
+test('queued concurrency 2', async (t) => {
   const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
     await wait(1000)
     return x + 'blarp'
@@ -325,12 +326,12 @@ test('queued concurrency 2', async t => {
     args.push([i, { x: true }])
   }
   const d = Date.now()
-  await Promise.all(args.map(v => myFnQueud(...v)))
+  await Promise.all(args.map((v) => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 1000 && ellapsed < 3000)
 })
 
-test('retry', async t => {
+test('retry', async (t) => {
   const fnFail = async () => {
     throw new Error('failed')
   }
@@ -389,7 +390,7 @@ test('retry', async t => {
   t.assert(elapsed > 200 && elapsed < 250)
 })
 
-test('randomString', t => {
+test('randomString', (t) => {
   const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz'
   const numberChars = '0123456789'
@@ -410,7 +411,7 @@ test('randomString', t => {
   t.assert(five.length === l)
 
   t.assert(
-    upperCaseChars.split('').some(v => {
+    upperCaseChars.split('').some((v) => {
       return (
         one.indexOf(v) >= 0 &&
         two.indexOf(v) >= 0 &&
@@ -422,7 +423,7 @@ test('randomString', t => {
   )
 
   t.assert(
-    lowerCaseChars.split('').some(v => {
+    lowerCaseChars.split('').some((v) => {
       return (
         one.indexOf(v) >= 0 &&
         two.indexOf(v) >= 0 &&
@@ -434,7 +435,7 @@ test('randomString', t => {
   )
 
   t.assert(
-    numberChars.split('').some(v => {
+    numberChars.split('').some((v) => {
       return (
         one.indexOf(v) >= 0 &&
         two.indexOf(v) >= 0 &&
@@ -446,7 +447,7 @@ test('randomString', t => {
   )
 
   t.assert(
-    specialsChars.split('').some(v => {
+    specialsChars.split('').some((v) => {
       return (
         one.indexOf(v) >= 0 &&
         two.indexOf(v) < 0 &&
@@ -456,4 +457,26 @@ test('randomString', t => {
       )
     })
   )
+})
+
+test('getType', (t) => {
+  t.is(getType(''), 'string')
+  t.is(getType('this is a string'), 'string')
+  t.is(getType(123), 'number')
+  t.is(getType(12.3), 'number')
+  t.is(getType(-12.3), 'number')
+  t.is(getType(-123), 'number')
+  t.is(getType(BigInt('1')), 'bigint')
+  t.is(getType(true), 'boolean')
+  t.is(getType(false), 'boolean')
+  t.is(getType(undefined), 'undefined')
+  t.is(getType({}), 'object')
+  t.is(getType({ a: 'wawa' }), 'object')
+  t.is(
+    getType(() => {}),
+    'function'
+  )
+  t.is(getType([]), 'array')
+  t.is(getType([1, 2, 3]), 'array')
+  t.is(getType(null), 'null')
 })
