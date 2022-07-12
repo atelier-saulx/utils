@@ -35,4 +35,6 @@ exports.retry = retry_1.default;
 const randomString_1 = __importDefault(require("./randomString"));
 exports.randomString = randomString_1.default;
 __exportStar(require("./deepMerge"), exports);
+__exportStar(require("./walker"), exports);
+__exportStar(require("./getType"), exports);
 //# sourceMappingURL=index.js.map

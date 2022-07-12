@@ -9,4 +9,6 @@ import obscurify from './obscurify';
 import retry from './retry';
 import randomString from './randomString';
 export * from './deepMerge';
-export { deepCopy, queued, obscurify, readStream, isObject, wait, deepEqual, toEnvVar, retry, randomString };
+export { deepCopy, queued, obscurify, readStream, isObject, wait, deepEqual, toEnvVar, retry, randomString, };
+export * from './walker';
+export * from './getType';
