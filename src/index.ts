@@ -30,5 +30,9 @@ export {
   deepEqual,
   toEnvVar,
   retry,
-  randomString
+  randomString,
 }
+
+export * from './walker'
+
+export * from './getType'

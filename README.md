@@ -182,3 +182,36 @@ Returns a string with the operand/type of the javascrit primitive. Adds 'null' a
   getType([1, 2, 3])						// -> "array"
   getType(null)									// -> "null"
 ```
+
+## walker
+
+Generic structure walker. By default walks objects.
+
+```javascript
+  const result = []
+  await walk(objectToWalk, async (item, info) => {
+    result.push({
+			value: item,
+			name: info.name, // property name
+			path: info.path, // slash separated path in object
+			type: info.type  // operand type
+		})
+  }) // returns void
+```
+
+By configuring the options you can walk any kind of structure
+
+```javascript
+  await walk(
+		objectToWalk, // starting target
+    itemFn, // function to run for each matched item
+		options: {
+			// check types for details
+			listFn, // function to list each path. Should return a list of items.
+			itemMatchFn, // function to choose which items to run itemFn on
+			recureseFn, // function to choose wchich items to recurse on
+			targetValidationFn, // function to validate starting path
+			previousPath, // prefix to add to paths
+		}
+  })
+```
