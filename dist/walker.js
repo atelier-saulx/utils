@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.walk = void 0;
 const _1 = require("./");
-const defaultItemMatchFn = async (item) => _1.getType(item) !== 'object';
+const defaultItemMatchFn = async (item) => _1.getType(item.ref) !== 'object';
 const defaultListFn = async (target, previousPath) => {
     return Object.keys(target).map((key) => ({
         name: key,
@@ -25,7 +25,7 @@ exports.walk = async (target, itemFn, options) => {
     const items = await options.listFn(target, options.previousPath);
     await Promise.all(items.map(async (item) => {
         const { name, path, type } = item;
-        if (await options.itemMatchFn(item.ref)) {
+        if (await options.itemMatchFn(item)) {
             itemFn(item.ref, { name, path, type });
         }
         if (await options.recurseFn(item)) {

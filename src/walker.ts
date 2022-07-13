@@ -30,7 +30,7 @@ export type Walk<L = ListItem, F = ItemFn> = (
 ) => Promise<void>
 
 const defaultItemMatchFn: ItemMatchFn<ListItem> = async (item) =>
-  getType(item) !== 'object'
+  getType(item.ref) !== 'object'
 const defaultListFn: WalkerListFn<ListItem> = async (target, previousPath) => {
   return Object.keys(target).map((key: string) => ({
     name: key,
@@ -66,7 +66,7 @@ export const walk: Walk = async (target, itemFn, options) => {
   await Promise.all(
     items.map(async (item) => {
       const { name, path, type } = item
-      if (await options.itemMatchFn(item.ref)) {
+      if (await options.itemMatchFn(item)) {
         itemFn(item.ref, { name, path, type })
       }
       if (await options.recurseFn(item)) {
