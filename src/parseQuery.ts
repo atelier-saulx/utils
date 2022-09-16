@@ -7,7 +7,8 @@ type QueryParams = {
 }
 
 const parseQueryValue = (q: any): QueryValue | QueryValue[] => {
-  if (Array.isArray(q)) {
+  if (q.includes(',')) {
+    q = q.split(',')
     for (let i = 0; i < q.length; i++) {
       q[i] = parseQueryValue(q[i])
     }
@@ -33,14 +34,19 @@ export const parseQuery = (query: string): QueryParams | void => {
       let inMem = ''
       let inMemVal = ''
       let parseVal = false
-      let isJson = false
+      let isJson: number = 0
       const len = query.length
 
       // len larger then 100 return?
       for (let i = 0; i < len; i++) {
         const q = query[i]
 
-        if (q === '&' && (!isJson || (isJson && query[i - 1] === '}'))) {
+        if (
+          q === '&' &&
+          (!isJson ||
+            (isJson === 1 && query[i - 1] === '}') ||
+            (isJson === 2 && query[i - 1] === ']'))
+        ) {
           if (!parseVal) {
             r[inMem] = true
           } else if (isJson) {
@@ -53,7 +59,8 @@ export const parseQuery = (query: string): QueryParams | void => {
             r[inMem] = parseQueryValue(inMemVal)
           }
           // is json
-          isJson = false
+
+          isJson = 0
           parseVal = false
           inMem = ''
           inMemVal = ''
@@ -62,8 +69,12 @@ export const parseQuery = (query: string): QueryParams | void => {
         } else {
           if (parseVal) {
             // if empty
-            if (inMemVal === '' && q === '{') {
-              isJson = true
+            if (inMemVal === '') {
+              if (q === '{') {
+                isJson = 1
+              } else if (q === '[') {
+                isJson = 2
+              }
             }
             inMemVal += q
           } else {
