@@ -30,8 +30,6 @@ test('parse query with arrays', async (t) => {
 
   const r1 = parseQuery(q)
 
-  console.info(r1)
-
   t.deepEqual(r1, {
     bla: true,
     a: [1, 2, 3],
@@ -39,7 +37,21 @@ test('parse query with arrays', async (t) => {
     c: ['a', 'b', 'c'],
   })
 
-  t.is(r1 && r1.bla, true)
+  const d = Date.now()
+  for (let i = 0; i < 100e3; i++) {
+    parseQuery(q)
+  }
+  console.info('query parser: parse 100k objects', Date.now() - d, 'ms')
+
+  t.true(Date.now() - d < 1000, '100k takes shorter then 1000ms')
+})
+
+test('parse query simple', async (t) => {
+  const q = 'bla=flap'
+
+  const r1 = parseQuery(q)
+
+  t.is(r1 && r1.bla, 'flap')
 
   const d = Date.now()
   for (let i = 0; i < 100e3; i++) {
@@ -47,5 +59,5 @@ test('parse query with arrays', async (t) => {
   }
   console.info('query parser: parse 100k objects', Date.now() - d, 'ms')
 
-  t.true(Date.now() - d < 500, '100k takes shorter then 500ms')
+  t.true(Date.now() - d < 100, '100k takes shorter then 100ms')
 })
