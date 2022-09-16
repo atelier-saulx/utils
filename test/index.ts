@@ -118,7 +118,7 @@ test('deepMerge', async (t) => {
 })
 
 test('wait ', async (t) => {
-  var d = Date.now()
+  const d = Date.now()
   await wait(1e3)
   t.true(Date.now() - d > 999)
 })
@@ -295,7 +295,7 @@ test('queued', async (t) => {
     return x + 'blarp'
   }
   const myFnQueud = queued(myFn)
-  const args = []
+  const args: any = []
   for (let i = 0; i < 10; i++) {
     args.push([i, { x: true }])
   }
@@ -306,6 +306,7 @@ test('queued', async (t) => {
     args.push([i, { x: true }])
   }
   const d = Date.now()
+  // @ts-ignore
   await Promise.all(args.map((v) => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 500 && ellapsed < 1500)
@@ -326,6 +327,7 @@ test('queued concurrency 2', async (t) => {
     args.push([i, { x: true }])
   }
   const d = Date.now()
+  // @ts-ignore
   await Promise.all(args.map((v) => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 1000 && ellapsed < 3000)

@@ -36,3 +36,5 @@ export {
 export * from './walker'
 
 export * from './getType'
+
+export * from './parseQuery'

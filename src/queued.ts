@@ -5,7 +5,7 @@ type Listener = (r: any) => any
 
 const defaultDedup = (...args: any[]): string | number => {
   let x = ''
-  for (let arg of args) {
+  for (const arg of args) {
     if (arg !== undefined) {
       if (typeof arg === 'object') {
         if (Array.isArray(arg)) {
@@ -150,6 +150,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   i?: I,
   j?: J
 ) => Promise<K>
+
 function queued(
   promiseFn,
   opts: {
@@ -172,7 +173,7 @@ function queued(
 
   const keysInProgress: Set<string> = new Set()
   const drain = () => {
-    for (let key in listeners) {
+    for (const key in listeners) {
       if (keysInProgress.size === opts.concurrency) {
         break
       }
@@ -181,7 +182,7 @@ function queued(
         keysInProgress.add(key)
         // console.log('EXEC', 'conc', keysInProgress.size, key, l.args)
         promiseFn(...l.args)
-          .then(v => {
+          .then((v) => {
             delete listeners[key]
             keysInProgress.delete(key)
             l.listeners.forEach(([resolve]) => {
@@ -189,7 +190,7 @@ function queued(
             })
             drain()
           })
-          .catch(err => {
+          .catch((err) => {
             delete listeners[key]
             keysInProgress.delete(key)
             l.listeners.forEach(([, reject]) => {
