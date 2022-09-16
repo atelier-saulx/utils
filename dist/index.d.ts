@@ -12,3 +12,4 @@ export * from './deepMerge';
 export { deepCopy, queued, obscurify, readStream, isObject, wait, deepEqual, toEnvVar, retry, randomString, };
 export * from './walker';
 export * from './getType';
+export * from './parseQuery';

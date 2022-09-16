@@ -37,4 +37,5 @@ exports.randomString = randomString_1.default;
 __exportStar(require("./deepMerge"), exports);
 __exportStar(require("./walker"), exports);
 __exportStar(require("./getType"), exports);
+__exportStar(require("./parseQuery"), exports);
 //# sourceMappingURL=index.js.map
