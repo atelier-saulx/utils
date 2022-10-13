@@ -68,3 +68,18 @@ test.serial('walker should handle undefined and void objects', async (t) => {
   })
   t.is(matchCounter, 0)
 })
+
+test.serial('walker should wait for async itemFns to finish', async (t) => {
+  let cnt = 0
+
+  await walk(stub, async () => {
+    await new Promise(resolve => {
+      setTimeout(() => {
+        cnt++
+        resolve(true)
+      }, 50)
+    })
+  })
+
+  t.not(cnt, 0)
+})

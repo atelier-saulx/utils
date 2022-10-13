@@ -67,7 +67,7 @@ export const walk: Walk = async (target, itemFn, options) => {
     items.map(async (item) => {
       const { name, path, type } = item
       if (await options.itemMatchFn(item)) {
-        itemFn(item.ref, { name, path, type })
+        await itemFn(item.ref, { name, path, type })
       }
       if (await options.recurseFn(item)) {
         await walk(item.ref, itemFn, {
