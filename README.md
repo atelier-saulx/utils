@@ -147,7 +147,7 @@ const utf8 = stringToUtf8('hello')
 console.log(utf8) // [ 104, 101, 108, 108, 111 ]
 ```
 
-## uft8ToString
+## utf8ToString
 
 Convert a utf8 Uint8 array to a string
 
@@ -174,7 +174,7 @@ console.log(b64) // aGVsbG8=
 
 ## decodeBase64
 
-Decoded a base64 string to a utf-8 Uint8 array
+Decode a base64 string to a utf-8 Uint8 array
 (vs atob where its not supported)
 
 ```javascript
