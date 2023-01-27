@@ -44,25 +44,61 @@ test('createEncoder', async (t) => {
     '}',
     ' ',
   ]
-  const str = '$100hellobla='
-  const { encode, decode } = createEncoder(chars)
+  const str = '$100he*llo*bla=*'
+  const { encode, decode } = createEncoder(chars, '*')
   const s = encode(str)
   const x = decode(s)
+  t.true(s !== str)
   t.is(x, str)
   t.true(true)
 })
 
 test('createEncoder long', async (t) => {
   const chars: string[] = []
-  for (let i = 0; i < 37; i++) {
+  for (let i = 0; i < 200; i++) {
     chars.push(String.fromCharCode(i + 97))
   }
   const str = '$100hellobla='
-  const { encode, decode, reverseCharMap, charMap } = createEncoder(chars)
-
-  console.log(reverseCharMap, charMap)
+  const { encode, decode } = createEncoder(chars)
   const s = encode(str)
+  t.true(s !== str)
   const x = decode(s)
   t.is(x, str)
+  t.true(true)
+})
+
+test('createEncoder 🥹', async (t) => {
+  const chars: string[] = ['🥹']
+  const str = '1🥹flapfl*ap!*'
+  const { encode, decode } = createEncoder(chars, '*')
+  const s = encode(str)
+  t.true(s !== str)
+  const x = decode(s)
+  t.is(x, str)
+  t.true(true)
+})
+
+test('createEncoder compressor', async (t) => {
+  const chars: string[] = [
+    'wow',
+    'this',
+    'and',
+    'nice',
+    'little',
+    'Hello',
+    'great',
+    'write',
+    'about',
+    'thing',
+  ]
+  const str =
+    'wow this is nice little thing to write about! wow Hello and this is great'
+  const { encode, decode } = createEncoder(chars, '*')
+  const s = encode(str)
+  console.info('    ', s)
+  t.true(s !== str)
+  const x = decode(s)
+  t.is(x, str)
+  t.true(s.length < str.length)
   t.true(true)
 })

@@ -134,7 +134,7 @@ Convert a string to an env-variable safe name
 ```javascript
 import { toEnvVar } from '@saulx/utils'
 const x = toEnvVar('@based/bla-bla-bla$_!')
-console.log(x) // prints BASED_BLA_BLA_BLA
+console.log(x) // BASED_BLA_BLA_BLA
 ```
 
 ## stringToUtf8
@@ -181,6 +181,25 @@ Decode a base64 string to a utf-8 Uint8 array
 import { decodeBase64 } from '@saulx/utils'
 const utf8 = decodeBase64('aGVsbG8=)
 console.log(b64) // [104, 101, 108, 108, 111]
+```
+
+## createEncoder
+
+Create an encoder similair to `encodeUri` / `decodeUri` but with specific strings
+Will use `[a-z]` and `[0-9]` as encoded variables
+
+```javascript
+import { createEncoder } from '@saulx/utils'
+const { encode, decode } = createEncoder(['🥹'], '@')
+console.log(encode('hello 🥹')) // "hello @a"
+```
+
+Can be used with larger strings
+
+```javascript
+import { createEncoder } from '@saulx/utils'
+const { encode, decode } = createEncoder(['hello'], '@')
+console.log(encode('hello 🥹')) // "@a 🥹"
 ```
 
 ## queued

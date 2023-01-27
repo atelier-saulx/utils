@@ -8,9 +8,13 @@ const fillEmpty = (str, len) => {
     return str;
 };
 exports.createEncoder = (chars, char = '$') => {
+    let charLen = 1;
     const isLong = chars.length > 36;
     const realChars = [...chars, char];
     const replacement = realChars.map((v, i) => {
+        if (v.length > charLen) {
+            charLen = v.length;
+        }
         if (i > 25) {
             return char + (i - 26);
         }
@@ -42,19 +46,41 @@ exports.createEncoder = (chars, char = '$') => {
     return {
         charMap,
         reverseCharMap,
-        encode: (input) => {
-            let str = '';
-            for (let i = 0; i < input.length; i++) {
-                const c = input[i];
-                if (charMap[c]) {
-                    str += charMap[c];
+        encode: charLen === 1
+            ? (input) => {
+                let str = '';
+                for (let i = 0; i < input.length; i++) {
+                    const c = input.charAt(i);
+                    if (charMap[c]) {
+                        str += charMap[c];
+                    }
+                    else {
+                        str += c;
+                    }
                 }
-                else {
-                    str += c;
-                }
+                return str;
             }
-            return str;
-        },
+            : (input) => {
+                let str = '';
+                for (let i = 0; i < input.length; i++) {
+                    for (let j = charLen - 1; j > -1; j--) {
+                        if (i + j > input.length - 1) {
+                            continue;
+                        }
+                        let s = '';
+                        for (let n = 0; n < j + 1; n++) {
+                            s += input.charAt(i + n);
+                        }
+                        if (charMap[s]) {
+                            str += charMap[s];
+                            i += j + 1;
+                            j = -1;
+                        }
+                    }
+                    str += input.charAt(i);
+                }
+                return str;
+            },
         decode: isLong
             ? (input) => {
                 let str = '';
