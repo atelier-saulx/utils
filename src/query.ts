@@ -25,7 +25,6 @@ const parseQueryValue = (q: any): QueryValue | QueryValue[] => {
 }
 
 export const parseQuery = (query: string): QueryParams | void => {
-  // TODO parse it yourself - and improve PERF!
   if (query) {
     try {
       const r: QueryParams = {}
@@ -96,4 +95,62 @@ export const parseQuery = (query: string): QueryParams | void => {
       return r
     } catch (_e) {}
   }
+}
+
+const topLevelObject = (q: { [key: string]: any }): string => {
+  const args: string[] = []
+  for (const key in q) {
+    const value = q[key]
+    if (value === true) {
+      args.push(`${key}`)
+    } else {
+      args.push(`${key}=${serializeQuery(value, true)}`)
+    }
+  }
+  return args.join('&')
+}
+
+export const serializeQuery = (
+  q: QueryValue | QueryValue[] | { [key: string]: any },
+  deep: boolean = false
+): string => {
+  if (typeof q === 'string') {
+    return q
+  }
+
+  if (typeof q === 'boolean') {
+    return !q ? 'false' : 'true'
+  }
+
+  if (typeof q === 'number') {
+    return String(q)
+  }
+
+  if (typeof q === 'number') {
+    return String(q)
+  }
+
+  if (q === null) {
+    return 'null'
+  }
+
+  if (Array.isArray(q)) {
+    return q
+      .map((v: any) => {
+        if (typeof v === 'object' && v !== null) {
+          return JSON.stringify(v)
+        }
+        return serializeQuery(v, true)
+      })
+      .join(',')
+  }
+
+  if (typeof q === 'object') {
+    if (deep) {
+      return JSON.stringify(q)
+    }
+    return topLevelObject(q)
+  }
+
+  return ''
 }

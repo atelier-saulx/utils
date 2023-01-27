@@ -1,5 +1,5 @@
 import test from 'ava'
-import { parseQuery } from '../src'
+import { parseQuery, serializeQuery } from '../src'
 
 test('parse query with special values', async (t) => {
   const q = 'bla=1&flap=true&q={"bla":"flap=x&v2!"}'
@@ -60,4 +60,21 @@ test('parse query simple', async (t) => {
   console.info('query parser: parse 100k objects', Date.now() - d, 'ms')
 
   t.true(Date.now() - d < 100, '100k takes shorter then 100ms')
+})
+
+test('serialize query', async (t) => {
+  const start = {
+    bla: true,
+    a: [1, 2, 3],
+    b: [1, 2, 3, 4],
+    c: ['a', 'b', 'c'],
+  }
+
+  const q = serializeQuery(start)
+
+  t.is(q, 'bla&a=1,2,3&b=1,2,3,4&c=a,b,c')
+
+  const result = parseQuery(q)
+
+  t.deepEqual(result, start)
 })

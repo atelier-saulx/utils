@@ -137,11 +137,57 @@ const x = toEnvVar('@based/bla-bla-bla$_!')
 console.log(x) // prints BASED_BLA_BLA_BLA
 ```
 
+## stringToUtf8
+
+Convert a string to a utf-8 Uint8 array
+
+```javascript
+import { stringToUtf8 } from '@saulx/utils'
+const utf8 = stringToUtf8('hello')
+console.log(utf8) // [ 104, 101, 108, 108, 111 ]
+```
+
+## uft8ToString
+
+Convert a utf8 Uint8 array to a string
+
+```javascript
+import { utf8ToString } from '@saulx/utils'
+// hello in utf-8
+const utf8 = new Uint8Array([104, 101, 108, 108, 111])
+const x = utf8ToString(utf8)
+console.log(x) // hello
+```
+
+## encodeBase64
+
+Convert utf-8 Uint8 array to a base64 string, allows converting 16byte chars.
+(vs btoa where its not supported)
+
+```javascript
+import { encodeBase64 } from '@saulx/utils'
+// hello in utf-8
+const utf8 = new Uint8Array([104, 101, 108, 108, 111])
+const b64 = encodeBase64(utf8)
+console.log(b64) // aGVsbG8=
+```
+
+## decodeBase64
+
+Decoded a base64 string to a utf-8 Uint8 array
+(vs atob where its not supported)
+
+```javascript
+import { decodeBase64 } from '@saulx/utils'
+const utf8 = decodeBase64('aGVsbG8=)
+console.log(b64) // [104, 101, 108, 108, 111]
+```
+
 ## queued
 
 Pass any async function and queue it based on the arguments, also shares the function execution for the same args
 
-Accepts 10 arguments maximum!
+_Accepts 10 arguments maximum_
 
 ```javascript
 import { queued, wait } from '@saulx/utils'
