@@ -85,13 +85,34 @@ Timeout in a promise, default is 100ms
 import { wait } from '@saulx/utils'
 
 const somethingAsync = async () => {
-	await wait() // 100ms
-	console.log('after 100ms')
-	await wait(1000)
-	console.log('after 1100ms')
+  await wait() // 100ms
+  console.log('after 100ms')
+  await wait(1000)
+  console.log('after 1100ms')
 }
 
 somethingAsync()
+```
+
+## serializeQuery
+
+Convert an object to a query string
+
+```javascript
+import { serializeQuery } from '@saulx/utils'
+const object = { bla: true, a: [1, 2, 3], b: { a: 1 }, c: ['a', 'b', 'c'] }
+const queryString = serializeQuery(object)
+console.log(queryString) // bla&a=[1,2,3]&b={"a":1}&c=a,b,c
+```
+
+## parseQuery
+
+Convert a query string to an object
+
+```javascript
+import { parseQuery } from '@saulx/utils'
+const result = parseQuery('bla&a=[1,2,3]&b={"a":1}&c=a,b,c')
+console.log(result) // { bla:true, a:[1,2,3], b:{a:1}, c:['a','b','c'] }
 ```
 
 ## readStream
@@ -108,7 +129,7 @@ const myResult = await readStream(aReadStream)
 
 ## toEnvVar
 
-Convert a string to a env variable safe name
+Convert a string to an env-variable safe name
 
 ```javascript
 import { toEnvVar } from '@saulx/utils'
@@ -120,7 +141,7 @@ console.log(x) // prints BASED_BLA_BLA_BLA
 
 Pass any async function and queue it based on the arguments, also shares the function execution for the same args
 
-Accepts 5 arguments maximum!
+Accepts 10 arguments maximum!
 
 ```javascript
 import { queued, wait } from '@saulx/utils'
@@ -160,27 +181,26 @@ await Promise.all([
 	myFn('bla') // bla will be shared
 ])
 ```
+
 ## getType
 
-Returns a string with the operand/type of the javascrit primitive. Adds 'null' and 'array'. 
+Returns a string with the operand/type of the javascrit primitive. Adds 'null' and 'array'.
 
 ```javascript
-	getType('')				// -> "string"
-	getType('this is a string')		// -> "string"
-	getType(123)				// -> "number"
-	getType(12.3)				// -> "number"
-	getType(-12.3)				// -> "number"
-	getType(-123)				// -> "number"
-	getType(BigInt('1'))			// -> "bigint"
-	getType(true)				// -> "boolean"
-	getType(false)				// -> "boolean"
-	getType(undefined)			// -> "undefined"
-	getType({})				// -> "object"
-	getType({ a: 'wawa' })			// -> "object"
-	getType(() => {})			// -> "function"
-	getType([])				// -> "array"
-	getType([1, 2, 3])			// -> "array"
-	getType(null)				// -> "null"
+getType('') // -> "string"
+getType('this is a string') // -> "string"
+getType(123) // -> "number"
+getType(12.3) // -> "number"
+getType(-12.3) // -> "number"
+getType(-123) // -> "number"
+getType(BigInt('1')) // -> "bigint"
+getType(true) // -> "boolean"
+getType(false) // -> "boolean"
+getType(undefined) // -> "undefined"
+getType({ a: 'wawa' }) // -> "object"
+getType(() => {}) // -> "function"
+getType([1, 2, 3]) // -> "array"
+getType(null) // -> "null"
 ```
 
 ## walker
@@ -188,15 +208,15 @@ Returns a string with the operand/type of the javascrit primitive. Adds 'null' a
 Generic structure walker. By default walks objects.
 
 ```javascript
-	const result = []
-	await walk(objectToWalk, async (item, info) => {
-		result.push({
-			value: item,
-			name: info.name, // property name
-			path: info.path, // slash separated path in object
-			type: info.type  // operand type
-		})
-	}) // returns void
+const result = []
+await walk(objectToWalk, async (item, info) => {
+  result.push({
+    value: item,
+    name: info.name, // property name
+    path: info.path, // slash separated path in object
+    type: info.type, // operand type
+  })
+}) // returns void
 ```
 
 By configuring the options you can walk any kind of structure
@@ -213,5 +233,5 @@ By configuring the options you can walk any kind of structure
 			targetValidationFn, // function to validate starting path
 			previousPath, // prefix to add to paths
 		}
-	})
+	)
 ```

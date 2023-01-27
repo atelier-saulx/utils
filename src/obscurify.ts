@@ -11,8 +11,8 @@ const toString = (hash: number): string => {
   return result
 }
 
-export default str => {
-  var i = str.length
+export default (str: string): string => {
+  let i = str.length
   let s = ''
   while (i) {
     s += toString(str.charCodeAt(--i))

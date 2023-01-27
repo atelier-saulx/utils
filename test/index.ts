@@ -292,7 +292,7 @@ test('queued', async (t) => {
   const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
     cnt++
     await wait(100)
-    return x + 'blarp'
+    return x + 'blarp' + y.x
   }
   const myFnQueud = queued(myFn)
   const args: any = []
@@ -314,12 +314,13 @@ test('queued', async (t) => {
 })
 
 test('queued concurrency 2', async (t) => {
-  const myFn = async (x: number, y: { x: boolean }): Promise<string> => {
+  const myFn = async (x: number, y?: { x: boolean }): Promise<string> => {
     await wait(1000)
-    return x + 'blarp'
+    return x + 'blarp' + y?.x
   }
   const myFnQueud = queued(myFn, { concurrency: 5 })
-  const args = []
+
+  const args: [number, { x: true }][] = []
   for (let i = 0; i < 10; i++) {
     args.push([i, { x: true }])
   }

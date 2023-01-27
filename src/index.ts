@@ -38,3 +38,7 @@ export * from './walker'
 export * from './getType'
 
 export * from './parseQuery'
+
+export * from './base64'
+
+export * from './utf8'
