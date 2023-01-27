@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.walk = void 0;
 const _1 = require("./");
 const defaultItemMatchFn = async (item) => _1.getType(item.ref) !== 'object';
 const defaultListFn = async (target, previousPath) => {

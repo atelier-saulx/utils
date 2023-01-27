@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.serializeQuery = exports.parseQuery = void 0;
 const parseQueryValue = (q) => {
     if (q.includes(',')) {
         q = q.split(',');

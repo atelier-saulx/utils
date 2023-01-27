@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.encodeBase64 = exports.decodeBase64 = void 0;
 const b64ToUint6 = (nChr) => {
     return nChr > 64 && nChr < 91
         ? nChr - 65

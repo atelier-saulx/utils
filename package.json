@@ -1,7 +1,7 @@
 {
   "name": "@saulx/utils",
   "main": "./dist/index.js",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",

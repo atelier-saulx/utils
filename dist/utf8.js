@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stringToUtf8 = exports.uft8ToString = void 0;
 // UTF-8 array to JS string and vice versa
 exports.uft8ToString = (aBytes) => {
     let sView = '';
