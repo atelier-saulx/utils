@@ -28,6 +28,8 @@ export {
   randomString,
 }
 
+export * from './encoder'
+
 export * from './deepMerge'
 
 export * from './walker'

@@ -24,6 +24,7 @@ const retry_1 = __importDefault(require("./retry"));
 exports.retry = retry_1.default;
 const randomString_1 = __importDefault(require("./randomString"));
 exports.randomString = randomString_1.default;
+__export(require("./encoder"));
 __export(require("./deepMerge"));
 __export(require("./walker"));
 __export(require("./getType"));
