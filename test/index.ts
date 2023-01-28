@@ -11,7 +11,16 @@ import {
   retry,
   randomString,
   getType,
+  padLeft,
+  padRight,
 } from '../src'
+
+test('padding', async (t) => {
+  const x = padLeft('a', 4, 'b')
+  t.is(x, 'bbba')
+  const y = padRight('a', 4, 'b')
+  t.is(y, 'abbb')
+})
 
 test('env var', async (t) => {
   const x = toEnvVar('@based/bla-bla-bla$_!')

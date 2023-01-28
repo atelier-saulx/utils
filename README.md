@@ -202,6 +202,26 @@ const { encode, decode } = createEncoder(['hello'], '@')
 console.log(encode('hello 🥹')) // "@a 🥹"
 ```
 
+## padLeft
+
+Add padding to a string
+
+```javascript
+import { padLeft } from '@saulx/utils'
+console.log(padLeft('a', 4, 'b')) // "bbba"
+const y = padRight('a', 4, 'b')
+t.is(y, 'abbb')
+```
+
+## padRight
+
+Add padding to a string
+
+```javascript
+import { padLeft } from '@saulx/utils'
+console.log(padRight('a', 4, 'b')) // "abbb"
+```
+
 ## queued
 
 Pass any async function and queue it based on the arguments, also shares the function execution for the same args

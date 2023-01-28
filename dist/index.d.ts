@@ -8,6 +8,7 @@ import queued from './queued';
 import retry from './retry';
 import randomString from './randomString';
 export { deepCopy, queued, readStream, isObject, wait, deepEqual, toEnvVar, retry, randomString, };
+export * from './padding';
 export * from './encoder';
 export * from './deepMerge';
 export * from './walker';
