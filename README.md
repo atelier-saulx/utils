@@ -190,7 +190,7 @@ Will use `[a-z]` and `[0-9]` as encoded variables
 
 ```javascript
 import { createEncoder } from '@saulx/utils'
-const { encode, decode } = createEncoder(['🥹'], '@')
+const { encode, decode } = createEncoder(['🥹'], ['@'])
 console.log(encode('hello 🥹')) // "hello @a"
 ```
 
@@ -198,7 +198,7 @@ Can be used with larger strings
 
 ```javascript
 import { createEncoder } from '@saulx/utils'
-const { encode, decode } = createEncoder(['hello'], '@')
+const { encode, decode } = createEncoder(['hello'], ['@'])
 console.log(encode('hello 🥹')) // "@a 🥹"
 ```
 
