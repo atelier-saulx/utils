@@ -21,7 +21,7 @@ const stub = {
 }
 
 test.serial('walker should walk objects', async (t) => {
-  const result = []
+  const result: any[] = []
   const start = performance.now()
   await walk(stub, async (item, info) => {
     result.push({ path: info.path, value: item })
@@ -73,7 +73,7 @@ test.serial('walker should wait for async itemFns to finish', async (t) => {
   let cnt = 0
 
   await walk(stub, async () => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         cnt++
         resolve(true)
