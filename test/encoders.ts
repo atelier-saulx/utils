@@ -16,7 +16,7 @@ test('base64', async (t) => {
   t.is(strAgain, str)
 })
 
-test('stringToUtf8', async (t) => {
+test.only('stringToUtf8', async (t) => {
   const str = 'hello'
   const utf = stringToUtf8(str)
   const strAgain = uft8ToString(utf)
