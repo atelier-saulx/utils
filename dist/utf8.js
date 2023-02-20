@@ -1,4 +1,5 @@
 "use strict";
+// Faster in some browsers e.g. chrome then native textEncoder (dont use in nodejs!)
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uft8ToString = (aBytes) => {
     let sView = '';

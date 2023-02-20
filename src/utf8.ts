@@ -1,3 +1,5 @@
+// Faster in some browsers e.g. chrome then native textEncoder (dont use in nodejs!)
+
 export const uft8ToString = (aBytes: Uint8Array): string => {
   let sView = ''
   let nPart: number

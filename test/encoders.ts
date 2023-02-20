@@ -16,7 +16,7 @@ test('base64', async (t) => {
   t.is(strAgain, str)
 })
 
-test.only('stringToUtf8', async (t) => {
+test('stringToUtf8', async (t) => {
   const str = 'hello'
   const utf = stringToUtf8(str)
   const strAgain = uft8ToString(utf)
@@ -287,7 +287,7 @@ test('createEncoder simple case  perf', async (t) => {
   t.is(x, str)
 })
 
-test.only('encoding lower len perf 2char', async (t) => {
+test('encoding lower len perf 2char', async (t) => {
   const chars: string[] = [
     'wow',
     'and',
