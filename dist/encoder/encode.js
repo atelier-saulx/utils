@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createEncode = void 0;
 const cycleChars = (encodeChars, encodeCharIndex) => {
     if (encodeCharIndex % 2) {
         return encodeChars[encodeChars.length - encodeCharIndex];
     }
     return encodeChars[encodeCharIndex];
 };
-exports.createEncode = (charLen, charMap, encodeChars) => {
+const createEncode = (charLen, charMap, encodeChars) => {
     if (encodeChars.length > 1 && charLen === 1) {
         const encodeCharsLen = encodeChars.length;
         return (input) => {
@@ -102,4 +103,5 @@ exports.createEncode = (charLen, charMap, encodeChars) => {
         return str;
     };
 };
+exports.createEncode = createEncode;
 //# sourceMappingURL=encode.js.map

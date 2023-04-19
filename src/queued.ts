@@ -3,6 +3,28 @@ import isPlainObject from 'is-plain-obj'
 
 type Listener = (r: any) => any
 
+type Retry = { max?: number; minTime?: number; maxTime?: number }
+
+function retryPromiseFn<T>(fn: T, retry: Retry): T {
+  let retries = 0
+  const retryIt = async (...args) => {
+    try {
+      // @ts-ignore
+      return await fn(...args)
+    } catch (err) {
+      retries++
+      if (!retry.max || retries < retry.max) {
+        setTimeout(() => {
+          retryIt(...args)
+        }, Math.min(retries * (retry.minTime ?? 1e3), retry.maxTime ?? Infinity))
+      } else {
+        throw err
+      }
+    }
+  }
+  return retryIt as T
+}
+
 const defaultDedup = (...args: any[]): string | number => {
   let x = ''
   for (const arg of args) {
@@ -42,6 +64,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a?: A,
@@ -71,6 +94,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a: A,
@@ -100,6 +124,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a: A,
@@ -129,6 +154,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a: A,
@@ -158,6 +184,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a: A,
@@ -187,6 +214,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a: A,
@@ -216,6 +244,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (
   a: A,
@@ -245,6 +274,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h?: H, i?: I, j?: J) => Promise<K>
 function queued<A, B, C, D, E, F, G, H, I, J, K>(
@@ -263,6 +293,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i?: I, j?: J) => Promise<K>
 function queued<A, B, C, D, E, F, G, H, I, J, K>(
@@ -281,6 +312,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j?: J) => Promise<K>
 
@@ -290,6 +322,7 @@ function queued<K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): () => Promise<K>
 function queued<A, K>(
@@ -297,6 +330,7 @@ function queued<A, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A) => Promise<K>
 function queued<A, B, K>(
@@ -304,6 +338,7 @@ function queued<A, B, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B) => Promise<K>
 function queued<A, B, C, K>(
@@ -311,6 +346,7 @@ function queued<A, B, C, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C) => Promise<K>
 function queued<A, B, C, D, K>(
@@ -318,6 +354,7 @@ function queued<A, B, C, D, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D) => Promise<K>
 function queued<A, B, C, D, E, K>(
@@ -325,6 +362,7 @@ function queued<A, B, C, D, E, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E) => Promise<K>
 function queued<A, B, C, D, E, F, K>(
@@ -332,6 +370,7 @@ function queued<A, B, C, D, E, F, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F) => Promise<K>
 function queued<A, B, C, D, E, F, G, K>(
@@ -339,6 +378,7 @@ function queued<A, B, C, D, E, F, G, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => Promise<K>
 function queued<A, B, C, D, E, F, G, H, K>(
@@ -346,6 +386,7 @@ function queued<A, B, C, D, E, F, G, H, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => Promise<K>
 function queued<A, B, C, D, E, F, G, H, I, K>(
@@ -363,6 +404,7 @@ function queued<A, B, C, D, E, F, G, H, I, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => Promise<K>
 function queued<A, B, C, D, E, F, G, H, I, J, K>(
@@ -381,6 +423,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
   opts?: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   }
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => Promise<K>
 
@@ -389,8 +432,12 @@ function queued(
   opts: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
+    retry?: Retry
   } = {}
 ) {
+  if (opts.retry) {
+    promiseFn = retryPromiseFn(promiseFn, opts.retry)
+  }
   // default options
   if (!opts.dedup) {
     opts.dedup = defaultDedup
@@ -413,7 +460,6 @@ function queued(
       if (!keysInProgress.has(key)) {
         const l = listeners[key]
         keysInProgress.add(key)
-        // console.log('EXEC', 'conc', keysInProgress.size, key, l.args)
         promiseFn(...l.args)
           .then((v) => {
             delete listeners[key]

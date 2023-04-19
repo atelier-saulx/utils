@@ -1,17 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.padLeft = (str, len, char) => {
+exports.padRight = exports.padLeft = void 0;
+const padLeft = (str, len, char) => {
     const l = str.length;
     for (let i = 0; i < len - l; i++) {
         str = char + str;
     }
     return str;
 };
-exports.padRight = (str, len, char) => {
+exports.padLeft = padLeft;
+const padRight = (str, len, char) => {
     const l = str.length;
     for (let i = 0; i < len - l; i++) {
         str = str + char;
     }
     return str;
 };
+exports.padRight = padRight;
 //# sourceMappingURL=padding.js.map

@@ -5,20 +5,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const hash_1 = require("@saulx/hash");
 const is_plain_obj_1 = __importDefault(require("is-plain-obj"));
+function retryPromiseFn(fn, retry) {
+    let retries = 0;
+    const retryIt = async (...args) => {
+        try {
+            // @ts-ignore
+            return await fn(...args);
+        }
+        catch (err) {
+            retries++;
+            if (!retry.max || retries < retry.max) {
+                setTimeout(() => {
+                    retryIt(...args);
+                }, Math.min(retries * (retry.minTime ?? 1e3), retry.maxTime ?? Infinity));
+            }
+            else {
+                throw err;
+            }
+        }
+    };
+    return retryIt;
+}
 const defaultDedup = (...args) => {
     let x = '';
     for (const arg of args) {
         if (arg !== undefined) {
             if (typeof arg === 'object') {
                 if (Array.isArray(arg)) {
-                    x += hash_1.hashObjectIgnoreKeyOrder(arg);
+                    x += (0, hash_1.hashObjectIgnoreKeyOrder)(arg);
                 }
-                else if (is_plain_obj_1.default(arg)) {
-                    x += hash_1.hashObjectIgnoreKeyOrder(arg);
+                else if ((0, is_plain_obj_1.default)(arg)) {
+                    x += (0, hash_1.hashObjectIgnoreKeyOrder)(arg);
                 }
             }
             else {
-                x += hash_1.hash(arg);
+                x += (0, hash_1.hash)(arg);
             }
         }
     }
@@ -29,6 +50,9 @@ const defaultDedup = (...args) => {
     return x;
 };
 function queued(promiseFn, opts = {}) {
+    if (opts.retry) {
+        promiseFn = retryPromiseFn(promiseFn, opts.retry);
+    }
     // default options
     if (!opts.dedup) {
         opts.dedup = defaultDedup;
@@ -46,7 +70,6 @@ function queued(promiseFn, opts = {}) {
             if (!keysInProgress.has(key)) {
                 const l = listeners[key];
                 keysInProgress.add(key);
-                // console.log('EXEC', 'conc', keysInProgress.size, key, l.args)
                 promiseFn(...l.args)
                     .then((v) => {
                     delete listeners[key];

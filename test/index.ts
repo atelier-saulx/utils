@@ -37,7 +37,7 @@ test('deepCopy', async (t) => {
 })
 
 test('deepMerge', async (t) => {
-  const a = {
+  const a: any = {
     b: {
       a: 'a!',
       c: [
@@ -48,7 +48,7 @@ test('deepMerge', async (t) => {
     },
   }
 
-  const b = {
+  const b: any = {
     b: {
       b: 'its b!',
       c: [{ x: true, y: true }],
@@ -341,6 +341,40 @@ test('queued concurrency 2', async (t) => {
   await Promise.all(args.map((v) => myFnQueud(...v)))
   const ellapsed = Date.now() - d
   t.true(ellapsed > 1000 && ellapsed < 3000)
+})
+
+test('queued retry concurrency', async (t) => {
+  let cnt = 0
+
+  const myFn = async (x: number, y?: { x: boolean }): Promise<string> => {
+    await wait(100)
+    cnt++
+
+    if (cnt % 2) {
+      throw new Error('bla')
+    }
+
+    return x + 'blarp' + y?.x
+  }
+  const myFnQueud = queued(myFn, { concurrency: 5, retry: { max: 10 } })
+
+  const args: [number, { x: true }][] = []
+  for (let i = 0; i < 10; i++) {
+    args.push([i, { x: true }])
+  }
+  for (let i = 0; i < 10; i++) {
+    args.push([i, { x: true }])
+  }
+
+  const x = await Promise.allSettled(args.map((v) => myFnQueud(...v)))
+
+  for (const y of x) {
+    if (y.status !== 'fulfilled') {
+      t.fail('should resolve')
+    }
+  }
+
+  t.true(true)
 })
 
 test('retry', async (t) => {

@@ -1,7 +1,8 @@
 "use strict";
 // Faster in some browsers e.g. chrome then native textEncoder (dont use in nodejs!)
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uft8ToString = (aBytes) => {
+exports.stringToUtf8 = exports.uft8ToString = void 0;
+const uft8ToString = (aBytes) => {
     let sView = '';
     let nPart;
     const nLen = aBytes.length;
@@ -39,7 +40,8 @@ exports.uft8ToString = (aBytes) => {
     }
     return sView;
 };
-exports.stringToUtf8 = (str) => {
+exports.uft8ToString = uft8ToString;
+const stringToUtf8 = (str) => {
     let nChr;
     const nStrLen = str.length;
     let nArrLen = 0;
@@ -107,4 +109,5 @@ exports.stringToUtf8 = (str) => {
     }
     return aBytes;
 };
+exports.stringToUtf8 = stringToUtf8;
 //# sourceMappingURL=utf8.js.map

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.deepMerge = exports.deepMergeArrays = void 0;
 const merge = (target, source) => {
     if (source.constructor === Array) {
         for (let i = 0; i < source.length; i++) {

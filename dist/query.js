@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.serializeQuery = exports.parseQuery = void 0;
 const parseQueryValue = (q) => {
     if (q.includes(',')) {
         q = q.split(',');
@@ -22,7 +23,7 @@ const parseQueryValue = (q) => {
     }
     return q;
 };
-exports.parseQuery = (query) => {
+const parseQuery = (query) => {
     if (query) {
         try {
             const r = {};
@@ -97,6 +98,7 @@ exports.parseQuery = (query) => {
         catch (_e) { }
     }
 };
+exports.parseQuery = parseQuery;
 const topLevelObject = (q) => {
     const args = [];
     for (const key in q) {
@@ -105,12 +107,12 @@ const topLevelObject = (q) => {
             args.push(`${key}`);
         }
         else {
-            args.push(`${key}=${exports.serializeQuery(value, true)}`);
+            args.push(`${key}=${(0, exports.serializeQuery)(value, true)}`);
         }
     }
     return args.join('&');
 };
-exports.serializeQuery = (q, deep = false) => {
+const serializeQuery = (q, deep = false) => {
     if (typeof q === 'string') {
         return q;
     }
@@ -132,7 +134,7 @@ exports.serializeQuery = (q, deep = false) => {
             if (typeof v === 'object' && v !== null) {
                 return JSON.stringify(v);
             }
-            return exports.serializeQuery(v, true);
+            return (0, exports.serializeQuery)(v, true);
         })
             .join(',');
     }
@@ -144,4 +146,5 @@ exports.serializeQuery = (q, deep = false) => {
     }
     return '';
 };
+exports.serializeQuery = serializeQuery;
 //# sourceMappingURL=query.js.map

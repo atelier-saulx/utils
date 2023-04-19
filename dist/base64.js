@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.encodeBase64 = exports.decodeBase64 = void 0;
 const b64ToUint6 = (nChr) => {
     return nChr > 64 && nChr < 91
         ? nChr - 65
@@ -26,7 +27,7 @@ const uint6ToB64 = (nUint6) => {
                         ? 47
                         : 65;
 };
-exports.decodeBase64 = (base64String, nBlocksSize) => {
+const decodeBase64 = (base64String, nBlocksSize) => {
     // Only necessary if the base64 includes whitespace such as line breaks
     const sB64Enc = base64String.replace(/[^A-Za-z0-9+/]/g, '');
     const nInLen = sB64Enc.length;
@@ -53,7 +54,8 @@ exports.decodeBase64 = (base64String, nBlocksSize) => {
     }
     return taBytes;
 };
-exports.encodeBase64 = (utf8Array) => {
+exports.decodeBase64 = decodeBase64;
+const encodeBase64 = (utf8Array) => {
     let nMod3 = 2;
     let sB64Enc = '';
     const nLen = utf8Array.length;
@@ -73,4 +75,5 @@ exports.encodeBase64 = (utf8Array) => {
     return (sB64Enc.substring(0, sB64Enc.length - 2 + nMod3) +
         (nMod3 === 2 ? '' : nMod3 === 1 ? '=' : '=='));
 };
+exports.encodeBase64 = encodeBase64;
 //# sourceMappingURL=base64.js.map

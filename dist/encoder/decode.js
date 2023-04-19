@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDecode = (isLong, longest, encodeChars = ['$'], reverseCharMap) => {
+exports.createDecode = void 0;
+const createDecode = (isLong, longest, encodeChars = ['$'], reverseCharMap) => {
     if (encodeChars.length > 1 && isLong) {
         // only isLong for now...
         return (input) => {
@@ -78,4 +79,5 @@ exports.createDecode = (isLong, longest, encodeChars = ['$'], reverseCharMap) =>
         return str;
     };
 };
+exports.createDecode = createDecode;
 //# sourceMappingURL=decode.js.map
