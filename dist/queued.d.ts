@@ -2,6 +2,7 @@ type Retry = {
     max?: number;
     minTime?: number;
     maxTime?: number;
+    logError?: (err: Error, args: any[], retries: number) => void;
 };
 declare function queued<A, B, C, D, E, F, G, H, I, J, K>(promiseFn: (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H, i?: I, j?: J) => Promise<K>, opts?: {
     concurrency?: number;

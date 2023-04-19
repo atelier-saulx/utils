@@ -7,23 +7,24 @@ const hash_1 = require("@saulx/hash");
 const is_plain_obj_1 = __importDefault(require("is-plain-obj"));
 function retryPromiseFn(fn, retry) {
     let retries = 0;
-    const retryIt = async (...args) => {
-        try {
-            // @ts-ignore
-            return await fn(...args);
-        }
-        catch (err) {
+    const retryIt = (...args) => new Promise((resolve, reject) => {
+        fn(...args)
+            .then((r) => resolve(r))
+            .catch((err) => {
             retries++;
+            if (retry.logError) {
+                retry.logError(err, args, retries);
+            }
             if (!retry.max || retries < retry.max) {
                 setTimeout(() => {
-                    retryIt(...args);
+                    resolve(retryIt(...args));
                 }, Math.min(retries * (retry.minTime ?? 1e3), retry.maxTime ?? Infinity));
             }
             else {
-                throw err;
+                reject(err);
             }
-        }
-    };
+        });
+    });
     return retryIt;
 }
 const defaultDedup = (...args) => {

@@ -347,32 +347,42 @@ test('queued retry concurrency', async (t) => {
   let cnt = 0
 
   const myFn = async (x: number, y?: { x: boolean }): Promise<string> => {
-    await wait(100)
+    await wait(10)
     cnt++
-
     if (cnt % 2) {
       throw new Error('bla')
     }
-
     return x + 'blarp' + y?.x
   }
-  const myFnQueud = queued(myFn, { concurrency: 5, retry: { max: 10 } })
+
+  let errs = 0
+
+  const myFnQueud = queued(myFn, {
+    concurrency: 5,
+    retry: {
+      max: 100,
+      minTime: 10,
+      maxTime: 500,
+      logError: (x, args) => {
+        errs++
+        console.info('Retrying!', args)
+      },
+    },
+  })
 
   const args: [number, { x: true }][] = []
   for (let i = 0; i < 10; i++) {
     args.push([i, { x: true }])
   }
-  for (let i = 0; i < 10; i++) {
-    args.push([i, { x: true }])
-  }
 
   const x = await Promise.allSettled(args.map((v) => myFnQueud(...v)))
-
   for (const y of x) {
     if (y.status !== 'fulfilled') {
       t.fail('should resolve')
     }
   }
+  t.is(cnt, 20)
+  t.is(errs, 10)
 
   t.true(true)
 })

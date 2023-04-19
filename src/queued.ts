@@ -3,26 +3,38 @@ import isPlainObject from 'is-plain-obj'
 
 type Listener = (r: any) => any
 
-type Retry = { max?: number; minTime?: number; maxTime?: number }
+type Retry = {
+  max?: number
+  minTime?: number
+  maxTime?: number
+  logError?: (err: Error, args: any[], retries: number) => void
+}
 
-function retryPromiseFn<T>(fn: T, retry: Retry): T {
+function retryPromiseFn<T extends (...args: any[]) => Promise<any>>(
+  fn: T,
+  retry: Retry
+): T {
   let retries = 0
-  const retryIt = async (...args) => {
-    try {
-      // @ts-ignore
-      return await fn(...args)
-    } catch (err) {
-      retries++
-      if (!retry.max || retries < retry.max) {
-        setTimeout(() => {
-          retryIt(...args)
-        }, Math.min(retries * (retry.minTime ?? 1e3), retry.maxTime ?? Infinity))
-      } else {
-        throw err
-      }
-    }
-  }
-  return retryIt as T
+  const retryIt: any = (...args): Promise<any> =>
+    new Promise((resolve, reject) => {
+      fn(...args)
+        .then((r) => resolve(r))
+        .catch((err) => {
+          retries++
+          if (retry.logError) {
+            retry.logError(err, args, retries)
+          }
+          if (!retry.max || retries < retry.max) {
+            setTimeout(() => {
+              resolve(retryIt(...args))
+            }, Math.min(retries * (retry.minTime ?? 1e3), retry.maxTime ?? Infinity))
+          } else {
+            reject(err)
+          }
+        })
+    })
+
+  return retryIt
 }
 
 const defaultDedup = (...args: any[]): string | number => {
