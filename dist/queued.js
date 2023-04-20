@@ -11,6 +11,7 @@ function retryPromiseFn(fn, retry) {
         fn(...args)
             .then((r) => resolve(r))
             .catch((err) => {
+            var _a, _b;
             retries++;
             if (retry.logError) {
                 retry.logError(err, args, retries);
@@ -18,7 +19,7 @@ function retryPromiseFn(fn, retry) {
             if (!retry.max || retries < retry.max) {
                 setTimeout(() => {
                     resolve(retryIt(...args));
-                }, Math.min(retries * (retry.minTime ?? 1e3), retry.maxTime ?? Infinity));
+                }, Math.min(retries * ((_a = retry.minTime) !== null && _a !== void 0 ? _a : 1e3), (_b = retry.maxTime) !== null && _b !== void 0 ? _b : Infinity));
             }
             else {
                 reject(err);

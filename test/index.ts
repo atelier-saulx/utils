@@ -375,12 +375,8 @@ test('queued retry concurrency', async (t) => {
     args.push([i, { x: true }])
   }
 
-  const x = await Promise.allSettled(args.map((v) => myFnQueud(...v)))
-  for (const y of x) {
-    if (y.status !== 'fulfilled') {
-      t.fail('should resolve')
-    }
-  }
+  const x = await Promise.all(args.map((v) => myFnQueud(...v)))
+
   t.is(cnt, 20)
   t.is(errs, 10)
 
