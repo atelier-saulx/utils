@@ -13,10 +13,10 @@ export default function randomString(
     noNumbers?: boolean;
   }
 ) {
-  const noSpecials = opts?.noSpecials || false
-  const noLowerCase = opts?.noLowerCase || false
-  const noUpperCase = opts?.noUpperCase || false
-  const noNumbers = opts?.noNumbers || false
+  const noSpecials = opts && opts.noSpecials || false
+  const noLowerCase = opts && opts.noLowerCase || false
+  const noUpperCase = opts && opts.noUpperCase || false
+  const noNumbers = opts && opts.noNumbers || false
 
   const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz'
