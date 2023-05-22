@@ -43,7 +43,6 @@ const deepEqual = (a, b) => {
                 return false;
             }
         }
-        // maybe not this ?
         if (a.checksum || b.checksum) {
             if (a.checksum !== b.checksum) {
                 return false;
@@ -61,10 +60,11 @@ const deepEqual = (a, b) => {
             if (!b.hasOwnProperty(key))
                 return false;
             const k = b[key];
-            if (k === void 0)
-                return false;
-            const t = typeof k;
             const k1 = a[key];
+            if (k === void 0 && k1 !== void 0) {
+                return false;
+            }
+            const t = typeof k;
             // eslint-disable-next-line
             if (t !== typeof k1) {
                 return false;
