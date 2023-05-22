@@ -137,6 +137,11 @@ test('deepEqual ', async (t) => {
   const blarf = { x: true, y: true, z: [1, 2, 3, 4, { x: true }] }
 
   t.true(deepEqual(bla, blarf))
+
+  const a = { x: 'x', y: undefined }
+  const b = { x: 'x', y: undefined }
+
+  t.true(deepEqual(a, b))
 })
 
 test('deepEqual 2', async (t) => {

@@ -1,8 +1,7 @@
-import deepCopy from './deepCopy'
-
 const deepEqual = (a: any, b: any): boolean => {
   const typeA = typeof a
   const typeB = typeof b
+
   if (a === b) return true
   if (typeA !== typeB) return false
   if (a === null || b === null) return false
@@ -37,7 +36,6 @@ const deepEqual = (a: any, b: any): boolean => {
       }
     }
 
-    // maybe not this ?
     if (a.checksum || b.checksum) {
       if (a.checksum !== b.checksum) {
         return false
@@ -52,9 +50,12 @@ const deepEqual = (a: any, b: any): boolean => {
       if (!a.hasOwnProperty(key)) continue
       if (!b.hasOwnProperty(key)) return false
       const k = b[key]
-      if (k === void 0) return false
-      const t = typeof k
       const k1 = a[key]
+      if (k === void 0 && k1 !== void 0) {
+        return false
+      }
+      const t = typeof k
+
       // eslint-disable-next-line
       if (t !== typeof k1) {
         return false
