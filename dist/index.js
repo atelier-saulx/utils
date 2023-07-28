@@ -44,4 +44,5 @@ __exportStar(require("./getType"), exports);
 __exportStar(require("./query"), exports);
 __exportStar(require("./base64"), exports);
 __exportStar(require("./utf8"), exports);
+__exportStar(require("./path"), exports);
 //# sourceMappingURL=index.js.map

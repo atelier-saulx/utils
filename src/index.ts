@@ -43,3 +43,5 @@ export * from './query'
 export * from './base64'
 
 export * from './utf8'
+
+export * from './path'

@@ -13,6 +13,8 @@ import {
   getType,
   padLeft,
   padRight,
+  setByPath,
+  getByPath,
 } from '../src'
 
 test('padding', async (t) => {
@@ -536,4 +538,25 @@ test('getType', (t) => {
   t.is(getType([]), 'array')
   t.is(getType([1, 2, 3]), 'array')
   t.is(getType(null), 'null')
+})
+
+test('setPath', (t) => {
+  const bla = {
+    a: {
+      b: {
+        c: {
+          bla: true,
+        },
+      },
+    },
+  }
+
+  t.deepEqual(setByPath(bla, ['a', 'b', 'c', 'x', 0], 'snurp'), {
+    a: {
+      b: { c: { bla: true, x: ['snurp'] } },
+    },
+  })
+
+  t.is(getByPath(bla, ['a', 'b', 'c', 'x', 0]), 'snurp')
+  t.true(true)
 })
