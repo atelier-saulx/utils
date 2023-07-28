@@ -38,6 +38,35 @@ test('deepCopy', async (t) => {
   t.deepEqual(deepCopy(bla), bla)
 })
 
+test.only('deepMergeArrayMulti', async (t) => {
+  const r = deepMergeArrays(
+    {},
+    {
+      a: [{ a: true }],
+    },
+    {
+      a: [{ b: true }],
+    },
+    {
+      a: [{ c: true }],
+    },
+    {
+      a: [{ d: true }],
+    }
+  )
+
+  t.deepEqual(r, {
+    a: [
+      {
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+      },
+    ],
+  })
+})
+
 test('deepMerge', async (t) => {
   const a: any = {
     b: {

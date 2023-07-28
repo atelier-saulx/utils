@@ -59,7 +59,6 @@ export function deepMergeArrays(target: any, ...sources: any[]): any {
       typeof source === 'object'
     ) {
       merge(target, source)
-      return target
     }
   }
   return target

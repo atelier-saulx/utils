@@ -59,7 +59,6 @@ function deepMergeArrays(target, ...sources) {
             source &&
             typeof source === 'object') {
             merge(target, source);
-            return target;
         }
     }
     return target;
