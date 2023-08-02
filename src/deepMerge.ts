@@ -9,7 +9,7 @@ const merge = (target: any, source: any) => {
           typeof source[i] === 'object'
         ) {
           merge(target[i], source[i])
-        } else {
+        } else if (source[i] !== undefined) {
           target[i] = source[i]
         }
       } else {
@@ -26,7 +26,7 @@ const merge = (target: any, source: any) => {
           typeof source[i] === 'object'
         ) {
           merge(target[i], source[i])
-        } else {
+        } else if (source[i] !== undefined) {
           target[i] = source[i]
         }
       } else {
