@@ -26,6 +26,7 @@
   "devDependencies": {
     "ava": "5.3.1",
     "@saulx/tsconfig": "^1.0.2",
-    "@saulx/prettier-config": "^1.0.0"
+    "@saulx/prettier-config": "^1.0.0",
+    "typescript": "^5.2.2"
   }
 }
