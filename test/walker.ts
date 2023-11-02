@@ -1,5 +1,5 @@
 import test from 'ava'
-import { walk } from '../src'
+import { walk } from '../src/index.js'
 
 const stub = {
   a: 'a',

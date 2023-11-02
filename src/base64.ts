@@ -68,6 +68,7 @@ export const encodeBase64 = (utf8Array: Uint8Array): string => {
     //   if (nIdx > 0 && ((nIdx * 4) / 3) % 76 === 0) {
     //      sB64Enc += "\r\n";
     //    }
+    // @ts-ignore
     nUint24 |= utf8Array[nIdx] << ((16 >>> nMod3) & 24)
     if (nMod3 === 2 || utf8Array.length - nIdx === 1) {
       sB64Enc += String.fromCodePoint(

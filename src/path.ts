@@ -7,7 +7,6 @@ export function setByPath(target: any, path: Path, value: any): any {
   let d = target
   for (let i = 0; i < path.length; i++) {
     const seg = path[i]
-
     if (i === path.length - 1) {
       d[seg] = value
       break

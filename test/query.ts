@@ -1,10 +1,10 @@
 import test from 'ava'
-import { parseQuery, serializeQuery } from '../src'
+import { parseQuery, serializeQuery } from '../src/index.js'
 
 test('parse query with special values', async (t) => {
   const q = 'bla=1&flap=true&q={"bla":"flap=x&v2!"}'
 
-  const r1 = parseQuery(q)
+  const r1: any = parseQuery(q)
 
   t.is(r1 && r1.bla, 1)
   t.is(r1 && r1.flap, true)
@@ -49,7 +49,7 @@ test('parse query with arrays', async (t) => {
 test('parse query simple', async (t) => {
   const q = 'bla=flap'
 
-  const r1 = parseQuery(q)
+  const r1: any = parseQuery(q)
 
   t.is(r1 && r1.bla, 'flap')
 

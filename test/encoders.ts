@@ -5,7 +5,7 @@ import {
   decodeBase64,
   encodeBase64,
   createEncoder,
-} from '../src'
+} from '../src/index.js'
 
 test('base64', async (t) => {
   const str = 'this is a nice string'

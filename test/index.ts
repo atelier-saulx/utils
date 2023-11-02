@@ -15,7 +15,12 @@ import {
   padRight,
   setByPath,
   getByPath,
-} from '../src'
+} from '../src/index.js'
+import { createReadStream } from 'fs'
+import { join } from 'path'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+const __dirname = fileURLToPath(dirname(import.meta.url))
 
 test('padding', async (t) => {
   const x = padLeft('a', 4, 'b')
@@ -355,14 +360,16 @@ test('deepEqual 4', async (t) => {
   t.false(deepEqual(bla, blarf))
 })
 
-test.cb('readStream', (t) => {
-  const { createReadStream } = require('fs')
-  const { join } = require('path')
-  readStream(createReadStream(join(__dirname, '../package.json'))).then((v) => {
-    const pkg = JSON.parse(v.toString())
-    t.is(pkg.name, '@saulx/utils')
-    t.end()
-  })
+test('readStream', async (t) => {
+  console.info(import.meta.url)
+
+  const v = await readStream(
+    createReadStream(join(__dirname, '../../package.json'))
+  )
+
+  const pkg = JSON.parse(v.toString())
+  t.is(pkg.name, '@saulx/utils')
+  t.pass()
 })
 
 test('queued', async (t) => {
@@ -432,7 +439,7 @@ test('queued retry concurrency', async (t) => {
       max: 100,
       minTime: 10,
       maxTime: 500,
-      logError: (x, args) => {
+      logError: (_x, args) => {
         errs++
         console.info('Retrying!', args)
       },
@@ -444,7 +451,7 @@ test('queued retry concurrency', async (t) => {
     args.push([i, { x: true }])
   }
 
-  const x = await Promise.all(args.map((v) => myFnQueud(...v)))
+  await Promise.all(args.map((v) => myFnQueud(...v)))
 
   t.is(cnt, 20)
   t.is(errs, 10)

@@ -1,19 +1,7 @@
 {
+  "extends": "@saulx/tsconfig/default.json",
   "compilerOptions": {
-    "target": "es2019",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "removeComments": false,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "resolveJsonModule": true
+    "outDir": "dist"
   },
-  "strict": true,
-  "exclude": ["node_modules", "test", "dist", "_src"]
+  "include": ["src", "test"]
 }

@@ -47,7 +47,7 @@ export const stringToUtf8 = (str: string): Uint8Array => {
   let nArrLen = 0
 
   for (let nMapIdx = 0; nMapIdx < nStrLen; nMapIdx++) {
-    nChr = str.codePointAt(nMapIdx)
+    nChr = str.codePointAt(nMapIdx) as number
 
     if (nChr >= 0x10000) {
       nMapIdx++
@@ -72,7 +72,7 @@ export const stringToUtf8 = (str: string): Uint8Array => {
   let nIdx = 0
   let nChrIdx = 0
   while (nIdx < nArrLen) {
-    nChr = str.codePointAt(nChrIdx)
+    nChr = str.codePointAt(nChrIdx) as number
     if (nChr < 128) {
       aBytes[nIdx++] = nChr
     } else if (nChr < 0x800) {

@@ -1,6 +1,6 @@
-import { createDecode } from './decode'
-import { createEncode } from './encode'
-import { padLeft } from '../padding'
+import { createDecode } from './decode.js'
+import { createEncode } from './encode.js'
+import { padLeft } from '../padding.js'
 
 export const createEncoder = (
   chars: string[],

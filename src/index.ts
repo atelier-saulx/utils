@@ -1,20 +1,20 @@
-import deepCopy from './deepCopy'
+import deepCopy from './deepCopy.js'
 
-import isObject from './isObject'
+import isObject from './isObject.js'
 
-import wait from './wait'
+import wait from './wait.js'
 
-import deepEqual from './deepEqual'
+import deepEqual from './deepEqual.js'
 
-import toEnvVar from './envVar'
+import toEnvVar from './envVar.js'
 
-import readStream from './readStream'
+import readStream from './readStream.js'
 
-import queued from './queued'
+import queued from './queued.js'
 
-import retry from './retry'
+import retry from './retry.js'
 
-import randomString from './randomString'
+import randomString from './randomString.js'
 
 export {
   deepCopy,
@@ -28,20 +28,20 @@ export {
   randomString,
 }
 
-export * from './padding'
+export * from './padding.js'
 
-export * from './encoder'
+export * from './encoder/index.js'
 
-export * from './deepMerge'
+export * from './deepMerge.js'
 
-export * from './walker'
+export * from './walker.js'
 
-export * from './getType'
+export * from './getType.js'
 
-export * from './query'
+export * from './query.js'
 
-export * from './base64'
+export * from './base64.js'
 
-export * from './utf8'
+export * from './utf8.js'
 
-export * from './path'
+export * from './path.js'

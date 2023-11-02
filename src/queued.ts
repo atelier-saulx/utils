@@ -1,5 +1,4 @@
 import { hash, hashObjectIgnoreKeyOrder } from '@saulx/hash'
-import isPlainObject from 'is-plain-obj'
 
 type Listener = (r: any) => any
 
@@ -15,7 +14,7 @@ function retryPromiseFn<T extends (...args: any[]) => Promise<any>>(
   retry: Retry
 ): T {
   let retries = 0
-  const retryIt: any = (...args): Promise<any> =>
+  const retryIt: any = (...args: any[]): Promise<any> =>
     new Promise((resolve, reject) => {
       fn(...args)
         .then((r) => resolve(r))
@@ -42,11 +41,7 @@ const defaultDedup = (...args: any[]): string | number => {
   for (const arg of args) {
     if (arg !== undefined) {
       if (typeof arg === 'object') {
-        if (Array.isArray(arg)) {
-          x += hashObjectIgnoreKeyOrder(arg)
-        } else if (isPlainObject(arg)) {
-          x += hashObjectIgnoreKeyOrder(arg)
-        }
+        x += hashObjectIgnoreKeyOrder(arg)
       } else {
         x += hash(arg)
       }
@@ -440,7 +435,7 @@ function queued<A, B, C, D, E, F, G, H, I, J, K>(
 ): (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => Promise<K>
 
 function queued(
-  promiseFn,
+  promiseFn: any,
   opts: {
     concurrency?: number
     dedup?: (...args: any[]) => number | string
@@ -472,8 +467,9 @@ function queued(
       if (!keysInProgress.has(key)) {
         const l = listeners[key]
         keysInProgress.add(key)
+        // @ts-ignore
         promiseFn(...l.args)
-          .then((v) => {
+          .then((v: any) => {
             delete listeners[key]
             keysInProgress.delete(key)
             l.listeners.forEach(([resolve]) => {
@@ -481,7 +477,7 @@ function queued(
             })
             drain()
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             delete listeners[key]
             keysInProgress.delete(key)
             l.listeners.forEach(([, reject]) => {
@@ -496,14 +492,16 @@ function queued(
     }
   }
 
-  return (...args) => {
+  return (...args: any[]) => {
     return new Promise((resolve, reject) => {
+      // @ts-ignore
       const id = opts.dedup(...args)
       if (!listeners[id]) {
         listeners[id] = { args, listeners: [[resolve, reject]] }
       } else {
         listeners[id].listeners.push([resolve, reject])
       }
+      // @ts-ignore
       if (keysInProgress.size < opts.concurrency) {
         drain()
       }

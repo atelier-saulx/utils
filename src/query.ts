@@ -1,4 +1,4 @@
-type QueryValue = string | number | boolean
+type QueryValue = string | number | boolean | null
 
 type QueryParams = {
   [key: string]: QueryValue | QueryValue[] | { [key: string]: any }

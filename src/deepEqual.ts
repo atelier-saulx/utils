@@ -1,7 +1,6 @@
 const deepEqual = (a: any, b: any): boolean => {
   const typeA = typeof a
   const typeB = typeof b
-
   if (a === b) return true
   if (typeA !== typeB) return false
   if (a === null || b === null) return false
@@ -22,7 +21,6 @@ const deepEqual = (a: any, b: any): boolean => {
         }
         for (let i = 0; i < len; i++) {
           const t = typeof a[i]
-          // eslint-disable-next-line
           if (typeof b[i] !== t) {
             return false
           } else if (t === 'object') {
@@ -35,7 +33,6 @@ const deepEqual = (a: any, b: any): boolean => {
         return false
       }
     }
-
     if (a.checksum || b.checksum) {
       if (a.checksum !== b.checksum) {
         return false
@@ -43,7 +40,6 @@ const deepEqual = (a: any, b: any): boolean => {
         return true
       }
     }
-
     let cnt = 0
     for (let key in a) {
       if (key[0] === '_') continue
@@ -55,8 +51,6 @@ const deepEqual = (a: any, b: any): boolean => {
         return false
       }
       const t = typeof k
-
-      // eslint-disable-next-line
       if (t !== typeof k1) {
         return false
       } else if (k && t === 'object') {
@@ -68,7 +62,6 @@ const deepEqual = (a: any, b: any): boolean => {
       }
       cnt++
     }
-    // eslint-disable-next-line
     for (const _key in b) {
       cnt--
       if (cnt < 0) {
