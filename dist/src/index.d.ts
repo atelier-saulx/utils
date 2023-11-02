@@ -14,6 +14,4 @@ export * from './deepMerge.js';
 export * from './walker.js';
 export * from './getType.js';
 export * from './query.js';
-export * from './base64.js';
-export * from './utf8.js';
 export * from './path.js';

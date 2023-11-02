@@ -60,7 +60,6 @@ function queued(promiseFn, opts = {}) {
             if (!keysInProgress.has(key)) {
                 const l = listeners[key];
                 keysInProgress.add(key);
-                // @ts-ignore
                 promiseFn(...l.args)
                     .then((v) => {
                     delete listeners[key];
@@ -86,16 +85,16 @@ function queued(promiseFn, opts = {}) {
     };
     return (...args) => {
         return new Promise((resolve, reject) => {
-            // @ts-ignore
-            const id = opts.dedup(...args);
-            if (!listeners[id]) {
-                listeners[id] = { args, listeners: [[resolve, reject]] };
+            if ('dedup' in opts) {
+                const id = opts.dedup(...args);
+                if (!listeners[id]) {
+                    listeners[id] = { args, listeners: [[resolve, reject]] };
+                }
+                else {
+                    listeners[id].listeners.push([resolve, reject]);
+                }
             }
-            else {
-                listeners[id].listeners.push([resolve, reject]);
-            }
-            // @ts-ignore
-            if (keysInProgress.size < opts.concurrency) {
+            if (keysInProgress.size < (opts.concurrency ?? 1)) {
                 drain();
             }
         });
