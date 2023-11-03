@@ -8,7 +8,7 @@ import deepEqual from './deepEqual.js'
 
 import toEnvVar from './envVar.js'
 
-import readStream from './readStream.js'
+import readStream from './readStream/index.js'
 
 import queued from './queued.js'
 

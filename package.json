@@ -1,6 +1,6 @@
 {
   "name": "@saulx/utils",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "repository": "https://github.com/atelier-saulx/utils",
   "files": [
     "dist/src"
@@ -10,6 +10,9 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "ava --verbose"
+  },
+  "browser": {
+    "./dist/src/readStream/index.ts": "./dist/src/readStream/browser.ts"
   },
   "type": "module",
   "main": "./dist/src/index.js",
