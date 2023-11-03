@@ -1,6 +1,6 @@
 import { Stream, PassThrough } from 'stream'
 
-export default (stream: Stream): Promise<Buffer> =>
+export const readStream = (stream: Stream): Promise<Buffer> =>
   new Promise((resolve, reject) => {
     const s = new PassThrough()
     s.on('error', (err) => {

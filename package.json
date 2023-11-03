@@ -1,6 +1,6 @@
 {
   "name": "@saulx/utils",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "repository": "https://github.com/atelier-saulx/utils",
   "files": [
     "dist/src"
@@ -12,7 +12,7 @@
     "test": "ava --verbose"
   },
   "browser": {
-    "./dist/src/readStream/index.js": "./dist/src/readStream/browser.js"
+    "./dist/src/readStream.js": false
   },
   "type": "module",
   "main": "./dist/src/index.js",

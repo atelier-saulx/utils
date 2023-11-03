@@ -8,7 +8,7 @@ import deepEqual from './deepEqual.js'
 
 import toEnvVar from './envVar.js'
 
-import readStream from './readStream/index.js'
+export * from './readStream.js'
 
 import queued from './queued.js'
 
@@ -19,7 +19,6 @@ import randomString from './randomString.js'
 export {
   deepCopy,
   queued,
-  readStream,
   isObject,
   wait,
   deepEqual,
