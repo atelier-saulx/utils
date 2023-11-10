@@ -40,3 +40,5 @@ export * from './getType.js'
 export * from './query.js'
 
 export * from './path.js'
+
+export * from './base64.js'

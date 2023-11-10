@@ -1,5 +1,14 @@
 import test from 'ava'
-import { createEncoder } from '../src/index.js'
+import { createEncoder, encodeBase64, decodeBase64 } from '../src/index.js'
+
+test('base64', async (t) => {
+  const str = 'this is a nice string'
+  const b64 = encodeBase64(new TextEncoder().encode(str))
+  t.is(b64, 'dGhpcyBpcyBhIG5pY2Ugc3RyaW5n')
+  t.true(str !== b64)
+  const strAgain = new TextDecoder().decode(decodeBase64(b64))
+  t.is(strAgain, str)
+})
 
 test('createEncoder', async (t) => {
   const chars = [
