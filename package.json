@@ -27,9 +27,10 @@
     "@saulx/hash": "^3.0.0"
   },
   "devDependencies": {
-    "ava": "5.3.1",
-    "@saulx/tsconfig": "^1.0.6",
     "@saulx/prettier-config": "^1.0.0",
+    "@saulx/tsconfig": "^1.0.6",
+    "@types/node": "18",
+    "ava": "5.3.1",
     "typescript": "^5.2.2"
   }
 }
