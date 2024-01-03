@@ -320,3 +320,41 @@ By configuring the options you can walk any kind of structure
 		}
 	)
 ```
+
+## nonRecursiveWalker
+
+Generic object walker that does not use recursion.
+
+```javascript
+  const obj = {
+    a1: {
+      a1b1: {
+        a1b1c1: 'a1b1c1',
+        a1b1c2: {
+          a1b1c2d1: 'a1b1c2d1',
+        },
+      },
+    },
+    a2: 'a2',
+    a3: {
+      a3b1: 'a3b1',
+    },
+  }
+
+  nonRecursiveWalker(
+    obj, // Object to walk
+    (
+      target, // reference to matched property
+      path, // path as a string[]
+      type // 0 for property, 1 for object
+    ) => {
+      if (path.join('.') === 'a1.a1b1') {
+        console.log('Object found type is 1')
+      }
+      if (path.join('.') === 'a2') {
+        console.log('Property found type is 0')
+      }
+    },
+    true // also match objects
+  )
+```
