@@ -2,16 +2,16 @@ import { Stream, Writable } from 'stream'
 
 export const readStream = (
   stream: Stream,
-  opts?: { throttle?: number; maxCunkSize?: number }
+  opts?: { throttle?: number; maxChunkSize?: number }
 ): Promise<Buffer> =>
   new Promise((resolve, reject) => {
-    const maxCunkSize = opts?.maxCunkSize ?? 0
+    const maxChunkSize = opts?.maxChunkSize ?? 0
     const throttle = opts?.throttle ?? 0
     const buffers: Buffer[] = []
     const processChunk = (c, next) => {
-      buffers.push(c.slice(0, maxCunkSize))
-      const chunkP = c.slice(maxCunkSize, c.byteLength)
-      if (chunkP.byteLength > maxCunkSize) {
+      buffers.push(c.slice(0, maxChunkSize))
+      const chunkP = c.slice(maxChunkSize, c.byteLength)
+      if (chunkP.byteLength > maxChunkSize) {
         if (throttle) {
           setTimeout(() => {
             processChunk(chunkP, next)
@@ -32,7 +32,7 @@ export const readStream = (
     }
     const s = new Writable({
       write: (c, _encoding, next) => {
-        if (maxCunkSize && c.byteLength > maxCunkSize) {
+        if (maxChunkSize && c.byteLength > maxChunkSize) {
           processChunk(c, next)
         } else {
           if (typeof c === 'string') {

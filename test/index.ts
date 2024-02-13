@@ -372,7 +372,7 @@ test('readStream', async (t) => {
 test('readStreamLarger', async (t) => {
   const v = await readStream(createReadStream(join(__dirname, './index.js')), {
     throttle: 10,
-    maxCunkSize: 100,
+    maxChunkSize: 100,
   })
   const pkg = v.toString()
   t.true(pkg.includes('readStreamLarger'))
