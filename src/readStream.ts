@@ -8,10 +8,9 @@ export const readStream = (
     const maxCunkSize = opts?.maxCunkSize ?? 0
     const throttle = opts?.throttle ?? 0
     const buffers: Buffer[] = []
-
     const processChunk = (c, next) => {
       buffers.push(c.slice(0, maxCunkSize))
-      const chunkP = c.slice(maxCunkSize)
+      const chunkP = c.slice(maxCunkSize, c.byteLength)
       if (chunkP.byteLength > maxCunkSize) {
         if (throttle) {
           setTimeout(() => {
@@ -21,6 +20,7 @@ export const readStream = (
           processChunk(chunkP, next)
         }
       } else {
+        buffers.push(chunkP)
         if (throttle) {
           setTimeout(() => {
             next()
@@ -30,7 +30,6 @@ export const readStream = (
         }
       }
     }
-
     const s = new Writable({
       write: (c, _encoding, next) => {
         if (maxCunkSize && c.byteLength > maxCunkSize) {
@@ -51,14 +50,11 @@ export const readStream = (
         }
       },
     })
-
     s.on('error', (err) => {
       reject(err)
     })
-
     s.on('finish', () => {
       resolve(Buffer.concat(buffers))
     })
-
     stream.pipe(s)
   })
