@@ -33,7 +33,7 @@ export const readStream = (
 
     const s = new Writable({
       write: (c, _encoding, next) => {
-        if (c.byteLength > maxCunkSize) {
+        if (maxCunkSize && c.byteLength > maxCunkSize) {
           processChunk(c, next)
         } else {
           if (typeof c === 'string') {

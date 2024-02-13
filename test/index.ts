@@ -369,7 +369,7 @@ test('readStream', async (t) => {
   t.pass()
 })
 
-test.only('readStreamLarger', async (t) => {
+test('readStreamLarger', async (t) => {
   const v = await readStream(createReadStream(join(__dirname, './index.js')), {
     throttle: 10,
     maxCunkSize: 100,
