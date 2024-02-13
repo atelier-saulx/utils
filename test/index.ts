@@ -361,14 +361,21 @@ test('deepEqual 4', async (t) => {
 })
 
 test('readStream', async (t) => {
-  console.info(import.meta.url)
-
   const v = await readStream(
     createReadStream(join(__dirname, '../../package.json'))
   )
-
   const pkg = JSON.parse(v.toString())
   t.is(pkg.name, '@saulx/utils')
+  t.pass()
+})
+
+test.only('readStreamLarger', async (t) => {
+  const v = await readStream(createReadStream(join(__dirname, './index.js')), {
+    throttle: 10,
+    maxCunkSize: 100,
+  })
+  const pkg = v.toString()
+  t.true(pkg.includes('readStreamLarger'))
   t.pass()
 })
 

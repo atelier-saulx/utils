@@ -1,22 +1,64 @@
-import { Stream, PassThrough } from 'stream'
+import { Stream, Writable } from 'stream'
 
-export const readStream = (stream: Stream): Promise<Buffer> =>
+export const readStream = (
+  stream: Stream,
+  opts?: { throttle?: number; maxCunkSize?: number }
+): Promise<Buffer> =>
   new Promise((resolve, reject) => {
-    const s = new PassThrough()
+    const maxCunkSize = opts?.maxCunkSize ?? 0
+    const throttle = opts?.throttle ?? 0
+    const buffers: Buffer[] = []
+
+    const processChunk = (c, next) => {
+      buffers.push(c.slice(0, maxCunkSize))
+      const chunkP = c.slice(maxCunkSize)
+      if (chunkP.byteLength > maxCunkSize) {
+        if (throttle) {
+          setTimeout(() => {
+            processChunk(chunkP, next)
+          }, throttle)
+        } else {
+          processChunk(chunkP, next)
+        }
+      } else {
+        if (throttle) {
+          setTimeout(() => {
+            next()
+          }, throttle)
+        } else {
+          next()
+        }
+      }
+    }
+
+    const s = new Writable({
+      write: (c, _encoding, next) => {
+        if (c.byteLength > maxCunkSize) {
+          processChunk(c, next)
+        } else {
+          if (typeof c === 'string') {
+            buffers.push(Buffer.from(c))
+          } else {
+            buffers.push(c)
+          }
+          if (throttle) {
+            setTimeout(() => {
+              next()
+            }, throttle)
+          } else {
+            next()
+          }
+        }
+      },
+    })
+
     s.on('error', (err) => {
       reject(err)
     })
-    let buffers: Buffer[] = []
-    s.on('data', (s: Buffer | string) => {
-      if (typeof s === 'string') {
-        buffers.push(Buffer.from(s))
-      } else {
-        buffers.push(s)
-      }
-    })
-    s.on('end', () => {
+
+    s.on('finish', () => {
       resolve(Buffer.concat(buffers))
     })
-    // @ts-ignore
+
     stream.pipe(s)
   })
