@@ -1,5 +1,9 @@
 const merge = (target: any, source: any) => {
   if (source.constructor === Array) {
+    if (source.length < target.length) {
+      return source
+    }
+
     for (let i = 0; i < source.length; i++) {
       if (i in target) {
         if (
@@ -8,7 +12,10 @@ const merge = (target: any, source: any) => {
           source[i] &&
           typeof source[i] === 'object'
         ) {
-          merge(target[i], source[i])
+          const s = merge(target[i], source[i])
+          if (s) {
+            target[i] = s
+          }
         } else if (source[i] !== undefined) {
           target[i] = source[i]
         }
@@ -25,7 +32,10 @@ const merge = (target: any, source: any) => {
           source[i] &&
           typeof source[i] === 'object'
         ) {
-          merge(target[i], source[i])
+          const s = merge(target[i], source[i])
+          if (s) {
+            target[i] = s
+          }
         } else if (source[i] !== undefined) {
           target[i] = source[i]
         }
@@ -36,30 +46,35 @@ const merge = (target: any, source: any) => {
   }
 }
 
+const deepMergeArrayBlock = (target: any, source: any) => {
+  if (
+    target &&
+    typeof target === 'object' &&
+    source &&
+    typeof source === 'object'
+  ) {
+    const s = merge(target, source)
+
+    if (s) {
+      // hard case
+      for (let i = 0; i < s.length; i++) {
+        target[i] = s[i]
+      }
+      target.splice(s.length - 1, target.length - s.length)
+    }
+
+    return target
+  }
+}
+
 export function deepMergeArrays(target: any, ...sources: any[]): any {
   if (!sources.length) return target
   if (sources.length === 1) {
-    const source = sources[0]
-    if (
-      target &&
-      typeof target === 'object' &&
-      source &&
-      typeof source === 'object'
-    ) {
-      merge(target, source)
-      return target
-    }
+    deepMergeArrayBlock(target, sources[0])
+    return target
   }
   for (let i = 0; i < sources.length; i++) {
-    const source = sources[i]
-    if (
-      target &&
-      typeof target === 'object' &&
-      source &&
-      typeof source === 'object'
-    ) {
-      merge(target, source)
-    }
+    deepMergeArrayBlock(target, sources[i])
   }
   return target
 }
