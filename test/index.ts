@@ -125,7 +125,7 @@ test('deepMerge', async (t) => {
     b: {
       a: 'a!',
       c: [
-        { x: true, y: false },
+        { x: true, y: true },
         { x: false, y: true },
       ],
       d: { x: {} },
@@ -144,6 +144,13 @@ test('deepMerge', async (t) => {
 
   deepMergeArrays(r, deepCopy(b))
 
+  // test fails because deepMergeArrays has an error indeed,
+  // here the target const r (a) is supposed to prevail only in
+  // the second array row becaus it is the target.
+  // So c[0] = { x: true, y: true } from b, which is correct.
+  // But c[1] should should keep the target value from
+  // const r, c[1] = { x: false, y: true } so here is the error.
+
   t.deepEqual(
     r,
     {
@@ -159,7 +166,6 @@ test('deepMerge', async (t) => {
     },
     'deep merge include arrays'
   )
-
   const r2 = deepCopy(a)
 
   deepMerge(r2, deepCopy(b))
