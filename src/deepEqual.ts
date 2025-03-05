@@ -63,6 +63,8 @@ const deepEqual = (a: any, b: any): boolean => {
       cnt++
     }
     for (const _key in b) {
+      if (_key[0] === '_') continue
+      if (!a.hasOwnProperty(_key)) continue
       cnt--
       if (cnt < 0) {
         return false
