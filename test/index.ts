@@ -375,6 +375,28 @@ test('deepEqual 4', async (t) => {
   t.false(deepEqual(bla, blarf))
 })
 
+test('deepEqual _keys', async (t) => {
+  const bla = {
+    hello: 'super cool',
+    what: {
+      nested: 'yes',
+      _yeah: true,
+    },
+    _niceKey: 1,
+  }
+  const blarf = {
+    hello: 'super cool',
+    what: {
+      nested: 'yes',
+      _yeah: true,
+    },
+    _niceKey: 1,
+  }
+  t.true(deepEqual(bla, blarf), 'same object with _key')
+  blarf._niceKey = 2
+  t.false(deepEqual(bla, blarf), 'change _key value')
+})
+
 test('readStream', async (t) => {
   const v = await readStream(
     createReadStream(join(__dirname, '../../package.json'))
