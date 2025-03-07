@@ -7,9 +7,10 @@
   ],
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf {dist,node_modules}",
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "ava --verbose"
+    "test": "tsc && node scripts/run-tests.js"
   },
   "browser": {
     "./dist/src/readStream.js": false
@@ -31,6 +32,7 @@
     "@saulx/tsconfig": "^1.0.6",
     "@types/node": "18",
     "ava": "5.3.1",
+    "rimraf": "^6.0.1",
     "typescript": "^5.2.2"
   }
 }
