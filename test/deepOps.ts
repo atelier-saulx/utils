@@ -74,35 +74,35 @@ test('deepMergeArrayMulti2', async (t) => {
   })
 })
 
-// test('deepMergeArrayMulti3', async (t) => {
-//   const r = deepMergeArrays(
-//     {},
-//     {
-//       a: [{ a: true }],
-//     },
-//     {
-//       a: [undefined, { b: [{ snurp: true }] }],
-//     }
-//   )
-//   t.deepEqual(r, {
-//     a: [{ a: true }, { b: [{ snurp: true }] }],
-//   })
-// })
+test('deepMergeArrayMulti3', async (t) => {
+  const r = deepMergeArrays(
+    {},
+    {
+      a: [{ a: true }],
+    },
+    {
+      a: [undefined, { b: [{ snurp: true }] }],
+    }
+  )
+  t.deepEqual(r, {
+    a: [{ a: true }, { b: [{ snurp: true }] }],
+  })
+})
 
-// test('deepMergeArrayMulti4', async (t) => {
-//   const r = deepMergeArrays(
-//     {},
-//     {
-//       a: ['a', 'b'],
-//     },
-//     {
-//       a: ['a'],
-//     }
-//   )
-//   t.deepEqual(r, {
-//     a: ['a'],
-//   })
-// })
+test('deepMergeArrayMulti4', async (t) => {
+  const r = deepMergeArrays(
+    {},
+    {
+      a: ['a', 'b'],
+    },
+    {
+      a: ['a'],
+    }
+  )
+  t.deepEqual(r, {
+    a: ['a', 'b'],
+  })
+})
 
 test('deepMerge', async (t) => {
   const a: any = {
@@ -128,7 +128,6 @@ test('deepMerge', async (t) => {
 
   deepMergeArrays(r, deepCopy(b))
 
-  // ----------------------------------------
   t.deepEqual(
     r,
     {
@@ -182,7 +181,7 @@ test('deepMerge', async (t) => {
       b: {
         a: 'ja',
         c: [
-          { x: true, y: false },
+          { x: true, y: true },
           { x: false, y: true },
         ],
         d: { x: {} },
