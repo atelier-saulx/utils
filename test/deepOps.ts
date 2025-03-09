@@ -176,24 +176,20 @@ test('deepMerge', async (t) => {
     }
   )
 
-  try {
-    t.deepEqual(
-      r3,
-      {
-        b: {
-          a: 'ja',
-          c: [
-            { x: true, y: false },
-            { x: false, y: true },
-          ],
-          d: { x: {} },
-          x: 'snurf',
-        },
-        blarf: true,
+  t.deepEqual(
+    r3,
+    {
+      b: {
+        a: 'ja',
+        c: [
+          { x: true, y: false },
+          { x: false, y: true },
+        ],
+        d: { x: {} },
+        x: 'snurf',
       },
-      'multiple arguments'
-    )
-  } catch (err) {
-    console.log('err: ------->', err)
-  }
+      blarf: true,
+    },
+    'multiple arguments'
+  )
 })

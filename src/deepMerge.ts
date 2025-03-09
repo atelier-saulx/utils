@@ -46,58 +46,35 @@ const merge = (target: any, source: any) => {
   }
 }
 
-// const deepMergeArrayBlock = (target: any, source: any) => {
-//   if (
-//     target &&
-//     typeof target === 'object' &&
-//     source &&
-//     typeof source === 'object'
-//   ) {
-//     const s = merge(target, source)
+const deepMergeArrayBlock = (target: any, source: any) => {
+  if (
+    target &&
+    typeof target === 'object' &&
+    source &&
+    typeof source === 'object'
+  ) {
+    const s = merge(target, source)
 
-//     if (s) {
-//       // hard case
-//       for (let i = 0; i < s.length; i++) {
-//         target[i] = s[i]
-//       }
-//       target.splice(s.length - 1, target.length - s.length)
-//     }
-
-//     return target
-//   }
-// }
-
-function mergeDeep(target, source, seen = new Map()) {
-  const isObject = (obj) => obj && typeof obj === 'object'
-
-  if (seen.has(source)) {
-    return seen.get(source)
-  }
-
-  seen.set(source, target)
-
-  for (const key in source) {
-    if (isObject(source[key])) {
-      if (!target[key]) {
-        Object.assign(target, { [key]: Array.isArray(source[key]) ? [] : {} })
+    if (s) {
+      // hard case
+      for (let i = 0; i < s.length; i++) {
+        target[i] = s[i]
       }
-      mergeDeep(target[key], source[key], seen)
-    } else {
-      Object.assign(target, { [key]: source[key] })
+      target.splice(s.length - 1, target.length - s.length)
     }
-  }
 
-  return target
+    return target
+  }
 }
 
 export function deepMergeArrays(target: any, ...sources: any[]): any {
   if (!sources.length) return target
   if (sources.length === 1) {
-    mergeDeep(target, sources[0])
+    deepMergeArrayBlock(target, sources[0])
     return target
   }
   for (let i = 0; i < sources.length; i++) {
-    mergeDeep(target, sources[i])
+    deepMergeArrayBlock(target, sources[i])
   }
   return target
 }

@@ -181,27 +181,3 @@ test('deepEqual _keys', async (t) => {
   blarf._niceKey = 2
   t.false(deepEqual(bla, blarf), 'change _key value')
 })
-
-test('deepEqual _keys2', async (t) => {
-  const bla = {
-    hello: 'super cool',
-    what: {
-      nested: 'yes',
-      _yeah: true,
-    },
-    _niceKey: 1,
-    _yeah: 'repeated key',
-  }
-  const blarf = {
-    hello: 'super cool',
-    what: {
-      nested: 'yes',
-      _yeah: true,
-    },
-    _niceKey: 1,
-    _yeah: 'repeated key',
-  }
-  t.true(deepEqual(bla, blarf), 'same object with _key')
-  blarf._niceKey = 2
-  t.false(deepEqual(bla, blarf), 'change _key value')
-})
