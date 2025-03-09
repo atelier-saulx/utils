@@ -1,6 +1,6 @@
 const merge = (target: any, source: any) => {
   if (source.constructor === Array) {
-    if (source.length < target.length) {
+    if (target.length == 0) {
       return source
     }
 
