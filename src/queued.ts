@@ -7,6 +7,7 @@ type Retry = {
   minTime?: number
   maxTime?: number
   logError?: (err: Error, args: any[], retries: number) => void
+  shouldRetry?: (error: any) => boolean
 }
 
 function retryPromiseFn<T extends (...args: any[]) => Promise<any>>(
@@ -22,6 +23,12 @@ function retryPromiseFn<T extends (...args: any[]) => Promise<any>>(
           retries++
           if (retry.logError) {
             retry.logError(err, args, retries)
+          }
+          if (
+            typeof retry?.shouldRetry === 'function' &&
+            !retry.shouldRetry(err)
+          ) {
+            return reject(err)
           }
           if (!retry.max || retries < retry.max) {
             setTimeout(() => {
