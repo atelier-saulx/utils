@@ -18,6 +18,7 @@
   "type": "module",
   "main": "./dist/src/index.js",
   "ava": {
+    "concurrency": 0,
     "timeout": "2m",
     "files": [
       "./dist/test/**/*.js"
