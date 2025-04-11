@@ -68,9 +68,8 @@ test('queued retry concurrency', async (t) => {
       max: 100,
       minTime: 10,
       maxTime: 500,
-      logError: (_x, args) => {
+      logError: () => {
         errs++
-        console.info('Retrying!', args)
       },
     },
   })
@@ -86,4 +85,49 @@ test('queued retry concurrency', async (t) => {
   t.is(errs, 10)
 
   t.true(true)
+})
+
+test('shouldRetry option', async (t) => {
+  let count = 0
+
+  const errorString = 'this is error'
+  const successString = 'yeeeeeyyyy'
+
+  const testFunction = async () => {
+    await wait(200)
+    if (count < 5) {
+      count++
+      throw new Error(errorString)
+    }
+    return successString
+  }
+
+  const queued1 = queued(testFunction, {
+    retry: {
+      shouldRetry: (error) => {
+        return error.message === errorString
+      },
+      max: 10,
+      minTime: 10,
+      maxTime: 100,
+    },
+  })
+  let result = await queued1()
+
+  t.is(count, 5)
+  t.is(result, successString)
+
+  count = 0
+  const queued2 = queued(testFunction, {
+    retry: {
+      shouldRetry: (_error) => {
+        return false
+      },
+    },
+  })
+
+  await t.throwsAsync(() => queued2(), {
+    message: errorString,
+  })
+  t.is(count, 1)
 })

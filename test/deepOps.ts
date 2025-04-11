@@ -27,22 +27,21 @@ test('deepMergeArrayMulti', async (t) => {
     }
   )
 
-  const m = deepMerge(
-    {},
-    {
-      a: [{ a: true }],
-    },
-    {
-      a: [{ b: true }],
-    },
-    {
-      a: [{ c: true }],
-    },
-    {
-      a: [{ d: true }],
-    }
-  )
-  console.log(m)
+  // const m = deepMerge(
+  //   {},
+  //   {
+  //     a: [{ a: true }],
+  //   },
+  //   {
+  //     a: [{ b: true }],
+  //   },
+  //   {
+  //     a: [{ c: true }],
+  //   },
+  //   {
+  //     a: [{ d: true }],
+  //   }
+  // )
 
   t.deepEqual(r, {
     a: [
@@ -89,7 +88,7 @@ test('deepMergeArrayMulti3', async (t) => {
   })
 })
 
-test('deepMergeArrayMulti4', async (t) => {
+test.only('deepMergeArrayMulti4', async (t) => {
   const r = deepMergeArrays(
     {},
     {

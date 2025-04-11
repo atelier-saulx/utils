@@ -46,3 +46,5 @@ export * from './base64.js'
 export * from './nonRecursiveWalker.js'
 
 export * from './longTimeOut.js'
+
+export * from './timestamp.js'

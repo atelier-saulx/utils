@@ -208,17 +208,13 @@ test('createEncoder multi encode-char perf', async (t) => {
     'x',
     'X',
   ])
-  const d = Date.now()
   for (let i = 0; i < 1e4; i++) {
     encode(str)
   }
-  console.info(Date.now() - d, 'ms', '10k encode /', str.length)
   const s = encode(str)
-  const d2 = Date.now()
   for (let i = 0; i < 1e4; i++) {
     decode(s)
   }
-  console.info(Date.now() - d2, 'ms', '10k decode /', str.length)
   t.true(s !== str)
   const x = decode(s)
   t.is(x, str)
@@ -246,29 +242,15 @@ test('createEncoder simple case  perf', async (t) => {
   this is great wow this is nice little thing 
   to write about! wow Hello and this is great`
   const { encode, decode } = createEncoder(chars, ['Z'])
-  const d = Date.now()
   for (let i = 0; i < 1e4; i++) {
     encode(str)
   }
-  console.info(
-    Date.now() - d,
-    'ms',
-    '10k encode simple /',
-    str.length,
-    'char len'
-  )
+
   const s = encode(str)
-  const d2 = Date.now()
   for (let i = 0; i < 1e4; i++) {
     decode(s)
   }
-  console.info(
-    Date.now() - d2,
-    'ms',
-    '10k decode simple /',
-    str.length,
-    'char len'
-  )
+
   t.true(s !== str)
   const x = decode(s)
   t.is(x, str)
@@ -309,31 +291,16 @@ test('encoding lower len perf 2char', async (t) => {
     'x',
     'X',
   ])
-  const d = Date.now()
 
   for (let i = 0; i < 1e4; i++) {
     encode(str)
   }
 
-  console.info(
-    Date.now() - d,
-    'ms',
-    '10k encode simple /',
-    str.length,
-    'char len'
-  )
   const s = encode(str)
-  const d2 = Date.now()
   for (let i = 0; i < 1e4; i++) {
     decode(s)
   }
-  console.info(
-    Date.now() - d2,
-    'ms',
-    '10k decode simple /',
-    str.length,
-    'char len'
-  )
+
   t.true(s !== str)
   const x = decode(s)
   t.is(x, str)
