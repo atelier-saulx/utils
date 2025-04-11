@@ -132,3 +132,18 @@ test('shouldRetry option', async (t) => {
   })
   t.is(count, 1)
 })
+
+test("don't dedup with classes arguments", async (t) => {
+  class A {
+    constructor() {
+      this.a = this
+    }
+    public a: any
+  }
+  const a = new A()
+  // const a = {}
+
+  const queuedA = queued(async (_a) => {})
+
+  await t.notThrowsAsync(() => queuedA(a))
+})
