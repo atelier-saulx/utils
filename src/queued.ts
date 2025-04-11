@@ -10,6 +10,21 @@ type Retry = {
   shouldRetry?: (error: any) => boolean
 }
 
+const isInstanceOfClass = (obj: any) => {
+  if (obj === null || typeof obj !== 'object') return false
+
+  let proto = Object.getPrototypeOf(obj)
+  while (proto) {
+    if (proto.constructor && proto.constructor !== Object) {
+      return true
+    }
+    proto = Object.getPrototypeOf(proto)
+  }
+  return false
+}
+
+const randomId = () => (~~(Math.random() * 99999)).toString(16)
+
 function retryPromiseFn<T extends (...args: any[]) => Promise<any>>(
   fn: T,
   retry: Retry
@@ -48,7 +63,11 @@ const defaultDedup = (...args: any[]): string | number => {
   for (const arg of args) {
     if (arg !== undefined) {
       if (typeof arg === 'object') {
-        x += hashObjectIgnoreKeyOrder(arg)
+        if (isInstanceOfClass(arg)) {
+          x += randomId()
+        } else {
+          x += hashObjectIgnoreKeyOrder(arg)
+        }
       } else {
         x += hash(arg)
       }
@@ -56,7 +75,7 @@ const defaultDedup = (...args: any[]): string | number => {
   }
   if (!x) {
     // random id
-    return (~~(Math.random() * 99999)).toString(16)
+    return randomId()
   }
   return x
 }
