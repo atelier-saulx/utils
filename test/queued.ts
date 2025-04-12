@@ -68,9 +68,8 @@ test('queued retry concurrency', async (t) => {
       max: 100,
       minTime: 10,
       maxTime: 500,
-      logError: (_x, args) => {
+      logError: () => {
         errs++
-        console.info('Retrying!', args)
       },
     },
   })

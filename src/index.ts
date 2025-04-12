@@ -27,6 +27,8 @@ export {
   randomString,
 }
 
+export * from './isWinterTimeInEurope.js'
+
 export * from './padding.js'
 
 export * from './encoder/index.js'
@@ -46,3 +48,5 @@ export * from './base64.js'
 export * from './nonRecursiveWalker.js'
 
 export * from './longTimeOut.js'
+
+export * from './timestamp.js'
