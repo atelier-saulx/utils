@@ -27,6 +27,8 @@ export {
   randomString,
 }
 
+export * from './isWinterTimeInEurope.js'
+
 export * from './padding.js'
 
 export * from './encoder/index.js'
