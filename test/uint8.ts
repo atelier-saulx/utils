@@ -1,0 +1,313 @@
+import test from 'ava'
+import {
+  equals,
+  concatUint8Arr,
+  bufToHex,
+  hexToBuf,
+  readDoubleLE,
+  readFloatLE,
+  readUint32,
+  readInt32,
+  readUint16,
+  readInt16,
+  makeTmpBuffer,
+} from '../src/uint8.js' // Adjust path if necessary
+
+test('equals() returns true for identical Uint8Arrays', (t) => {
+  t.true(equals(new Uint8Array([]), new Uint8Array([])), 'Empty arrays')
+  t.true(equals(new Uint8Array([1]), new Uint8Array([1])), 'Single element')
+  t.true(
+    equals(new Uint8Array([1, 2, 3]), new Uint8Array([1, 2, 3])),
+    'Multiple elements'
+  )
+  const longArr = new Uint8Array(100).map((_, i) => i)
+  t.true(equals(longArr, new Uint8Array(longArr)), 'Long arrays')
+})
+
+test('equals() returns false for different Uint8Arrays', (t) => {
+  t.false(
+    equals(new Uint8Array([1]), new Uint8Array([])),
+    'Different lengths (1 vs 0)'
+  )
+  t.false(
+    equals(new Uint8Array([]), new Uint8Array([1])),
+    'Different lengths (0 vs 1)'
+  )
+  t.false(
+    equals(new Uint8Array([1, 2, 3]), new Uint8Array([1, 2, 4])),
+    'Different content (end)'
+  )
+  t.false(
+    equals(new Uint8Array([1, 2, 3]), new Uint8Array([5, 2, 3])),
+    'Different content (start)'
+  )
+  t.false(
+    equals(new Uint8Array([1, 2, 3]), new Uint8Array([1, 5, 3])),
+    'Different content (middle)'
+  )
+  const longArr1 = new Uint8Array(100).map((_, i) => i)
+  const longArr2 = new Uint8Array(longArr1)
+  longArr2[50] = 99
+  t.false(equals(longArr1, longArr2), 'Different content (long arrays)')
+})
+
+// --- concatUint8Arr ---
+
+test('concatUint8Arr() concatenates multiple arrays', (t) => {
+  const arr1 = new Uint8Array([1, 2])
+  const arr2 = new Uint8Array([3, 4, 5])
+  const arr3 = new Uint8Array([6])
+  const expected = new Uint8Array([1, 2, 3, 4, 5, 6])
+  t.deepEqual(concatUint8Arr([arr1, arr2, arr3]), expected)
+})
+
+test('concatUint8Arr() handles empty arrays', (t) => {
+  const arr1 = new Uint8Array([1, 2])
+  const arr2 = new Uint8Array([])
+  const arr3 = new Uint8Array([3])
+  const expected = new Uint8Array([1, 2, 3])
+  t.deepEqual(concatUint8Arr([arr1, arr2, arr3]), expected, 'Middle empty')
+  t.deepEqual(concatUint8Arr([arr2, arr1, arr3]), expected, 'Start empty')
+  t.deepEqual(concatUint8Arr([arr1, arr3, arr2]), expected, 'End empty')
+  t.deepEqual(concatUint8Arr([arr2, arr2]), new Uint8Array([]), 'All empty')
+})
+
+test('concatUint8Arr() handles single array', (t) => {
+  const arr1 = new Uint8Array([1, 2, 3])
+  t.deepEqual(concatUint8Arr([arr1]), arr1)
+})
+
+// --- bufToHex / hexToBuf ---
+
+test('bufToHex() converts Uint8Array to hex string', (t) => {
+  t.is(bufToHex(new Uint8Array([])), '', 'Empty array')
+  t.is(bufToHex(new Uint8Array([0])), '00', 'Zero byte')
+  t.is(bufToHex(new Uint8Array([255])), 'ff', 'Max byte')
+  t.is(bufToHex(new Uint8Array([10])), '0a', 'Single digit hex')
+  t.is(bufToHex(new Uint8Array([16])), '10', 'Single digit hex boundary')
+  t.is(
+    bufToHex(new Uint8Array([72, 101, 108, 108, 111])),
+    '48656c6c6f',
+    'Hello'
+  ) // "Hello"
+})
+
+test('hexToBuf() converts hex string to Uint8Array', (t) => {
+  t.deepEqual(hexToBuf(''), new Uint8Array([]), 'Empty string')
+  t.deepEqual(hexToBuf('00'), new Uint8Array([0]), 'Zero byte')
+  t.deepEqual(hexToBuf('ff'), new Uint8Array([255]), 'Max byte')
+  t.deepEqual(hexToBuf('0a'), new Uint8Array([10]), 'Single digit hex')
+  t.deepEqual(hexToBuf('10'), new Uint8Array([16]), 'Single digit hex boundary')
+  t.deepEqual(
+    hexToBuf('48656c6c6f'),
+    new Uint8Array([72, 101, 108, 108, 111]),
+    'Hello'
+  )
+})
+
+test('hexToBuf() handles odd length string (truncates last char)', (t) => {
+  t.deepEqual(hexToBuf('f'), new Uint8Array([]), 'Single char')
+  t.deepEqual(hexToBuf('abc'), new Uint8Array([171]), 'Three chars') // ab -> 171
+})
+
+test('hexToBuf() handles invalid hex characters (results in NaN/0)', (t) => {
+  // The current implementation maps invalid chars to undefined -> NaN -> 0
+  t.deepEqual(hexToBuf('gg'), new Uint8Array([0]), 'Invalid chars')
+  t.deepEqual(hexToBuf('0g'), new Uint8Array([0]), 'Mixed valid/invalid')
+  t.deepEqual(hexToBuf('g0'), new Uint8Array([0]), 'Mixed invalid/valid')
+})
+
+test('bufToHex() and hexToBuf() are inverses', (t) => {
+  const original = new Uint8Array([0, 1, 15, 16, 128, 255, 7, 8, 9])
+  const hex = bufToHex(original)
+  const convertedBack = hexToBuf(hex)
+  t.deepEqual(convertedBack, original)
+
+  const originalHex = '0123456789abcdef'
+  const buf = hexToBuf(originalHex)
+  const convertedHexBack = bufToHex(buf)
+  t.is(convertedHexBack, originalHex)
+})
+
+function createBufferWithDoubleLE(value: number): Uint8Array {
+  const buffer = new ArrayBuffer(8)
+  const view = new DataView(buffer)
+  view.setFloat64(0, value, true)
+  return new Uint8Array(buffer)
+}
+
+test('readDoubleLE() reads double values correctly', (t) => {
+  t.is(readDoubleLE(createBufferWithDoubleLE(0), 0), 0, 'Zero')
+  t.is(readDoubleLE(createBufferWithDoubleLE(1), 0), 1, 'One')
+  t.is(readDoubleLE(createBufferWithDoubleLE(-1), 0), -1, 'Negative One')
+  t.is(
+    readDoubleLE(createBufferWithDoubleLE(123.456), 0),
+    123.456,
+    'Positive float'
+  )
+  t.is(
+    readDoubleLE(createBufferWithDoubleLE(-987.654), 0),
+    -987.654,
+    'Negative float'
+  )
+  t.is(readDoubleLE(createBufferWithDoubleLE(Math.PI), 0), Math.PI, 'PI')
+  t.is(
+    readDoubleLE(createBufferWithDoubleLE(Number.MAX_VALUE), 0),
+    Number.MAX_VALUE,
+    'Max value'
+  )
+  t.is(
+    readDoubleLE(createBufferWithDoubleLE(Number.MIN_VALUE), 0),
+    Number.MIN_VALUE,
+    'Min value'
+  )
+  t.is(
+    readDoubleLE(createBufferWithDoubleLE(Infinity), 0),
+    Infinity,
+    'Infinity'
+  )
+  t.is(
+    readDoubleLE(createBufferWithDoubleLE(-Infinity), 0),
+    -Infinity,
+    '-Infinity'
+  )
+  t.true(isNaN(readDoubleLE(createBufferWithDoubleLE(NaN), 0)), 'NaN')
+})
+
+test('readDoubleLE() reads with offset', (t) => {
+  const buffer = new Uint8Array([
+    0,
+    0,
+    ...createBufferWithFloatDoubleLE(123.456),
+    0,
+  ])
+  t.true(readDoubleLE(buffer, 2) === 123.456)
+})
+
+function createBufferWithFloatDoubleLE(value: number): Uint8Array {
+  const buffer = new Uint8Array(8)
+  const view = new DataView(buffer.buffer, 0, 8)
+  view.setFloat64(0, value, true)
+  return buffer
+}
+
+function createBufferWithFloatLE(value: number): Uint8Array {
+  const buffer = new Uint8Array(4)
+  const view = new DataView(buffer.buffer, 0, 4)
+  view.setFloat32(0, value, true)
+  return buffer
+}
+
+test('readFloatLE() reads float values correctly', (t) => {
+  const tolerance = 1e-5
+  t.is(readFloatLE(createBufferWithFloatLE(0), 0), 0, 'Zero')
+  t.is(readFloatLE(createBufferWithFloatLE(1), 0), 1, 'One')
+  t.is(readFloatLE(createBufferWithFloatLE(-1), 0), -1, 'Negative One')
+
+  t.assert(
+    Math.abs(readFloatLE(createBufferWithFloatLE(Math.PI), 0) - Math.PI) <
+      tolerance,
+    'PI'
+  )
+  t.is(readFloatLE(createBufferWithFloatLE(Infinity), 0), Infinity, 'Infinity')
+  t.is(
+    readFloatLE(createBufferWithFloatLE(-Infinity), 0),
+    -Infinity,
+    '-Infinity'
+  )
+  t.true(isNaN(readFloatLE(createBufferWithFloatLE(NaN), 0)), 'NaN')
+})
+
+test('readFloatLE() reads with offset', (t) => {
+  const tolerance = 1e-5
+  const buffer = new Uint8Array([0, ...createBufferWithFloatLE(123.456), 0])
+
+  t.assert(Math.abs(readFloatLE(buffer, 1) - 123.456) < tolerance)
+})
+
+test('readUint32() reads uint32 values', (t) => {
+  const buf = new Uint8Array([
+    0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x34, 0x12, 0xcd, 0xab,
+  ])
+  t.is(readUint32(buf, 0), 0, 'Zero')
+  t.is(readUint32(buf, 4), 0xffffffff, 'Max Uint32')
+  t.is(readUint32(buf, 8), 0xabcd1234, 'Specific value')
+})
+
+test('readInt32() reads int32 values using DataView setup', (t) => {
+  // Define the values to test
+  const values = [
+    0, // Zero
+    2147483647, // Max Int32
+    -2147483648, // Min Int32
+    -1412793804, // Specific negative value
+    -1735758116, // Another specific negative value
+  ]
+
+  const bytesPerValue = 4
+  const buffer = new ArrayBuffer(values.length * bytesPerValue)
+  const view = new DataView(buffer)
+  const littleEndian = true // Assuming readInt32 reads Little Endian
+
+  // Write the values into the buffer using DataView
+  values.forEach((value, index) => {
+    view.setInt32(index * bytesPerValue, value, littleEndian)
+  })
+
+  // Create the Uint8Array from the prepared buffer
+  const buf = new Uint8Array(buffer)
+
+  // Perform the reads and assertions
+  t.is(readInt32(buf, 0), values[0], 'Zero')
+  t.is(readInt32(buf, 4), values[1], 'Max Int32')
+  t.is(readInt32(buf, 8), values[2], 'Min Int32')
+  t.is(readInt32(buf, 12), values[3], 'Specific negative value')
+  t.is(readInt32(buf, 16), values[4], 'Another specific negative value')
+})
+
+test('readUint16() reads uint16 values', (t) => {
+  const buf = new Uint8Array([0x00, 0x00, 0xff, 0xff, 0x34, 0x12])
+  t.is(readUint16(buf, 0), 0, 'Zero')
+  t.is(readUint16(buf, 2), 0xffff, 'Max Uint16')
+  t.is(readUint16(buf, 4), 0x1234, 'Specific value')
+})
+
+test('readInt16() reads int16 values', (t) => {
+  const buf = new Uint8Array([
+    0x00,
+    0x00, // 0
+    0xff,
+    0x7f, // Max Int16 (32767)
+    0x00,
+    0x80, // Min Int16 (-32768)
+    0x34,
+    0xab, // -21708
+  ])
+  t.is(readInt16(buf, 0), 0, 'Zero')
+  t.is(readInt16(buf, 2), 32767, 'Max Int16')
+  t.is(readInt16(buf, 4), -32768, 'Min Int16')
+  t.is(readInt16(buf, 6), -21708, 'Specific negative value')
+})
+
+// --- makeTmpBuffer ---
+
+test('makeTmpBuffer().getUint8Array() returns array of correct size', (t) => {
+  const initialSize = 100
+  const { getUint8Array } = makeTmpBuffer(initialSize)
+
+  const arr50 = getUint8Array(50)
+  t.is(arr50.byteLength, 50, 'Smaller than initial')
+
+  const arr100 = getUint8Array(100)
+  t.is(arr100.byteLength, 100, 'Equal to initial')
+
+  const arr200 = getUint8Array(200)
+  t.is(arr200.byteLength, 200, 'Larger than initial (triggers resize)')
+
+  // Check if buffer is reused/resized correctly (optional but good)
+  const arrAgain50 = getUint8Array(50)
+  t.is(arrAgain50.byteLength, 50, 'Request smaller size again')
+  // Verify it's likely the same underlying buffer (though this is an implementation detail)
+  // arrAgain50[0] = 1;
+  // t.is(arr200[0], 1); // This might pass if the buffer was resized down
+})
