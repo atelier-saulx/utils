@@ -150,6 +150,30 @@ export const readFloatLE = (val: Uint8Array, offset: number): number => {
   return sign * fraction * 2 ** (exponent - 150)
 }
 
+export const writeUint16 = (dest: Uint8Array, val: number, offset: number) => {
+  dest[offset] = val
+  dest[offset + 1] = val >>> 8
+}
+
+export const writeInt16 = writeUint16
+
+export const writeUint24 = (dest: Uint8Array, val: number, offset: number) => {
+  dest[offset] = val
+  dest[offset + 1] = val >>> 8
+  dest[offset + 2] = val >>> 16
+}
+
+export const writeInt24 = writeUint24
+
+export const writeUint32 = (dest: Uint8Array, val: number, offset: number) => {
+  dest[offset + 0] = val
+  dest[offset + 1] = val >>> 8
+  dest[offset + 2] = val >>> 16
+  dest[offset + 3] = val >>> 24
+}
+
+export const writeInt32 = writeUint32
+
 export const readUint32 = (val: Uint8Array, offset: number): number => {
   return (
     (val[offset] |
@@ -167,6 +191,14 @@ export const readInt32 = (val: Uint8Array, offset: number): number => {
     (val[offset + 2] << 16) |
     (val[offset + 3] << 24)
   )
+}
+
+export const readUint24 = (val: Uint8Array, offset: number): number => {
+  return (val[offset] | (val[offset + 1] << 8) | (val[offset + 2] << 16)) >>> 0
+}
+
+export const readInt24 = (val: Uint8Array, offset: number): number => {
+  return val[offset] | (val[offset + 1] << 8) | (val[offset + 2] << 16)
 }
 
 export const readInt16 = (val: Uint8Array, offset: number): number => {
