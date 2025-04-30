@@ -126,10 +126,6 @@ export const serializeQuery = (
     return String(q)
   }
 
-  if (typeof q === 'number') {
-    return String(q)
-  }
-
   if (q === null) {
     return 'null'
   }
