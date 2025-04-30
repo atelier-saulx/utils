@@ -173,20 +173,50 @@ export const writeUint32 = (dest: Uint8Array, val: number, offset: number) => {
 }
 
 export const writeUint64 = (dest: Uint8Array, val: number, offset: number) => {
-  for (let index = offset; index < offset + 8; index++) {
-    const byte = val & 0xff
-    dest[index] = byte
-    val = (val - byte) / 256
-  }
+  const byte0 = val & 0xff
+  dest[offset + 0] = byte0
+  val = (val - byte0) / 256
+  const byte1 = val & 0xff
+  dest[offset + 1] = byte1
+  val = (val - byte1) / 256
+  const byte2 = val & 0xff
+  dest[offset + 2] = byte2
+  val = (val - byte2) / 256
+  const byte3 = val & 0xff
+  dest[offset + 3] = byte3
+  val = (val - byte3) / 256
+  const byte4 = val & 0xff
+  dest[offset + 4] = byte4
+  val = (val - byte4) / 256
+  const byte5 = val & 0xff
+  dest[offset + 5] = byte5
+  val = (val - byte5) / 256
+  const byte6 = val & 0xff
+  dest[offset + 6] = byte6
+  val = (val - byte6) / 256
+  const byte7 = val & 0xff
+  dest[offset + 7] = byte7
 }
 
-export const readUint64 = (dest: Uint8Array, offset: number) => {
-  let n = 0
-  const s = 8 - 1 + offset
-  for (let i = s; i >= offset; i--) {
-    n = n * 256 + dest[i]
-  }
+export const readUint64 = (src: Uint8Array, offset: number) => {
+  let n = src[offset + 7]
+  n = n * 256 + src[offset + 6]
+  n = n * 256 + src[offset + 5]
+  n = n * 256 + src[offset + 4]
+  n = n * 256 + src[offset + 3]
+  n = n * 256 + src[offset + 2]
+  n = n * 256 + src[offset + 1]
+  n = n * 256 + src[offset + 0]
   return n
+}
+
+export const writeDoubleLE = (
+  dest: Uint8Array,
+  val: number,
+  offset: number
+) => {
+  const dV = new DataView(dest.buffer, offset)
+  dV.setFloat64(0, val, true)
 }
 
 export const writeInt32 = writeUint32
