@@ -19,7 +19,9 @@ import {
   writeUint32,
   writeInt32,
   makeTmpBuffer,
-} from '../src/uint8.js' // Adjust path if necessary
+  writeUint64,
+  readUint64,
+} from '../src/uint8.js'
 
 test('equals() returns true for identical Uint8Arrays', (t) => {
   t.true(equals(new Uint8Array([]), new Uint8Array([])), 'Empty arrays')
@@ -415,4 +417,15 @@ test('writeInt32() writes int32 values (LE)', (t) => {
   t.is(readInt32(buf, 4), 2147483647)
   t.is(readInt32(buf, 8), -1)
   t.is(readInt32(buf, 12), -2147483648)
+})
+
+test('writeUint64()', (t) => {
+  const buf = new Uint8Array(8)
+  const bigBoyNumber = Date.now()
+  writeUint64(buf, bigBoyNumber, 0)
+  t.is(readUint64(buf, 0), bigBoyNumber)
+
+  const bigBoyNumberNegative = -Date.now()
+  writeUint64(buf, bigBoyNumberNegative, 0)
+  t.not(readUint64(buf, 0), bigBoyNumberNegative)
 })

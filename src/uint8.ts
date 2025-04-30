@@ -172,6 +172,23 @@ export const writeUint32 = (dest: Uint8Array, val: number, offset: number) => {
   dest[offset + 3] = val >>> 24
 }
 
+export const writeUint64 = (dest: Uint8Array, val: number, offset: number) => {
+  for (let index = offset; index < offset + 8; index++) {
+    const byte = val & 0xff
+    dest[index] = byte
+    val = (val - byte) / 256
+  }
+}
+
+export const readUint64 = (dest: Uint8Array, offset: number) => {
+  let n = 0
+  const s = 8 - 1 + offset
+  for (let i = s; i >= offset; i--) {
+    n = n * 256 + dest[i]
+  }
+  return n
+}
+
 export const writeInt32 = writeUint32
 
 export const readUint32 = (val: Uint8Array, offset: number): number => {
