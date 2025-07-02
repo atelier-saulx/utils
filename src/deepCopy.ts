@@ -6,7 +6,8 @@ const deepCopy = <
   const r: T = <T>(Array.isArray(a) ? [] : {})
   for (const k in a) {
     if (a[k] !== null && typeof a[k] === 'object') {
-      if (a[k] instanceof ArrayBuffer) {
+      // @ts-ignore
+      if ('buffer' in a[k] && a[k].buffer instanceof ArrayBuffer) {
         r[k] = a[k]
       } else {
         // @ts-ignore

@@ -100,7 +100,7 @@ test('deepMergeArrayMulti3', async (t) => {
   })
 })
 
-test.only('deepMergeArrayMulti4', async (t) => {
+test('deepMergeArrayMulti4', async (t) => {
   const r = deepMergeArrays(
     {},
     {
