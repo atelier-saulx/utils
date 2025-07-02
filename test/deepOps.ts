@@ -10,6 +10,18 @@ test('deepCopy', async (t) => {
   t.deepEqual(deepCopy(bla), bla)
 })
 
+test('deepCopy ArrayBuffer', async (t) => {
+  const bla = {
+    x: {
+      bla: 'x',
+      x: new Uint8Array([1, 2, 3, 4]),
+      y: new Uint16Array([1, 2, 3, 4]),
+      z: new Float64Array([1, 2, 3, 4]),
+    },
+  }
+  t.deepEqual(deepCopy(bla), bla)
+})
+
 test('deepMergeArrayMulti', async (t) => {
   const r = deepMergeArrays(
     {},

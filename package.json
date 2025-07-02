@@ -1,6 +1,6 @@
 {
   "name": "@saulx/utils",
-  "version": "6.6.0",
+  "version": "6.7.0",
   "repository": "https://github.com/atelier-saulx/utils",
   "files": [
     "dist/src"
