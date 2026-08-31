@@ -203,3 +203,43 @@ test('deepMerge', async (t) => {
     'multiple arguments'
   )
 })
+
+test('deepMerge prototype pollution', async (t) => {
+  const target = JSON.parse('{ "x": { "a": { "c": true, "x": [1, 2] } } }')
+  const payload = JSON.parse(
+    '{ "x": { "a": { "b": true, "__proto__": { "polluted": "yes" } } }, "__proto__": { "polluted2": "yes" } }'
+  )
+
+  deepMerge(target, { y: true }, payload)
+
+  t.is(({} as any).polluted, undefined, 'nested __proto__ ignored')
+  t.is(({} as any).polluted2, undefined, 'top level __proto__ ignored')
+  t.is(Object.getPrototypeOf(target), Object.prototype, 'target proto intact')
+  t.deepEqual(target, {
+    x: { a: { b: true, c: true, x: [1, 2] } },
+    y: true,
+  })
+
+  const ctor = {}
+  deepMerge(ctor, JSON.parse('{ "constructor": { "prototype": { "bad": 1 } } }'))
+  t.is(({} as any).bad, undefined, 'constructor gadget ignored')
+  t.false(Object.hasOwn(ctor, 'constructor'), 'no constructor shadow')
+
+  const proto = {}
+  deepMerge(proto, JSON.parse('{ "prototype": { "bad2": 1 } }'))
+  t.false(Object.hasOwn(proto, 'prototype'), 'prototype key ignored')
+})
+
+test('deepMergeArrays prototype pollution', async (t) => {
+  const target = { x: { a: { b: true, c: ['bla'] } } }
+  const payload = JSON.parse(
+    '{ "x": { "a": { "c": true }, "__proto__": { "pollutedArr": "yes" } }, "__proto__": { "pollutedArr2": "yes" } }'
+  )
+
+  deepMergeArrays(target, payload)
+
+  t.is(({} as any).pollutedArr, undefined, 'nested __proto__ ignored')
+  t.is(({} as any).pollutedArr2, undefined, 'top level __proto__ ignored')
+  t.is(Object.getPrototypeOf(target), Object.prototype, 'target proto intact')
+  t.deepEqual(target, { x: { a: { b: true, c: true } } })
+})

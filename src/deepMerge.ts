@@ -25,6 +25,10 @@ const merge = (target: any, source: any) => {
     }
   } else {
     for (const i in source) {
+      // JSON.parse creates these as own keys, assigning them walks into Object.prototype
+      if (i === '__proto__' || i === 'constructor' || i === 'prototype') {
+        continue
+      }
       if (i in target) {
         if (
           target[i] &&
@@ -84,6 +88,10 @@ const mergeExcludeArray = (target: any, source: any): any => {
     return source
   } else {
     for (const i in source) {
+      // JSON.parse creates these as own keys, assigning them walks into Object.prototype
+      if (i === '__proto__' || i === 'constructor' || i === 'prototype') {
+        continue
+      }
       if (i in target) {
         if (
           target[i] &&
